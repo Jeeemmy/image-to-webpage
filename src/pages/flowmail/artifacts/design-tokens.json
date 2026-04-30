@@ -1,0 +1,542 @@
+{
+  "meta": {
+    "source_type": "ui_snapshot",
+    "extraction_confidence": 0.82,
+    "notes": [
+      "Source image is a landscape FlowMail integrations dashboard screenshot at 2157x1535.",
+      "Landscape workflow default adaptation width is 1440px; normalized scale is approximately 0.6676.",
+      "The UI is mostly flat: surfaces are separated by borders, pale fills, and active states. Cast shadows are not clearly visible on most components."
+    ],
+    "assumptions": [
+      "Typography appears to be an Inter/SF-style sans serif; exact font family is not visible.",
+      "Most component measurements are inferred from visible proportions and normalized toward a 1440px implementation width.",
+      "Brand primary is inferred from the purple logo, switches, selected nav item icon, and primary CTA."
+    ],
+    "unknowns": [
+      "Exact font family",
+      "Exact hover and active colors",
+      "Exact animation durations and easing",
+      "Hidden/off-screen integration cards beyond the visible viewport"
+    ]
+  },
+  "colors": {
+    "brand": {
+      "primary": "#5B4CF5",
+      "primary_hover": "#5143E6",
+      "primary_active": "#4638CF",
+      "primary_subtle": "#F1EFFF",
+      "secondary": "#48B9E8",
+      "accent": "#8FD8F3"
+    },
+    "background": {
+      "page": "#F7F7FB",
+      "canvas": "#F5F5FA",
+      "surface": "#FFFFFF",
+      "surface_raised": "#FFFFFF",
+      "surface_overlay": "#FFFFFF",
+      "inverse": "#111111"
+    },
+    "text": {
+      "primary": "#111111",
+      "secondary": "#606064",
+      "tertiary": "#7A7A80",
+      "muted": "#9B9BA2",
+      "disabled": "#B9B9BF",
+      "inverse": "#FFFFFF",
+      "link": null,
+      "link_hover": null
+    },
+    "border": {
+      "default": "#E4E4E9",
+      "subtle": "#EEEEF2",
+      "strong": "#D7D7DE",
+      "focus": "#6A5CF6",
+      "divider": "#E6E6EA"
+    },
+    "state": {
+      "success": "#20A95A",
+      "success_bg": "#DDF4E7",
+      "warning": null,
+      "warning_bg": null,
+      "error": null,
+      "error_bg": null,
+      "info": "#2B8FE8",
+      "info_bg": "#EAF5FF",
+      "disabled_bg": "#ECECEF",
+      "disabled_text": "#B8B8BE"
+    },
+    "neutral_scale": {
+      "0": "#FFFFFF",
+      "50": "#FAFAFC",
+      "100": "#F7F7FB",
+      "200": "#EEEEF2",
+      "300": "#E4E4E9",
+      "400": "#CFCFD6",
+      "500": "#9B9BA2",
+      "600": "#6F6F76",
+      "700": "#4F4F55",
+      "800": "#2E2E33",
+      "900": "#111111",
+      "1000": "#000000"
+    },
+    "semantic_aliases": [
+      {
+        "name": "sidebar.background",
+        "value": "#FBFBFD",
+        "confidence": 0.78
+      },
+      {
+        "name": "active_nav.background",
+        "value": "#F4F4F8",
+        "confidence": 0.82
+      },
+      {
+        "name": "metric_inner_fill",
+        "value": "#F8F8FB",
+        "confidence": 0.78
+      },
+      {
+        "name": "switch.track_on",
+        "value": "#5B4CF5",
+        "confidence": 0.86
+      },
+      {
+        "name": "ai_button.gradient",
+        "value": "linear-gradient(90deg, #B9A5F4 0%, #8FD8F3 100%)",
+        "confidence": 0.74
+      }
+    ]
+  },
+  "opacity": {
+    "disabled": 0.55,
+    "hover_overlay": null,
+    "pressed_overlay": null,
+    "scrim": null
+  },
+  "typography": {
+    "font_family": {
+      "primary": "Inter",
+      "secondary": null,
+      "mono": null
+    },
+    "font_size": {
+      "display": null,
+      "h1": 30,
+      "h2": 24,
+      "h3": 18,
+      "h4": 16,
+      "title": 18,
+      "subtitle": 17,
+      "body": 16,
+      "body_sm": 14,
+      "caption": 13,
+      "label": 14,
+      "button": 16
+    },
+    "line_height": {
+      "display": null,
+      "h1": 38,
+      "h2": 32,
+      "h3": 26,
+      "body": 24,
+      "caption": 18,
+      "button": 22
+    },
+    "font_weight": {
+      "regular": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700
+    },
+    "letter_spacing": {
+      "display": 0,
+      "heading": 0,
+      "body": 0,
+      "caption": 0,
+      "button": 0
+    },
+    "text_transform": {
+      "button": "none",
+      "label": "none"
+    }
+  },
+  "spacing": {
+    "base": 4,
+    "scale": {
+      "0": 0,
+      "2xs": 4,
+      "xs": 8,
+      "sm": 12,
+      "md": 16,
+      "lg": 24,
+      "xl": 32,
+      "2xl": 40,
+      "3xl": 48,
+      "4xl": 64
+    },
+    "component_gap": {
+      "inline": 10,
+      "stack": 16,
+      "section": 24,
+      "page_margin": 24,
+      "card_padding": 24,
+      "form_gap": 12
+    }
+  },
+  "sizing": {
+    "icon": {
+      "xs": 14,
+      "sm": 16,
+      "md": 20,
+      "lg": 28
+    },
+    "control_height": {
+      "xs": 30,
+      "sm": 38,
+      "md": 46,
+      "lg": 58
+    },
+    "container": {
+      "max_width": null,
+      "sidebar_width": 250,
+      "content_width": 1190
+    }
+  },
+  "radius": {
+    "none": 0,
+    "xs": 6,
+    "sm": 8,
+    "md": 12,
+    "lg": 18,
+    "xl": 24,
+    "2xl": 28,
+    "pill": 999,
+    "circle": 999,
+    "component": {
+      "button": 12,
+      "input": 12,
+      "card": 20,
+      "modal": null,
+      "badge": 999,
+      "avatar": 999
+    }
+  },
+  "border": {
+    "width": {
+      "none": 0,
+      "hairline": 1,
+      "sm": 1,
+      "md": 2,
+      "lg": null
+    },
+    "style": {
+      "default": "solid",
+      "focus": "solid"
+    }
+  },
+  "shadow": {
+    "none": "none",
+    "xs": null,
+    "sm": "0 1px 2px rgba(17, 17, 17, 0.04)",
+    "md": null,
+    "lg": null,
+    "xl": null,
+    "card": "none",
+    "popover": null,
+    "modal": null,
+    "button": "0 1px 2px rgba(17, 17, 17, 0.06)",
+    "focus_ring": "0 0 0 3px rgba(91, 76, 245, 0.18)"
+  },
+  "blur": {
+    "backdrop": null,
+    "glass": null
+  },
+  "gradient": {
+    "brand": "linear-gradient(90deg, #5B4CF5 0%, #6A4CF6 100%)",
+    "surface": null,
+    "overlay": "linear-gradient(90deg, rgba(185, 165, 244, 0.9) 0%, rgba(143, 216, 243, 0.95) 100%)"
+  },
+  "layout": {
+    "grid": {
+      "columns": 3,
+      "gutter": 16,
+      "margin": 24
+    },
+    "breakpoints": {
+      "mobile": 414,
+      "tablet": 768,
+      "desktop": 1440,
+      "wide": null
+    },
+    "density": "comfortable",
+    "alignment": "left"
+  },
+  "motion": {
+    "duration": {
+      "fast": null,
+      "normal": null,
+      "slow": null
+    },
+    "easing": {
+      "standard": null,
+      "enter": null,
+      "exit": null
+    }
+  },
+  "components": {
+    "button": {
+      "variants": {
+        "primary": {
+          "height": 48,
+          "padding_x": 24,
+          "padding_y": 12,
+          "radius": 12,
+          "background": "#5B4CF5",
+          "text_color": "#FFFFFF",
+          "border": "#5B4CF5",
+          "shadow": "0 1px 2px rgba(17, 17, 17, 0.06)",
+          "font_size": 16,
+          "font_weight": 600
+        },
+        "secondary": {
+          "height": 36,
+          "padding_x": 12,
+          "padding_y": 8,
+          "radius": 8,
+          "background": "#FFFFFF",
+          "text_color": "#111111",
+          "border": "#E4E4E9",
+          "shadow": "none"
+        },
+        "ghost": {
+          "height": 40,
+          "padding_x": 12,
+          "background": "transparent",
+          "text_color": "#606064"
+        },
+        "danger": {
+          "height": null,
+          "background": null,
+          "text_color": null
+        }
+      },
+      "states": {
+        "default": {},
+        "hover": {},
+        "active": {},
+        "focus": {},
+        "disabled": {}
+      }
+    },
+    "input": {
+      "height": 48,
+      "padding_x": 16,
+      "padding_y": 12,
+      "radius": 12,
+      "background": "#FFFFFF",
+      "text_color": "#111111",
+      "placeholder_color": "#6F6F76",
+      "border_color": "#E4E4E9",
+      "border_width": 1,
+      "font_size": 16,
+      "states": {
+        "default": {},
+        "focus": {},
+        "error": {},
+        "disabled": {}
+      }
+    },
+    "select": {
+      "height": 40,
+      "padding_x": 12,
+      "radius": 12,
+      "background": "#FFFFFF",
+      "border_color": "#E4E4E9",
+      "icon_size": 16
+    },
+    "checkbox": {
+      "size": null,
+      "radius": null,
+      "border_color": null,
+      "checked_background": null,
+      "check_color": null
+    },
+    "radio": {
+      "size": null,
+      "border_color": null,
+      "checked_color": null
+    },
+    "switch": {
+      "width": 36,
+      "height": 22,
+      "thumb_size": 18,
+      "track_off": "#ECECEF",
+      "track_on": "#5B4CF5"
+    },
+    "card": {
+      "background": "#FFFFFF",
+      "padding": 24,
+      "radius": 20,
+      "border_color": "#E4E4E9",
+      "shadow": "none"
+    },
+    "modal": {
+      "background": null,
+      "width": null,
+      "padding": null,
+      "radius": null,
+      "shadow": null,
+      "scrim_color": null
+    },
+    "tooltip": {
+      "background": null,
+      "text_color": null,
+      "padding_x": null,
+      "padding_y": null,
+      "radius": null,
+      "font_size": null
+    },
+    "badge": {
+      "height": 32,
+      "padding_x": 14,
+      "radius": 999,
+      "background": "#DDF4E7",
+      "text_color": "#20A95A",
+      "font_size": 16,
+      "font_weight": 500
+    },
+    "avatar": {
+      "size_sm": null,
+      "size_md": 46,
+      "size_lg": null,
+      "radius": 999
+    },
+    "tabs": {
+      "height": 40,
+      "gap": 4,
+      "active_text": "#111111",
+      "inactive_text": "#606064",
+      "indicator_color": null,
+      "indicator_height": null
+    },
+    "navigation": {
+      "item_height": 44,
+      "item_padding_x": 16,
+      "active_background": "#F4F4F8",
+      "active_text": "#111111",
+      "inactive_text": "#606064",
+      "icon_size": 18
+    },
+    "table": {
+      "header_height": null,
+      "row_height": null,
+      "cell_padding_x": null,
+      "border_color": null,
+      "header_background": null,
+      "row_background": null,
+      "row_hover_background": null
+    }
+  },
+  "icons": {
+    "style": "outline rounded",
+    "stroke_width": 1.75,
+    "corner_style": "rounded",
+    "default_size": 20,
+    "color": "#606064"
+  },
+  "imagery": {
+    "style": "simple product logos and circular profile photo",
+    "corner_radius": 12,
+    "aspect_ratios": [
+      "1:1"
+    ],
+    "treatment": "flat logo marks on white cards"
+  },
+  "accessibility": {
+    "minimum_text_contrast_observed": null,
+    "focus_visible": null,
+    "touch_target_min": 40
+  },
+  "raw_observations": {
+    "visible_text_samples": [
+      "FlowMail",
+      "Integrations",
+      "Search here...",
+      "Get Ai Insight",
+      "Request Integration",
+      "All Integrations",
+      "Search Integrations...",
+      "Slack",
+      "Trello",
+      "Monday.com",
+      "Notion",
+      "Jira",
+      "Asana",
+      "John Doe",
+      "Pro Plan"
+    ],
+    "detected_color_samples": [
+      {
+        "name": "brand_purple",
+        "value": "#5B4CF5",
+        "confidence": 0.86
+      },
+      {
+        "name": "page_background",
+        "value": "#F7F7FB",
+        "confidence": 0.8
+      },
+      {
+        "name": "surface_white",
+        "value": "#FFFFFF",
+        "confidence": 0.9
+      },
+      {
+        "name": "border_light",
+        "value": "#E4E4E9",
+        "confidence": 0.82
+      },
+      {
+        "name": "success_green",
+        "value": "#20A95A",
+        "confidence": 0.83
+      }
+    ],
+    "measured_elements": [
+      {
+        "name": "screenshot",
+        "width": 2157,
+        "height": 1535,
+        "unit": "px"
+      },
+      {
+        "name": "adaptation_width",
+        "width": 1440,
+        "unit": "px"
+      },
+      {
+        "name": "normalized_scale",
+        "value": 0.6675938803894298
+      },
+      {
+        "name": "sidebar_width_normalized",
+        "width": 250,
+        "unit": "px",
+        "confidence": 0.82
+      },
+      {
+        "name": "topbar_height_normalized",
+        "height": 94,
+        "unit": "px",
+        "confidence": 0.72
+      },
+      {
+        "name": "integration_card_normalized",
+        "width": 355,
+        "height": 220,
+        "unit": "px",
+        "confidence": 0.76
+      }
+    ]
+  }
+}

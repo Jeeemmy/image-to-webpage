@@ -1,0 +1,4 @@
+interface:
+  display_name: "Image to Webpage"
+  short_description: "Turn UI images into real web pages"
+  default_prompt: "Use $image-to-webpage to recreate this UI screenshot as a React + Tailwind page."

@@ -1,0 +1,2217 @@
+{
+  "version": "ui-dsl-v2",
+  "request": {
+    "source": "given_snapshot",
+    "ignored_outer_container": true,
+    "source_image": "/Users/jimmy/Downloads/flowmail-page.png",
+    "source_dimensions": {
+      "width": 2157,
+      "height": 1535
+    },
+    "adaptation": {
+      "orientation": "landscape",
+      "default_width": 1440,
+      "scale": 0.6675938803894298
+    }
+  },
+  "root": {
+    "type": "container",
+    "id": "root",
+    "role": "screen",
+    "children": [
+      {
+        "type": "container",
+        "id": "app_shell",
+        "role": "dashboard_app_shell",
+        "children": [
+          {
+            "type": "sidebar",
+            "id": "sidebar",
+            "role": "primary_navigation",
+            "children": [
+              {
+                "type": "header",
+                "id": "sidebar_brand_header",
+                "role": "brand",
+                "children": [
+                  {
+                    "type": "icon",
+                    "id": "flowmail_logo_icon",
+                    "role": "brand_mark",
+                    "content": null,
+                    "icon": {
+                      "type": "icon",
+                      "name": "mail",
+                      "aria_label": "FlowMail",
+                      "decorative": false,
+                      "position": "standalone"
+                    },
+                    "layout": {
+                      "width": 36,
+                      "height": 36
+                    },
+                    "appearance": {
+                      "variant": "primary",
+                      "size": "lg",
+                      "tone": "brand",
+                      "border": {
+                        "visible": false,
+                        "sides": [
+                          "all"
+                        ],
+                        "role": null
+                      },
+                      "elevation": "none",
+                      "shape": "rounded"
+                    }
+                  },
+                  {
+                    "type": "heading",
+                    "id": "brand_name",
+                    "role": "brand_name",
+                    "level": 2,
+                    "content": "FlowMail"
+                  },
+                  {
+                    "type": "icon_button",
+                    "id": "sidebar_collapse",
+                    "role": "collapse_sidebar",
+                    "content": null,
+                    "icon": {
+                      "type": "icon",
+                      "name": "menu",
+                      "aria_label": "collapse sidebar",
+                      "decorative": false,
+                      "position": "standalone"
+                    },
+                    "appearance": {
+                      "variant": "ghost",
+                      "size": "sm",
+                      "shape": "circle"
+                    },
+                    "state": {
+                      "disabled": null,
+                      "loading": null,
+                      "active": null
+                    }
+                  }
+                ],
+                "layout": {
+                  "direction": "row",
+                  "gap": 12,
+                  "padding_x": 24,
+                  "padding_y": 30,
+                  "align": "center",
+                  "justify": "space-between",
+                  "width": null,
+                  "height": 94
+                },
+                "appearance": {
+                  "variant": null,
+                  "size": null,
+                  "tone": "neutral",
+                  "border": {
+                    "visible": false,
+                    "sides": [
+                      "all"
+                    ],
+                    "role": null
+                  },
+                  "elevation": "none",
+                  "shape": null
+                }
+              },
+              {
+                "type": "nav",
+                "id": "sidebar_nav",
+                "role": "main_navigation",
+                "items": [
+                  {
+                    "type": "nav_item",
+                    "id": "nav_dashboard",
+                    "content": "Dashboard",
+                    "icon": {
+                      "type": "icon",
+                      "name": "home",
+                      "aria_label": null,
+                      "decorative": false,
+                      "position": "leading"
+                    },
+                    "trailing_icon": null,
+                    "state": {
+                      "active": false,
+                      "selected": false,
+                      "disabled": null,
+                      "expanded": null
+                    }
+                  },
+                  {
+                    "type": "nav_item",
+                    "id": "nav_campaigns",
+                    "content": "Campaigns",
+                    "icon": {
+                      "type": "icon",
+                      "name": "mail",
+                      "aria_label": null,
+                      "decorative": false,
+                      "position": "leading"
+                    },
+                    "trailing_icon": null,
+                    "state": {
+                      "active": false,
+                      "selected": false,
+                      "disabled": null,
+                      "expanded": null
+                    }
+                  },
+                  {
+                    "type": "nav_item",
+                    "id": "nav_automations",
+                    "content": "Automations",
+                    "icon": {
+                      "type": "icon",
+                      "name": "settings",
+                      "aria_label": null,
+                      "decorative": false,
+                      "position": "leading"
+                    },
+                    "trailing_icon": null,
+                    "state": {
+                      "active": false,
+                      "selected": false,
+                      "disabled": null,
+                      "expanded": null
+                    }
+                  },
+                  {
+                    "type": "nav_item",
+                    "id": "nav_audience",
+                    "content": "Audience",
+                    "icon": {
+                      "type": "icon",
+                      "name": "users",
+                      "aria_label": null,
+                      "decorative": false,
+                      "position": "leading"
+                    },
+                    "trailing_icon": null,
+                    "state": {
+                      "active": false,
+                      "selected": false,
+                      "disabled": null,
+                      "expanded": null
+                    }
+                  },
+                  {
+                    "type": "nav_item",
+                    "id": "nav_analytics",
+                    "content": "Analytics",
+                    "icon": {
+                      "type": "icon",
+                      "name": "chart",
+                      "aria_label": null,
+                      "decorative": false,
+                      "position": "leading"
+                    },
+                    "trailing_icon": null,
+                    "state": {
+                      "active": false,
+                      "selected": false,
+                      "disabled": null,
+                      "expanded": null
+                    }
+                  },
+                  {
+                    "type": "nav_item",
+                    "id": "nav_templates",
+                    "content": "Templates",
+                    "icon": {
+                      "type": "icon",
+                      "name": "copy",
+                      "aria_label": null,
+                      "decorative": false,
+                      "position": "leading"
+                    },
+                    "trailing_icon": null,
+                    "state": {
+                      "active": false,
+                      "selected": false,
+                      "disabled": null,
+                      "expanded": null
+                    }
+                  },
+                  {
+                    "type": "nav_item",
+                    "id": "nav_integrations",
+                    "content": "Integrations",
+                    "icon": {
+                      "type": "icon",
+                      "name": "plug",
+                      "aria_label": null,
+                      "decorative": false,
+                      "position": "leading"
+                    },
+                    "trailing_icon": null,
+                    "state": {
+                      "active": true,
+                      "selected": true,
+                      "disabled": null,
+                      "expanded": null
+                    }
+                  },
+                  {
+                    "type": "nav_item",
+                    "id": "nav_forms",
+                    "content": "Forms",
+                    "icon": {
+                      "type": "icon",
+                      "name": "copy",
+                      "aria_label": null,
+                      "decorative": false,
+                      "position": "leading"
+                    },
+                    "trailing_icon": null,
+                    "state": {
+                      "active": false,
+                      "selected": false,
+                      "disabled": null,
+                      "expanded": null
+                    }
+                  },
+                  {
+                    "type": "nav_item",
+                    "id": "nav_settings",
+                    "content": "Settings",
+                    "icon": {
+                      "type": "icon",
+                      "name": "settings",
+                      "aria_label": null,
+                      "decorative": false,
+                      "position": "leading"
+                    },
+                    "trailing_icon": null,
+                    "state": {
+                      "active": false,
+                      "selected": false,
+                      "disabled": null,
+                      "expanded": null
+                    }
+                  }
+                ],
+                "children": [],
+                "layout": {
+                  "direction": "column",
+                  "gap": 16,
+                  "padding_x": 22,
+                  "padding_y": 20,
+                  "align": "stretch",
+                  "justify": "start",
+                  "width": null,
+                  "height": null
+                },
+                "appearance": {
+                  "variant": null,
+                  "size": null,
+                  "tone": "neutral",
+                  "border": {
+                    "visible": false,
+                    "sides": [
+                      "all"
+                    ],
+                    "role": null
+                  },
+                  "elevation": "none",
+                  "shape": null
+                }
+              },
+              {
+                "type": "divider",
+                "id": "sidebar_profile_divider",
+                "layout": {
+                  "direction": "row",
+                  "width": null,
+                  "height": 1
+                },
+                "appearance": {
+                  "border": {
+                    "visible": true,
+                    "sides": [
+                      "top"
+                    ],
+                    "role": "separator"
+                  }
+                }
+              },
+              {
+                "type": "container",
+                "id": "profile_summary",
+                "role": "account_switcher",
+                "children": [
+                  {
+                    "type": "avatar",
+                    "id": "john_doe_avatar",
+                    "content": null,
+                    "alt": "John Doe",
+                    "layout": {
+                      "width": 46,
+                      "height": 46
+                    },
+                    "appearance": {
+                      "variant": null,
+                      "size": "md",
+                      "tone": "neutral",
+                      "border": {
+                        "visible": false,
+                        "sides": [
+                          "all"
+                        ],
+                        "role": null
+                      },
+                      "elevation": "none",
+                      "shape": "circle"
+                    }
+                  },
+                  {
+                    "type": "container",
+                    "id": "profile_text",
+                    "role": "profile_text",
+                    "children": [
+                      {
+                        "type": "text",
+                        "id": "profile_name",
+                        "content": "John Doe"
+                      },
+                      {
+                        "type": "text",
+                        "id": "profile_plan",
+                        "content": "Pro Plan"
+                      }
+                    ],
+                    "layout": {
+                      "direction": "column",
+                      "gap": 2,
+                      "padding": 0,
+                      "align": "start",
+                      "justify": "center",
+                      "width": null,
+                      "height": null
+                    },
+                    "appearance": {
+                      "variant": null,
+                      "size": null,
+                      "tone": "neutral",
+                      "border": {
+                        "visible": false,
+                        "sides": [
+                          "all"
+                        ],
+                        "role": null
+                      },
+                      "elevation": "none",
+                      "shape": null
+                    }
+                  },
+                  {
+                    "type": "icon",
+                    "id": "profile_chevron",
+                    "role": "expand_account_menu",
+                    "icon": {
+                      "type": "icon",
+                      "name": "chevron-down",
+                      "aria_label": "open account menu",
+                      "decorative": false,
+                      "position": "trailing"
+                    }
+                  }
+                ],
+                "layout": {
+                  "direction": "row",
+                  "gap": 12,
+                  "padding_x": 24,
+                  "padding_y": 22,
+                  "align": "center",
+                  "justify": "start",
+                  "width": null,
+                  "height": 92
+                },
+                "appearance": {
+                  "variant": null,
+                  "size": null,
+                  "tone": "neutral",
+                  "border": {
+                    "visible": false,
+                    "sides": [
+                      "all"
+                    ],
+                    "role": null
+                  },
+                  "elevation": "none",
+                  "shape": null
+                }
+              }
+            ],
+            "layout": {
+              "direction": "column",
+              "gap": 0,
+              "padding": 0,
+              "align": "stretch",
+              "justify": "space-between",
+              "columns": null,
+              "rows": null,
+              "width": 250,
+              "height": null
+            },
+            "appearance": {
+              "variant": null,
+              "size": null,
+              "tone": "neutral",
+              "border": {
+                "visible": true,
+                "sides": [
+                  "right"
+                ],
+                "role": "separator"
+              },
+              "elevation": "none",
+              "shape": "square"
+            },
+            "behavior": {
+              "positioning": "sticky",
+              "sticky_edge": "top",
+              "persistent": true,
+              "scroll_container": "internal_when_needed"
+            }
+          },
+          {
+            "type": "container",
+            "id": "app_pane",
+            "role": "scrollable_app_pane",
+            "children": [
+              {
+                "type": "header",
+                "id": "topbar",
+                "role": "global_topbar",
+                "children": [
+                  {
+                    "type": "heading",
+                    "id": "topbar_title",
+                    "role": "current_section",
+                    "level": 2,
+                    "content": "Integrations"
+                  },
+                  {
+                    "type": "toolbar",
+                    "id": "topbar_actions",
+                    "role": "global_actions",
+                    "children": [
+                      {
+                        "type": "search_input",
+                        "id": "global_search",
+                        "label": null,
+                        "placeholder": "Search here...",
+                        "value": null,
+                        "leading_icon": {
+                          "type": "icon",
+                          "name": "search",
+                          "aria_label": "search",
+                          "decorative": false,
+                          "position": "leading"
+                        },
+                        "trailing_icon": null,
+                        "layout": {
+                          "width": 304,
+                          "height": 48
+                        },
+                        "appearance": {
+                          "border": {
+                            "visible": true,
+                            "sides": [
+                              "all"
+                            ],
+                            "role": "outline"
+                          },
+                          "elevation": "none",
+                          "shape": "rounded"
+                        },
+                        "state": {
+                          "focused": null,
+                          "disabled": null,
+                          "error": null
+                        }
+                      },
+                      {
+                        "type": "icon_button",
+                        "id": "notifications_button",
+                        "role": "notifications",
+                        "content": null,
+                        "icon": {
+                          "type": "icon",
+                          "name": "bell",
+                          "aria_label": "notifications",
+                          "decorative": false,
+                          "position": "standalone"
+                        },
+                        "appearance": {
+                          "variant": "outline",
+                          "size": "lg",
+                          "shape": "rounded",
+                          "elevation": "none"
+                        },
+                        "state": {
+                          "disabled": null,
+                          "loading": null,
+                          "active": null
+                        }
+                      },
+                      {
+                        "type": "button",
+                        "id": "ai_insight_button",
+                        "role": "open_ai_insight",
+                        "content": "Get Ai Insight",
+                        "leading_icon": {
+                          "type": "icon",
+                          "name": "star",
+                          "aria_label": null,
+                          "decorative": false,
+                          "position": "leading"
+                        },
+                        "trailing_icon": null,
+                        "appearance": {
+                          "variant": "primary",
+                          "size": "md",
+                          "tone": "brand"
+                        },
+                        "state": {
+                          "disabled": null,
+                          "loading": null,
+                          "active": null
+                        }
+                      }
+                    ],
+                    "layout": {
+                      "direction": "row",
+                      "gap": 18,
+                      "padding": 0,
+                      "align": "center",
+                      "justify": "end",
+                      "width": null,
+                      "height": null
+                    },
+                    "appearance": {
+                      "variant": null,
+                      "size": null,
+                      "tone": "neutral",
+                      "border": {
+                        "visible": false,
+                        "sides": [
+                          "all"
+                        ],
+                        "role": null
+                      },
+                      "elevation": "none",
+                      "shape": null
+                    }
+                  }
+                ],
+                "layout": {
+                  "direction": "row",
+                  "gap": 24,
+                  "padding_x": 24,
+                  "padding_y": 24,
+                  "align": "center",
+                  "justify": "space-between",
+                  "width": null,
+                  "height": 94
+                },
+                "appearance": {
+                  "variant": null,
+                  "size": null,
+                  "tone": "neutral",
+                  "border": {
+                    "visible": true,
+                    "sides": [
+                      "bottom"
+                    ],
+                    "role": "separator"
+                  },
+                  "elevation": "none",
+                  "shape": "square"
+                },
+                "behavior": {
+                  "positioning": "sticky",
+                  "sticky_edge": "top",
+                  "persistent": true
+                }
+              },
+              {
+                "type": "main",
+                "id": "main_content",
+                "role": "integrations_page_content",
+                "children": [
+                  {
+                    "type": "section",
+                    "id": "page_intro",
+                    "role": "page_header",
+                    "children": [
+                      {
+                        "type": "container",
+                        "id": "page_intro_text",
+                        "role": "title_group",
+                        "children": [
+                          {
+                            "type": "heading",
+                            "id": "page_title",
+                            "level": 1,
+                            "content": "Integrations"
+                          },
+                          {
+                            "type": "text",
+                            "id": "page_subtitle",
+                            "content": "Connect FlowMail with your favorite tools"
+                          }
+                        ],
+                        "layout": {
+                          "direction": "column",
+                          "gap": 4,
+                          "padding": 0,
+                          "align": "start",
+                          "justify": "start",
+                          "width": null,
+                          "height": null
+                        },
+                        "appearance": {
+                          "variant": null,
+                          "size": null,
+                          "tone": "neutral",
+                          "border": {
+                            "visible": false,
+                            "sides": [
+                              "all"
+                            ],
+                            "role": null
+                          },
+                          "elevation": "none",
+                          "shape": null
+                        }
+                      },
+                      {
+                        "type": "button",
+                        "id": "request_integration_button",
+                        "role": "request_integration",
+                        "content": "Request Integration",
+                        "leading_icon": {
+                          "type": "icon",
+                          "name": "plus",
+                          "aria_label": null,
+                          "decorative": false,
+                          "position": "leading"
+                        },
+                        "trailing_icon": null,
+                        "appearance": {
+                          "variant": "primary",
+                          "size": "md",
+                          "tone": "brand"
+                        },
+                        "state": {
+                          "disabled": null,
+                          "loading": null,
+                          "active": null
+                        }
+                      }
+                    ],
+                    "layout": {
+                      "direction": "row",
+                      "gap": 24,
+                      "padding": 0,
+                      "align": "center",
+                      "justify": "space-between",
+                      "width": null,
+                      "height": null
+                    },
+                    "appearance": {
+                      "variant": null,
+                      "size": null,
+                      "tone": "neutral",
+                      "border": {
+                        "visible": false,
+                        "sides": [
+                          "all"
+                        ],
+                        "role": null
+                      },
+                      "elevation": "none",
+                      "shape": null
+                    }
+                  },
+                  {
+                    "type": "grid",
+                    "id": "metrics_grid",
+                    "role": "integration_metrics",
+                    "children": [
+                      {
+                        "type": "card",
+                        "id": "metric_total_available",
+                        "role": "metric_card",
+                        "children": [
+                          {
+                            "type": "container",
+                            "id": "metric_total_header",
+                            "role": "metric_header",
+                            "children": [
+                              {
+                                "type": "icon",
+                                "id": "metric_total_icon",
+                                "icon": {
+                                  "type": "icon",
+                                  "name": "check",
+                                  "aria_label": null,
+                                  "decorative": false,
+                                  "position": "leading"
+                                }
+                              },
+                              {
+                                "type": "text",
+                                "id": "metric_total_label",
+                                "content": "Total Available"
+                              },
+                              {
+                                "type": "icon_button",
+                                "id": "metric_total_menu",
+                                "content": null,
+                                "icon": {
+                                  "type": "icon",
+                                  "name": "more-vertical",
+                                  "aria_label": "metric menu",
+                                  "decorative": false,
+                                  "position": "standalone"
+                                },
+                                "appearance": {
+                                  "variant": "ghost",
+                                  "size": "sm",
+                                  "shape": "circle",
+                                  "elevation": "none"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "type": "container",
+                            "id": "metric_total_value_row",
+                            "role": "metric_value_row",
+                            "children": [
+                              {
+                                "type": "heading",
+                                "id": "metric_total_value",
+                                "level": 2,
+                                "content": "24"
+                              },
+                              {
+                                "type": "badge",
+                                "id": "metric_total_delta",
+                                "content": "+6%",
+                                "leading_icon": {
+                                  "type": "icon",
+                                  "name": "arrow-up",
+                                  "aria_label": null,
+                                  "decorative": false,
+                                  "position": "leading"
+                                },
+                                "trailing_icon": null,
+                                "appearance": {
+                                  "variant": "success",
+                                  "size": "md",
+                                  "shape": "pill"
+                                }
+                              }
+                            ],
+                            "layout": {
+                              "direction": "row",
+                              "gap": 16,
+                              "padding_x": 18,
+                              "padding_y": 16,
+                              "align": "center",
+                              "justify": "space-between",
+                              "width": null,
+                              "height": 62
+                            },
+                            "appearance": {
+                              "variant": "neutral",
+                              "size": null,
+                              "tone": "neutral",
+                              "border": {
+                                "visible": false,
+                                "sides": [
+                                  "all"
+                                ],
+                                "role": null
+                              },
+                              "elevation": "none",
+                              "shape": "rounded"
+                            }
+                          }
+                        ],
+                        "layout": {
+                          "direction": "column",
+                          "gap": 18,
+                          "padding": 16,
+                          "width": null,
+                          "height": 136
+                        },
+                        "appearance": {
+                          "variant": "neutral",
+                          "size": null,
+                          "tone": "neutral",
+                          "border": {
+                            "visible": true,
+                            "sides": [
+                              "all"
+                            ],
+                            "role": "outline"
+                          },
+                          "elevation": "none",
+                          "shape": "rounded"
+                        }
+                      },
+                      {
+                        "type": "card",
+                        "id": "metric_connected",
+                        "role": "metric_card",
+                        "children": [
+                          {
+                            "type": "text",
+                            "id": "metric_connected_label",
+                            "content": "Connected"
+                          },
+                          {
+                            "type": "heading",
+                            "id": "metric_connected_value",
+                            "level": 2,
+                            "content": "09"
+                          },
+                          {
+                            "type": "badge",
+                            "id": "metric_connected_delta",
+                            "content": "+2%",
+                            "leading_icon": {
+                              "type": "icon",
+                              "name": "arrow-up",
+                              "aria_label": null,
+                              "decorative": false,
+                              "position": "leading"
+                            },
+                            "appearance": {
+                              "variant": "success",
+                              "size": "md",
+                              "shape": "pill"
+                            }
+                          },
+                          {
+                            "type": "icon_button",
+                            "id": "metric_connected_menu",
+                            "content": null,
+                            "icon": {
+                              "type": "icon",
+                              "name": "more-vertical",
+                              "aria_label": "metric menu",
+                              "decorative": false,
+                              "position": "standalone"
+                            },
+                            "appearance": {
+                              "variant": "ghost",
+                              "size": "sm",
+                              "shape": "circle",
+                              "elevation": "none"
+                            }
+                          }
+                        ],
+                        "layout": {
+                          "direction": "column",
+                          "gap": 18,
+                          "padding": 16,
+                          "width": null,
+                          "height": 136
+                        },
+                        "appearance": {
+                          "variant": "neutral",
+                          "size": null,
+                          "tone": "neutral",
+                          "border": {
+                            "visible": true,
+                            "sides": [
+                              "all"
+                            ],
+                            "role": "outline"
+                          },
+                          "elevation": "none",
+                          "shape": "rounded"
+                        }
+                      },
+                      {
+                        "type": "card",
+                        "id": "metric_categories",
+                        "role": "metric_card",
+                        "children": [
+                          {
+                            "type": "text",
+                            "id": "metric_categories_label",
+                            "content": "Categories"
+                          },
+                          {
+                            "type": "heading",
+                            "id": "metric_categories_value",
+                            "level": 2,
+                            "content": "08"
+                          },
+                          {
+                            "type": "badge",
+                            "id": "metric_categories_delta",
+                            "content": "+5%",
+                            "leading_icon": {
+                              "type": "icon",
+                              "name": "arrow-up",
+                              "aria_label": null,
+                              "decorative": false,
+                              "position": "leading"
+                            },
+                            "appearance": {
+                              "variant": "success",
+                              "size": "md",
+                              "shape": "pill"
+                            }
+                          },
+                          {
+                            "type": "icon_button",
+                            "id": "metric_categories_menu",
+                            "content": null,
+                            "icon": {
+                              "type": "icon",
+                              "name": "more-vertical",
+                              "aria_label": "metric menu",
+                              "decorative": false,
+                              "position": "standalone"
+                            },
+                            "appearance": {
+                              "variant": "ghost",
+                              "size": "sm",
+                              "shape": "circle",
+                              "elevation": "none"
+                            }
+                          }
+                        ],
+                        "layout": {
+                          "direction": "column",
+                          "gap": 18,
+                          "padding": 16,
+                          "width": null,
+                          "height": 136
+                        },
+                        "appearance": {
+                          "variant": "neutral",
+                          "size": null,
+                          "tone": "neutral",
+                          "border": {
+                            "visible": true,
+                            "sides": [
+                              "all"
+                            ],
+                            "role": "outline"
+                          },
+                          "elevation": "none",
+                          "shape": "rounded"
+                        }
+                      },
+                      {
+                        "type": "card",
+                        "id": "metric_last_synced",
+                        "role": "metric_card",
+                        "children": [
+                          {
+                            "type": "text",
+                            "id": "metric_last_synced_label",
+                            "content": "Last Synced"
+                          },
+                          {
+                            "type": "heading",
+                            "id": "metric_last_synced_value",
+                            "level": 2,
+                            "content": "2m"
+                          },
+                          {
+                            "type": "badge",
+                            "id": "metric_last_synced_status",
+                            "content": "Live",
+                            "leading_icon": null,
+                            "trailing_icon": null,
+                            "appearance": {
+                              "variant": "success",
+                              "size": "md",
+                              "shape": "pill"
+                            }
+                          },
+                          {
+                            "type": "icon_button",
+                            "id": "metric_last_synced_menu",
+                            "content": null,
+                            "icon": {
+                              "type": "icon",
+                              "name": "more-vertical",
+                              "aria_label": "metric menu",
+                              "decorative": false,
+                              "position": "standalone"
+                            },
+                            "appearance": {
+                              "variant": "ghost",
+                              "size": "sm",
+                              "shape": "circle",
+                              "elevation": "none"
+                            }
+                          }
+                        ],
+                        "layout": {
+                          "direction": "column",
+                          "gap": 18,
+                          "padding": 16,
+                          "width": null,
+                          "height": 136
+                        },
+                        "appearance": {
+                          "variant": "neutral",
+                          "size": null,
+                          "tone": "neutral",
+                          "border": {
+                            "visible": true,
+                            "sides": [
+                              "all"
+                            ],
+                            "role": "outline"
+                          },
+                          "elevation": "none",
+                          "shape": "rounded"
+                        }
+                      }
+                    ],
+                    "layout": {
+                      "direction": "grid",
+                      "gap": 16,
+                      "columns": 4,
+                      "rows": 1,
+                      "width": null,
+                      "height": null
+                    },
+                    "appearance": {
+                      "variant": null,
+                      "size": null,
+                      "tone": "neutral",
+                      "border": {
+                        "visible": false,
+                        "sides": [
+                          "all"
+                        ],
+                        "role": null
+                      },
+                      "elevation": "none",
+                      "shape": null
+                    }
+                  },
+                  {
+                    "type": "card",
+                    "id": "integrations_panel",
+                    "role": "integrations_catalog_panel",
+                    "children": [
+                      {
+                        "type": "toolbar",
+                        "id": "integrations_panel_toolbar",
+                        "role": "catalog_header_controls",
+                        "children": [
+                          {
+                            "type": "heading",
+                            "id": "all_integrations_heading",
+                            "level": 2,
+                            "content": "All Integrations"
+                          },
+                          {
+                            "type": "container",
+                            "id": "catalog_controls",
+                            "role": "search_and_filter_controls",
+                            "children": [
+                              {
+                                "type": "search_input",
+                                "id": "catalog_search",
+                                "label": null,
+                                "placeholder": "Search Integrations...",
+                                "value": null,
+                                "leading_icon": {
+                                  "type": "icon",
+                                  "name": "search",
+                                  "aria_label": "search integrations",
+                                  "decorative": false,
+                                  "position": "leading"
+                                },
+                                "trailing_icon": null,
+                                "layout": {
+                                  "width": 300,
+                                  "height": 40
+                                },
+                                "appearance": {
+                                  "border": {
+                                    "visible": true,
+                                    "sides": [
+                                      "all"
+                                    ],
+                                    "role": "outline"
+                                  },
+                                  "elevation": "none",
+                                  "shape": "rounded"
+                                },
+                                "state": {
+                                  "focused": null,
+                                  "disabled": null,
+                                  "error": null
+                                }
+                              },
+                              {
+                                "type": "tabs",
+                                "id": "catalog_filter_tabs",
+                                "role": "integration_status_filter",
+                                "items": [
+                                  {
+                                    "type": "tab",
+                                    "id": "filter_all",
+                                    "content": "All",
+                                    "icon": null,
+                                    "state": {
+                                      "active": true,
+                                      "selected": true,
+                                      "disabled": null
+                                    }
+                                  },
+                                  {
+                                    "type": "tab",
+                                    "id": "filter_available",
+                                    "content": "Available",
+                                    "icon": null,
+                                    "state": {
+                                      "active": false,
+                                      "selected": false,
+                                      "disabled": null
+                                    }
+                                  },
+                                  {
+                                    "type": "tab",
+                                    "id": "filter_connected",
+                                    "content": "Connected",
+                                    "icon": null,
+                                    "state": {
+                                      "active": false,
+                                      "selected": false,
+                                      "disabled": null
+                                    }
+                                  }
+                                ],
+                                "children": [],
+                                "layout": {
+                                  "direction": "row",
+                                  "gap": 2,
+                                  "padding": 4,
+                                  "width": null,
+                                  "height": 40
+                                },
+                                "appearance": {
+                                  "variant": "neutral",
+                                  "size": "md",
+                                  "tone": "neutral",
+                                  "border": {
+                                    "visible": true,
+                                    "sides": [
+                                      "all"
+                                    ],
+                                    "role": "outline"
+                                  },
+                                  "elevation": "none",
+                                  "shape": "rounded"
+                                }
+                              }
+                            ],
+                            "layout": {
+                              "direction": "row",
+                              "gap": 10,
+                              "padding": 0,
+                              "align": "center",
+                              "justify": "end",
+                              "width": null,
+                              "height": null
+                            },
+                            "appearance": {
+                              "variant": null,
+                              "size": null,
+                              "tone": "neutral",
+                              "border": {
+                                "visible": false,
+                                "sides": [
+                                  "all"
+                                ],
+                                "role": null
+                              },
+                              "elevation": "none",
+                              "shape": null
+                            }
+                          }
+                        ],
+                        "layout": {
+                          "direction": "row",
+                          "gap": 24,
+                          "padding": 0,
+                          "align": "center",
+                          "justify": "space-between",
+                          "width": null,
+                          "height": null
+                        },
+                        "appearance": {
+                          "variant": null,
+                          "size": null,
+                          "tone": "neutral",
+                          "border": {
+                            "visible": false,
+                            "sides": [
+                              "all"
+                            ],
+                            "role": null
+                          },
+                          "elevation": "none",
+                          "shape": null
+                        }
+                      },
+                      {
+                        "type": "grid",
+                        "id": "integrations_grid",
+                        "role": "integration_cards_grid",
+                        "children": [
+                          {
+                            "type": "card",
+                            "id": "integration_slack",
+                            "role": "integration_card",
+                            "children": [
+                              {
+                                "type": "image",
+                                "id": "slack_logo",
+                                "alt": "Slack logo",
+                                "src": null,
+                                "layout": {
+                                  "width": 28,
+                                  "height": 28
+                                }
+                              },
+                              {
+                                "type": "heading",
+                                "id": "slack_title",
+                                "level": 3,
+                                "content": "Slack"
+                              },
+                              {
+                                "type": "paragraph",
+                                "id": "slack_description",
+                                "content": "Streamline team collaboration with timelines and customizable workflows."
+                              },
+                              {
+                                "type": "divider",
+                                "id": "slack_divider",
+                                "layout": {
+                                  "direction": "row",
+                                  "width": null,
+                                  "height": 1
+                                },
+                                "appearance": {
+                                  "border": {
+                                    "visible": true,
+                                    "sides": [
+                                      "top"
+                                    ],
+                                    "role": "separator"
+                                  }
+                                }
+                              },
+                              {
+                                "type": "toolbar",
+                                "id": "slack_card_actions",
+                                "role": "integration_card_actions",
+                                "children": [
+                                  {
+                                    "type": "icon_button",
+                                    "id": "slack_settings",
+                                    "content": null,
+                                    "icon": {
+                                      "type": "icon",
+                                      "name": "settings",
+                                      "aria_label": "Slack settings",
+                                      "decorative": false,
+                                      "position": "standalone"
+                                    },
+                                    "appearance": {
+                                      "variant": "outline",
+                                      "size": "sm",
+                                      "shape": "rounded",
+                                      "elevation": "none"
+                                    }
+                                  },
+                                  {
+                                    "type": "button",
+                                    "id": "slack_details",
+                                    "content": "Details",
+                                    "leading_icon": null,
+                                    "trailing_icon": null,
+                                    "appearance": {
+                                      "variant": "secondary",
+                                      "size": "sm",
+                                      "elevation": "none"
+                                    },
+                                    "state": {
+                                      "disabled": null,
+                                      "loading": null,
+                                      "active": null
+                                    }
+                                  },
+                                  {
+                                    "type": "switch",
+                                    "id": "slack_switch",
+                                    "label": null,
+                                    "state": {
+                                      "checked": true,
+                                      "disabled": null
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "icon_button",
+                                "id": "slack_more",
+                                "content": null,
+                                "icon": {
+                                  "type": "icon",
+                                  "name": "more-vertical",
+                                  "aria_label": "Slack more actions",
+                                  "decorative": false,
+                                  "position": "standalone"
+                                },
+                                "appearance": {
+                                  "variant": "ghost",
+                                  "size": "sm",
+                                  "shape": "circle",
+                                  "elevation": "none"
+                                }
+                              }
+                            ],
+                            "layout": {
+                              "direction": "column",
+                              "gap": 14,
+                              "padding": 16,
+                              "width": null,
+                              "height": 220
+                            },
+                            "appearance": {
+                              "variant": "neutral",
+                              "size": null,
+                              "tone": "neutral",
+                              "border": {
+                                "visible": true,
+                                "sides": [
+                                  "all"
+                                ],
+                                "role": "outline"
+                              },
+                              "elevation": "none",
+                              "shape": "rounded"
+                            }
+                          },
+                          {
+                            "type": "card",
+                            "id": "integration_trello",
+                            "role": "integration_card",
+                            "children": [
+                              {
+                                "type": "image",
+                                "id": "trello_logo",
+                                "alt": "Trello logo",
+                                "src": null,
+                                "layout": {
+                                  "width": 28,
+                                  "height": 28
+                                }
+                              },
+                              {
+                                "type": "heading",
+                                "id": "trello_title",
+                                "level": 3,
+                                "content": "Trello"
+                              },
+                              {
+                                "type": "paragraph",
+                                "id": "trello_description",
+                                "content": "Visual project management using boards, lists, and cards for flexible task tracking."
+                              },
+                              {
+                                "type": "button",
+                                "id": "trello_details",
+                                "content": "Details",
+                                "appearance": {
+                                  "variant": "secondary",
+                                  "size": "sm",
+                                  "elevation": "none"
+                                }
+                              },
+                              {
+                                "type": "switch",
+                                "id": "trello_switch",
+                                "label": null,
+                                "state": {
+                                  "checked": true,
+                                  "disabled": null
+                                }
+                              },
+                              {
+                                "type": "icon_button",
+                                "id": "trello_more",
+                                "content": null,
+                                "icon": {
+                                  "type": "icon",
+                                  "name": "more-vertical",
+                                  "aria_label": "Trello more actions",
+                                  "decorative": false,
+                                  "position": "standalone"
+                                },
+                                "appearance": {
+                                  "variant": "ghost",
+                                  "size": "sm",
+                                  "shape": "circle",
+                                  "elevation": "none"
+                                }
+                              }
+                            ],
+                            "layout": {
+                              "direction": "column",
+                              "gap": 14,
+                              "padding": 16,
+                              "width": null,
+                              "height": 220
+                            },
+                            "appearance": {
+                              "variant": "neutral",
+                              "border": {
+                                "visible": true,
+                                "sides": [
+                                  "all"
+                                ],
+                                "role": "outline"
+                              },
+                              "elevation": "none",
+                              "shape": "rounded"
+                            }
+                          },
+                          {
+                            "type": "card",
+                            "id": "integration_monday",
+                            "role": "integration_card",
+                            "children": [
+                              {
+                                "type": "image",
+                                "id": "monday_logo",
+                                "alt": "Monday.com logo",
+                                "src": null,
+                                "layout": {
+                                  "width": 34,
+                                  "height": 24
+                                }
+                              },
+                              {
+                                "type": "heading",
+                                "id": "monday_title",
+                                "level": 3,
+                                "content": "Monday.com"
+                              },
+                              {
+                                "type": "paragraph",
+                                "id": "monday_description",
+                                "content": "Optimize workflow automation and visualize progress with customizable dashboards."
+                              },
+                              {
+                                "type": "button",
+                                "id": "monday_details",
+                                "content": "Details",
+                                "appearance": {
+                                  "variant": "secondary",
+                                  "size": "sm",
+                                  "elevation": "none"
+                                }
+                              },
+                              {
+                                "type": "switch",
+                                "id": "monday_switch",
+                                "label": null,
+                                "state": {
+                                  "checked": true,
+                                  "disabled": null
+                                }
+                              },
+                              {
+                                "type": "icon_button",
+                                "id": "monday_more",
+                                "content": null,
+                                "icon": {
+                                  "type": "icon",
+                                  "name": "more-vertical",
+                                  "aria_label": "Monday.com more actions",
+                                  "decorative": false,
+                                  "position": "standalone"
+                                },
+                                "appearance": {
+                                  "variant": "ghost",
+                                  "size": "sm",
+                                  "shape": "circle",
+                                  "elevation": "none"
+                                }
+                              }
+                            ],
+                            "layout": {
+                              "direction": "column",
+                              "gap": 14,
+                              "padding": 16,
+                              "width": null,
+                              "height": 220
+                            },
+                            "appearance": {
+                              "variant": "neutral",
+                              "border": {
+                                "visible": true,
+                                "sides": [
+                                  "all"
+                                ],
+                                "role": "outline"
+                              },
+                              "elevation": "none",
+                              "shape": "rounded"
+                            }
+                          },
+                          {
+                            "type": "card",
+                            "id": "integration_notion",
+                            "role": "integration_card",
+                            "children": [
+                              {
+                                "type": "image",
+                                "id": "notion_logo",
+                                "alt": "Notion logo",
+                                "src": null,
+                                "layout": {
+                                  "width": 28,
+                                  "height": 28
+                                }
+                              },
+                              {
+                                "type": "heading",
+                                "id": "notion_title",
+                                "level": 3,
+                                "content": "Notion"
+                              },
+                              {
+                                "type": "paragraph",
+                                "id": "notion_description",
+                                "content": "Unify tasks, notes, and files for better project and team oversight."
+                              },
+                              {
+                                "type": "button",
+                                "id": "notion_details",
+                                "content": "Details",
+                                "appearance": {
+                                  "variant": "secondary",
+                                  "size": "sm",
+                                  "elevation": "none"
+                                }
+                              },
+                              {
+                                "type": "switch",
+                                "id": "notion_switch",
+                                "label": null,
+                                "state": {
+                                  "checked": false,
+                                  "disabled": null
+                                }
+                              },
+                              {
+                                "type": "icon_button",
+                                "id": "notion_more",
+                                "content": null,
+                                "icon": {
+                                  "type": "icon",
+                                  "name": "more-vertical",
+                                  "aria_label": "Notion more actions",
+                                  "decorative": false,
+                                  "position": "standalone"
+                                },
+                                "appearance": {
+                                  "variant": "ghost",
+                                  "size": "sm",
+                                  "shape": "circle",
+                                  "elevation": "none"
+                                }
+                              }
+                            ],
+                            "layout": {
+                              "direction": "column",
+                              "gap": 14,
+                              "padding": 16,
+                              "width": null,
+                              "height": 220
+                            },
+                            "appearance": {
+                              "variant": "neutral",
+                              "border": {
+                                "visible": true,
+                                "sides": [
+                                  "all"
+                                ],
+                                "role": "outline"
+                              },
+                              "elevation": "none",
+                              "shape": "rounded"
+                            }
+                          },
+                          {
+                            "type": "card",
+                            "id": "integration_jira",
+                            "role": "integration_card",
+                            "children": [
+                              {
+                                "type": "image",
+                                "id": "jira_logo",
+                                "alt": "Jira logo",
+                                "src": null,
+                                "layout": {
+                                  "width": 28,
+                                  "height": 28
+                                }
+                              },
+                              {
+                                "type": "heading",
+                                "id": "jira_title",
+                                "level": 3,
+                                "content": "Jira"
+                              },
+                              {
+                                "type": "paragraph",
+                                "id": "jira_description",
+                                "content": "Manage complex projects with advanced issue tracking and agile planning capabilities."
+                              },
+                              {
+                                "type": "button",
+                                "id": "jira_details",
+                                "content": "Details",
+                                "appearance": {
+                                  "variant": "secondary",
+                                  "size": "sm",
+                                  "elevation": "none"
+                                }
+                              },
+                              {
+                                "type": "switch",
+                                "id": "jira_switch",
+                                "label": null,
+                                "state": {
+                                  "checked": true,
+                                  "disabled": null
+                                }
+                              },
+                              {
+                                "type": "icon_button",
+                                "id": "jira_more",
+                                "content": null,
+                                "icon": {
+                                  "type": "icon",
+                                  "name": "more-vertical",
+                                  "aria_label": "Jira more actions",
+                                  "decorative": false,
+                                  "position": "standalone"
+                                },
+                                "appearance": {
+                                  "variant": "ghost",
+                                  "size": "sm",
+                                  "shape": "circle",
+                                  "elevation": "none"
+                                }
+                              }
+                            ],
+                            "layout": {
+                              "direction": "column",
+                              "gap": 14,
+                              "padding": 16,
+                              "width": null,
+                              "height": 220
+                            },
+                            "appearance": {
+                              "variant": "neutral",
+                              "border": {
+                                "visible": true,
+                                "sides": [
+                                  "all"
+                                ],
+                                "role": "outline"
+                              },
+                              "elevation": "none",
+                              "shape": "rounded"
+                            }
+                          },
+                          {
+                            "type": "card",
+                            "id": "integration_asana",
+                            "role": "integration_card",
+                            "children": [
+                              {
+                                "type": "image",
+                                "id": "asana_logo",
+                                "alt": "Asana logo",
+                                "src": null,
+                                "layout": {
+                                  "width": 28,
+                                  "height": 28
+                                }
+                              },
+                              {
+                                "type": "heading",
+                                "id": "asana_title",
+                                "level": 3,
+                                "content": "Asana"
+                              },
+                              {
+                                "type": "paragraph",
+                                "id": "asana_description",
+                                "content": "Improve team coordination, task management, and project tracking."
+                              },
+                              {
+                                "type": "button",
+                                "id": "asana_details",
+                                "content": "Details",
+                                "appearance": {
+                                  "variant": "secondary",
+                                  "size": "sm",
+                                  "elevation": "none"
+                                }
+                              },
+                              {
+                                "type": "switch",
+                                "id": "asana_switch",
+                                "label": null,
+                                "state": {
+                                  "checked": true,
+                                  "disabled": null
+                                }
+                              },
+                              {
+                                "type": "icon_button",
+                                "id": "asana_more",
+                                "content": null,
+                                "icon": {
+                                  "type": "icon",
+                                  "name": "more-vertical",
+                                  "aria_label": "Asana more actions",
+                                  "decorative": false,
+                                  "position": "standalone"
+                                },
+                                "appearance": {
+                                  "variant": "ghost",
+                                  "size": "sm",
+                                  "shape": "circle",
+                                  "elevation": "none"
+                                }
+                              }
+                            ],
+                            "layout": {
+                              "direction": "column",
+                              "gap": 14,
+                              "padding": 16,
+                              "width": null,
+                              "height": 220
+                            },
+                            "appearance": {
+                              "variant": "neutral",
+                              "border": {
+                                "visible": true,
+                                "sides": [
+                                  "all"
+                                ],
+                                "role": "outline"
+                              },
+                              "elevation": "none",
+                              "shape": "rounded"
+                            }
+                          },
+                          {
+                            "type": "card",
+                            "id": "integration_clickup",
+                            "role": "integration_card",
+                            "children": [
+                              {
+                                "type": "image",
+                                "id": "clickup_logo",
+                                "alt": "ClickUp logo",
+                                "src": null,
+                                "layout": {
+                                  "width": 28,
+                                  "height": 28
+                                }
+                              },
+                              {
+                                "type": "heading",
+                                "id": "clickup_title",
+                                "level": 3,
+                                "content": "ClickUp"
+                              },
+                              {
+                                "type": "paragraph",
+                                "id": "clickup_description",
+                                "content": null
+                              },
+                              {
+                                "type": "icon_button",
+                                "id": "clickup_more",
+                                "content": null,
+                                "icon": {
+                                  "type": "icon",
+                                  "name": "more-vertical",
+                                  "aria_label": "ClickUp more actions",
+                                  "decorative": false,
+                                  "position": "standalone"
+                                },
+                                "appearance": {
+                                  "variant": "ghost",
+                                  "size": "sm",
+                                  "shape": "circle",
+                                  "elevation": "none"
+                                }
+                              }
+                            ],
+                            "layout": {
+                              "direction": "column",
+                              "gap": 14,
+                              "padding": 16,
+                              "width": null,
+                              "height": 220
+                            },
+                            "appearance": {
+                              "variant": "neutral",
+                              "border": {
+                                "visible": true,
+                                "sides": [
+                                  "all"
+                                ],
+                                "role": "outline"
+                              },
+                              "elevation": "none",
+                              "shape": "rounded"
+                            }
+                          },
+                          {
+                            "type": "card",
+                            "id": "integration_basecamp",
+                            "role": "integration_card",
+                            "children": [
+                              {
+                                "type": "image",
+                                "id": "basecamp_logo",
+                                "alt": "Basecamp logo",
+                                "src": null,
+                                "layout": {
+                                  "width": 28,
+                                  "height": 28
+                                }
+                              },
+                              {
+                                "type": "heading",
+                                "id": "basecamp_title",
+                                "level": 3,
+                                "content": "Basecamp"
+                              },
+                              {
+                                "type": "paragraph",
+                                "id": "basecamp_description",
+                                "content": null
+                              },
+                              {
+                                "type": "icon_button",
+                                "id": "basecamp_more",
+                                "content": null,
+                                "icon": {
+                                  "type": "icon",
+                                  "name": "more-vertical",
+                                  "aria_label": "Basecamp more actions",
+                                  "decorative": false,
+                                  "position": "standalone"
+                                },
+                                "appearance": {
+                                  "variant": "ghost",
+                                  "size": "sm",
+                                  "shape": "circle",
+                                  "elevation": "none"
+                                }
+                              }
+                            ],
+                            "layout": {
+                              "direction": "column",
+                              "gap": 14,
+                              "padding": 16,
+                              "width": null,
+                              "height": 220
+                            },
+                            "appearance": {
+                              "variant": "neutral",
+                              "border": {
+                                "visible": true,
+                                "sides": [
+                                  "all"
+                                ],
+                                "role": "outline"
+                              },
+                              "elevation": "none",
+                              "shape": "rounded"
+                            }
+                          },
+                          {
+                            "type": "card",
+                            "id": "integration_wrike",
+                            "role": "integration_card",
+                            "children": [
+                              {
+                                "type": "image",
+                                "id": "wrike_logo",
+                                "alt": "Wrike logo",
+                                "src": null,
+                                "layout": {
+                                  "width": 28,
+                                  "height": 28
+                                }
+                              },
+                              {
+                                "type": "heading",
+                                "id": "wrike_title",
+                                "level": 3,
+                                "content": "Wrike"
+                              },
+                              {
+                                "type": "paragraph",
+                                "id": "wrike_description",
+                                "content": null
+                              },
+                              {
+                                "type": "icon_button",
+                                "id": "wrike_more",
+                                "content": null,
+                                "icon": {
+                                  "type": "icon",
+                                  "name": "more-vertical",
+                                  "aria_label": "Wrike more actions",
+                                  "decorative": false,
+                                  "position": "standalone"
+                                },
+                                "appearance": {
+                                  "variant": "ghost",
+                                  "size": "sm",
+                                  "shape": "circle",
+                                  "elevation": "none"
+                                }
+                              }
+                            ],
+                            "layout": {
+                              "direction": "column",
+                              "gap": 14,
+                              "padding": 16,
+                              "width": null,
+                              "height": 220
+                            },
+                            "appearance": {
+                              "variant": "neutral",
+                              "border": {
+                                "visible": true,
+                                "sides": [
+                                  "all"
+                                ],
+                                "role": "outline"
+                              },
+                              "elevation": "none",
+                              "shape": "rounded"
+                            }
+                          }
+                        ],
+                        "layout": {
+                          "direction": "grid",
+                          "gap": 16,
+                          "columns": 3,
+                          "rows": null,
+                          "width": null,
+                          "height": null
+                        },
+                        "appearance": {
+                          "variant": null,
+                          "size": null,
+                          "tone": "neutral",
+                          "border": {
+                            "visible": false,
+                            "sides": [
+                              "all"
+                            ],
+                            "role": null
+                          },
+                          "elevation": "none",
+                          "shape": null
+                        }
+                      }
+                    ],
+                    "layout": {
+                      "direction": "column",
+                      "gap": 24,
+                      "padding": 24,
+                      "width": null,
+                      "height": null
+                    },
+                    "appearance": {
+                      "variant": "neutral",
+                      "size": null,
+                      "tone": "neutral",
+                      "border": {
+                        "visible": true,
+                        "sides": [
+                          "all"
+                        ],
+                        "role": "outline"
+                      },
+                      "elevation": "none",
+                      "shape": "rounded"
+                    }
+                  }
+                ],
+                "layout": {
+                  "direction": "column",
+                  "gap": 24,
+                  "padding": 24,
+                  "align": "stretch",
+                  "justify": "start",
+                  "width": null,
+                  "height": null
+                },
+                "appearance": {
+                  "variant": null,
+                  "size": null,
+                  "tone": "neutral",
+                  "border": {
+                    "visible": false,
+                    "sides": [
+                      "all"
+                    ],
+                    "role": null
+                  },
+                  "elevation": "none",
+                  "shape": null
+                },
+                "behavior": {
+                  "scroll_container": "main_content_pane"
+                }
+              }
+            ],
+            "layout": {
+              "direction": "column",
+              "gap": 0,
+              "padding": 0,
+              "align": "stretch",
+              "justify": "start",
+              "width": null,
+              "height": null
+            },
+            "appearance": {
+              "variant": null,
+              "size": null,
+              "tone": "neutral",
+              "border": {
+                "visible": false,
+                "sides": [
+                  "all"
+                ],
+                "role": null
+              },
+              "elevation": "none",
+              "shape": null
+            },
+            "behavior": {
+              "scroll_container": "vertical",
+              "contains_persistent_topbar": true
+            }
+          }
+        ],
+        "layout": {
+          "direction": "row",
+          "gap": 0,
+          "padding": 0,
+          "align": "stretch",
+          "justify": "start",
+          "columns": null,
+          "rows": null,
+          "width": 1440,
+          "height": null
+        },
+        "appearance": {
+          "variant": null,
+          "size": null,
+          "tone": "neutral",
+          "border": {
+            "visible": false,
+            "sides": [
+              "all"
+            ],
+            "role": null
+          },
+          "elevation": "none",
+          "shape": null
+        },
+        "behavior": {
+          "scroll_architecture": "desktop_app_shell",
+          "document_scroll": false,
+          "main_pane_scroll": true
+        }
+      }
+    ],
+    "layout": {
+      "direction": "row",
+      "gap": 0,
+      "padding": 0,
+      "align": "stretch",
+      "justify": "start",
+      "columns": null,
+      "rows": null,
+      "width": null,
+      "height": null
+    },
+    "appearance": {
+      "variant": null,
+      "size": null,
+      "tone": "neutral",
+      "border": {
+        "visible": false,
+        "sides": [
+          "all"
+        ],
+        "role": null
+      },
+      "elevation": "none",
+      "shape": null
+    },
+    "state": {
+      "active": null,
+      "selected": null,
+      "disabled": null,
+      "focused": null,
+      "checked": null,
+      "expanded": null,
+      "loading": null,
+      "error": null
+    },
+    "icon": null,
+    "leading_icon": null,
+    "trailing_icon": null,
+    "items": null
+  }
+}

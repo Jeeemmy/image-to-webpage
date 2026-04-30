@@ -1,0 +1,48 @@
+import { useEffect } from "react";
+import PageIndex from "./PageIndex.jsx";
+import { findPageByRoute } from "./pageRegistry.js";
+import { normalizePathname } from "./routing.js";
+
+function NotFound({ pathname }) {
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-[#111111] px-6 text-white">
+      <section className="w-full max-w-xl rounded-lg border border-white/20 bg-white/5 p-8">
+        <p className="text-sm font-semibold uppercase tracking-[0.16em] text-white/55">
+          404
+        </p>
+        <h1 className="mt-3 text-3xl font-semibold">页面未注册</h1>
+        <p className="mt-4 break-all text-sm leading-6 text-white/70">
+          当前路径没有匹配到实验页面：{pathname}
+        </p>
+        <a
+          href="/"
+          className="mt-6 inline-flex h-11 items-center rounded-md bg-white px-4 text-sm font-semibold text-[#111111]"
+        >
+          返回页面索引
+        </a>
+      </section>
+    </main>
+  );
+}
+
+export default function PageRouter() {
+  const pathname = normalizePathname(window.location.pathname);
+  const page = pathname === "/" ? null : findPageByRoute(pathname);
+  const title =
+    pathname === "/" ? "UIWorkflow Lab" : page?.title ?? "页面未注册";
+
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+
+  if (pathname === "/") {
+    return <PageIndex />;
+  }
+
+  if (!page) {
+    return <NotFound pathname={pathname} />;
+  }
+
+  const PageComponent = page.component;
+  return <PageComponent artifacts={page.artifacts} />;
+}

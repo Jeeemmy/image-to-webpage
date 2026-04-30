@@ -1,0 +1,1099 @@
+{
+  "version": "ui-dsl-v2",
+  "request": {
+    "source": "given_snapshot",
+    "ignored_outer_container": true,
+    "source_image": "user_provided_chat_image",
+    "source_dimensions": {
+      "width": 2048,
+      "height": 1536
+    },
+    "adaptation": {
+      "orientation": "landscape",
+      "default_width": 1440,
+      "scale": 0.703125
+    },
+    "notes": [
+      "Ignore the gray showcase canvas, rounded outer presentation frame, and showcase shadow.",
+      "Treat the white/pale app surface inside the frame as the real product UI root.",
+      "Sidebar and main stage backgrounds should be treated as a continuous app shell canvas."
+    ]
+  },
+  "root": {
+    "type": "container",
+    "id": "root",
+    "role": "screen",
+    "children": [
+      {
+        "type": "container",
+        "id": "app_shell",
+        "role": "cloud_storage_dashboard_shell",
+        "layout": {
+          "direction": "row",
+          "gap": 0,
+          "padding": 0,
+          "align": "stretch",
+          "justify": "start",
+          "width": 1690,
+          "height": 1218
+        },
+        "appearance": {
+          "variant": "neutral",
+          "size": "xl",
+          "tone": "neutral",
+          "border": {
+            "visible": false,
+            "sides": [
+              "all"
+            ],
+            "role": null
+          },
+          "elevation": "none",
+          "shape": "rounded"
+        },
+        "children": [
+          {
+            "type": "sidebar",
+            "id": "sidebar",
+            "role": "primary_navigation",
+            "layout": {
+              "direction": "column",
+              "gap": 0,
+              "padding_x": 16,
+              "padding_y": 18,
+              "align": "stretch",
+              "justify": "start",
+              "width": 348,
+              "height": 1218
+            },
+            "appearance": {
+              "variant": "neutral",
+              "size": "lg",
+              "tone": "neutral",
+              "border": {
+                "visible": false,
+                "sides": [
+                  "all"
+                ],
+                "role": null
+              },
+              "elevation": "none",
+              "shape": null
+            },
+            "behavior": {
+              "positioning": "sticky",
+              "sticky_edge": "top",
+              "internal_scroll": true
+            },
+            "children": [
+              {
+                "type": "header",
+                "id": "brand_header",
+                "role": "brand",
+                "layout": {
+                  "direction": "row",
+                  "gap": 10,
+                  "padding": 0,
+                  "align": "center",
+                  "justify": "start",
+                  "height": 32
+                },
+                "children": [
+                  {
+                    "type": "icon",
+                    "id": "nubo_logo_icon",
+                    "role": "brand_mark",
+                    "icon": {
+                      "type": "icon",
+                      "name": "sparkle",
+                      "aria_label": "Nubo",
+                      "decorative": false,
+                      "position": "standalone"
+                    },
+                    "layout": {
+                      "width": 32,
+                      "height": 32
+                    },
+                    "appearance": {
+                      "variant": "primary",
+                      "size": "lg",
+                      "tone": "neutral",
+                      "border": {
+                        "visible": false,
+                        "sides": [
+                          "all"
+                        ],
+                        "role": null
+                      },
+                      "elevation": "none",
+                      "shape": "circle"
+                    }
+                  },
+                  {
+                    "type": "heading",
+                    "id": "brand_name",
+                    "role": "brand_name",
+                    "level": 2,
+                    "content": "Nubo"
+                  }
+                ]
+              },
+              {
+                "type": "search_input",
+                "id": "sidebar_search",
+                "role": "search_files",
+                "label": null,
+                "placeholder": "Search...",
+                "value": null,
+                "leading_icon": {
+                  "type": "icon",
+                  "name": "search",
+                  "aria_label": "search",
+                  "decorative": false,
+                  "position": "leading"
+                },
+                "trailing_icon": null,
+                "trailing_affordance": "/",
+                "layout": {
+                  "width": 324,
+                  "height": 46
+                },
+                "appearance": {
+                  "variant": "neutral",
+                  "size": "md",
+                  "tone": "neutral",
+                  "border": {
+                    "visible": true,
+                    "sides": [
+                      "all"
+                    ],
+                    "role": "outline"
+                  },
+                  "elevation": "none",
+                  "shape": "rounded"
+                },
+                "state": {
+                  "focused": null,
+                  "disabled": null,
+                  "error": null
+                }
+              },
+              {
+                "type": "nav",
+                "id": "primary_nav",
+                "role": "main_navigation",
+                "layout": {
+                  "direction": "column",
+                  "gap": 3,
+                  "padding": 0,
+                  "width": 324
+                },
+                "items": [
+                  {
+                    "type": "nav_item",
+                    "id": "nav_dashboard",
+                    "content": "Dashboard",
+                    "icon": {
+                      "type": "icon",
+                      "name": "home",
+                      "aria_label": null,
+                      "decorative": false,
+                      "position": "leading"
+                    },
+                    "state": {
+                      "active": true,
+                      "selected": true,
+                      "disabled": null,
+                      "expanded": null
+                    }
+                  },
+                  {
+                    "type": "nav_item",
+                    "id": "nav_my_files",
+                    "content": "My files",
+                    "icon": {
+                      "type": "icon",
+                      "name": "folder",
+                      "aria_label": null,
+                      "decorative": false,
+                      "position": "leading"
+                    },
+                    "state": {
+                      "active": false,
+                      "selected": false,
+                      "disabled": null,
+                      "expanded": null
+                    }
+                  },
+                  {
+                    "type": "nav_item",
+                    "id": "nav_shared",
+                    "content": "Shared with me",
+                    "icon": {
+                      "type": "icon",
+                      "name": "users",
+                      "aria_label": null,
+                      "decorative": false,
+                      "position": "leading"
+                    },
+                    "state": {
+                      "active": false,
+                      "selected": false,
+                      "disabled": null,
+                      "expanded": null
+                    }
+                  },
+                  {
+                    "type": "nav_item",
+                    "id": "nav_recent",
+                    "content": "Recent",
+                    "icon": {
+                      "type": "icon",
+                      "name": "clock",
+                      "aria_label": null,
+                      "decorative": false,
+                      "position": "leading"
+                    },
+                    "state": {
+                      "active": false,
+                      "selected": false,
+                      "disabled": null,
+                      "expanded": null
+                    }
+                  }
+                ],
+                "children": []
+              },
+              {
+                "type": "section",
+                "id": "starred_files_section",
+                "role": "starred_files",
+                "children": [
+                  {
+                    "type": "label",
+                    "id": "starred_files_label",
+                    "content": "Starred files"
+                  },
+                  {
+                    "type": "list",
+                    "id": "starred_files_list",
+                    "role": "starred_file_shortcuts",
+                    "items": [
+                      {
+                        "type": "list_item",
+                        "id": "starred_job_contract",
+                        "content": "job-contract-2026.pdf",
+                        "leading_icon": {
+                          "type": "icon",
+                          "name": "file-pdf",
+                          "aria_label": "PDF file",
+                          "decorative": false,
+                          "position": "leading"
+                        },
+                        "trailing_icon": {
+                          "type": "icon",
+                          "name": "star",
+                          "aria_label": "starred",
+                          "decorative": false,
+                          "position": "trailing"
+                        }
+                      },
+                      {
+                        "type": "list_item",
+                        "id": "starred_resume",
+                        "content": "update-resume.pdf",
+                        "leading_icon": {
+                          "type": "icon",
+                          "name": "file-pdf",
+                          "aria_label": "PDF file",
+                          "decorative": false,
+                          "position": "leading"
+                        },
+                        "trailing_icon": {
+                          "type": "icon",
+                          "name": "star",
+                          "aria_label": "starred",
+                          "decorative": false,
+                          "position": "trailing"
+                        }
+                      },
+                      {
+                        "type": "list_item",
+                        "id": "starred_photoshoot",
+                        "content": "photoshoot-25.png",
+                        "leading_icon": {
+                          "type": "icon",
+                          "name": "image",
+                          "aria_label": "image file",
+                          "decorative": false,
+                          "position": "leading"
+                        },
+                        "trailing_icon": {
+                          "type": "icon",
+                          "name": "star",
+                          "aria_label": "starred",
+                          "decorative": false,
+                          "position": "trailing"
+                        }
+                      }
+                    ],
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "type": "section",
+                "id": "file_type_legend",
+                "role": "file_type_filter_legend",
+                "children": [
+                  {
+                    "type": "label",
+                    "id": "file_type_label",
+                    "content": "File type"
+                  },
+                  {
+                    "type": "list",
+                    "id": "file_type_list",
+                    "items": [
+                      {
+                        "type": "list_item",
+                        "id": "legend_images",
+                        "content": "Images",
+                        "leading_icon": {
+                          "type": "icon",
+                          "name": "dot",
+                          "aria_label": "Images color",
+                          "decorative": false,
+                          "position": "leading"
+                        }
+                      },
+                      {
+                        "type": "list_item",
+                        "id": "legend_documents",
+                        "content": "Documents",
+                        "leading_icon": {
+                          "type": "icon",
+                          "name": "dot",
+                          "aria_label": "Documents color",
+                          "decorative": false,
+                          "position": "leading"
+                        }
+                      },
+                      {
+                        "type": "list_item",
+                        "id": "legend_videos",
+                        "content": "Videos",
+                        "leading_icon": {
+                          "type": "icon",
+                          "name": "dot",
+                          "aria_label": "Videos color",
+                          "decorative": false,
+                          "position": "leading"
+                        }
+                      },
+                      {
+                        "type": "list_item",
+                        "id": "legend_audio",
+                        "content": "Audio",
+                        "leading_icon": {
+                          "type": "icon",
+                          "name": "dot",
+                          "aria_label": "Audio color",
+                          "decorative": false,
+                          "position": "leading"
+                        }
+                      }
+                    ],
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "type": "nav",
+                "id": "utility_nav",
+                "role": "utility_navigation",
+                "items": [
+                  {
+                    "type": "nav_item",
+                    "id": "nav_settings",
+                    "content": "Settings",
+                    "icon": {
+                      "type": "icon",
+                      "name": "settings",
+                      "aria_label": null,
+                      "decorative": false,
+                      "position": "leading"
+                    }
+                  },
+                  {
+                    "type": "nav_item",
+                    "id": "nav_recently_deleted",
+                    "content": "Recently deleted",
+                    "icon": {
+                      "type": "icon",
+                      "name": "trash",
+                      "aria_label": null,
+                      "decorative": false,
+                      "position": "leading"
+                    }
+                  },
+                  {
+                    "type": "nav_item",
+                    "id": "nav_integrations",
+                    "content": "Integrations",
+                    "icon": {
+                      "type": "icon",
+                      "name": "plug",
+                      "aria_label": null,
+                      "decorative": false,
+                      "position": "leading"
+                    }
+                  }
+                ],
+                "children": []
+              }
+            ]
+          },
+          {
+            "type": "main",
+            "id": "main_content",
+            "role": "scrollable_dashboard_content",
+            "layout": {
+              "direction": "column",
+              "gap": 18,
+              "padding_x": 22,
+              "padding_y": 18,
+              "align": "stretch",
+              "justify": "start",
+              "width": 1340,
+              "height": 1218
+            },
+            "behavior": {
+              "scroll_container": true
+            },
+            "children": [
+              {
+                "type": "header",
+                "id": "top_header",
+                "role": "global_app_header",
+                "layout": {
+                  "direction": "row",
+                  "gap": 16,
+                  "align": "center",
+                  "justify": "space-between",
+                  "height": 44
+                },
+                "behavior": {
+                  "positioning": "sticky",
+                  "sticky_edge": "top"
+                },
+                "children": [
+                  {
+                    "type": "heading",
+                    "id": "page_title",
+                    "role": "page_title",
+                    "level": 1,
+                    "content": "Dashboard"
+                  },
+                  {
+                    "type": "toolbar",
+                    "id": "account_toolbar",
+                    "role": "account_actions",
+                    "layout": {
+                      "direction": "row",
+                      "gap": 12,
+                      "align": "center",
+                      "justify": "end"
+                    },
+                    "children": [
+                      {
+                        "type": "icon_button",
+                        "id": "notifications_button",
+                        "role": "notifications",
+                        "content": null,
+                        "icon": {
+                          "type": "icon",
+                          "name": "bell",
+                          "aria_label": "Notifications",
+                          "decorative": false,
+                          "position": "standalone"
+                        },
+                        "appearance": {
+                          "variant": "neutral",
+                          "size": "md",
+                          "shape": "rounded",
+                          "border": {
+                            "visible": false,
+                            "sides": [
+                              "all"
+                            ],
+                            "role": null
+                          },
+                          "elevation": "none"
+                        }
+                      },
+                      {
+                        "type": "avatar",
+                        "id": "user_avatar",
+                        "role": "current_user",
+                        "content": null,
+                        "alt": "Bella",
+                        "layout": {
+                          "width": 42,
+                          "height": 42
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "section",
+                "id": "intro_actions",
+                "role": "dashboard_intro",
+                "layout": {
+                  "direction": "row",
+                  "gap": 16,
+                  "align": "start",
+                  "justify": "space-between"
+                },
+                "children": [
+                  {
+                    "type": "stack",
+                    "id": "greeting_stack",
+                    "role": "greeting",
+                    "layout": {
+                      "direction": "column",
+                      "gap": 8
+                    },
+                    "children": [
+                      {
+                        "type": "heading",
+                        "id": "greeting",
+                        "level": 2,
+                        "content": "Good morning, Bella!"
+                      },
+                      {
+                        "type": "paragraph",
+                        "id": "greeting_subtitle",
+                        "content": "Let's manage all of your online storage."
+                      }
+                    ]
+                  },
+                  {
+                    "type": "toolbar",
+                    "id": "primary_actions",
+                    "role": "file_actions",
+                    "layout": {
+                      "direction": "row",
+                      "gap": 10,
+                      "align": "center",
+                      "justify": "end"
+                    },
+                    "children": [
+                      {
+                        "type": "button",
+                        "id": "upload_button",
+                        "content": "Upload",
+                        "leading_icon": {
+                          "type": "icon",
+                          "name": "upload",
+                          "aria_label": null,
+                          "decorative": false,
+                          "position": "leading"
+                        },
+                        "appearance": {
+                          "variant": "secondary",
+                          "size": "md",
+                          "border": {
+                            "visible": false,
+                            "sides": [
+                              "all"
+                            ],
+                            "role": null
+                          },
+                          "elevation": "none",
+                          "shape": "rounded"
+                        }
+                      },
+                      {
+                        "type": "button",
+                        "id": "create_button",
+                        "content": "Create",
+                        "leading_icon": {
+                          "type": "icon",
+                          "name": "plus",
+                          "aria_label": null,
+                          "decorative": false,
+                          "position": "leading"
+                        },
+                        "appearance": {
+                          "variant": "secondary",
+                          "size": "md",
+                          "border": {
+                            "visible": false,
+                            "sides": [
+                              "all"
+                            ],
+                            "role": null
+                          },
+                          "elevation": "none",
+                          "shape": "rounded"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "grid",
+                "id": "overview_grid",
+                "role": "storage_summary",
+                "layout": {
+                  "direction": "grid",
+                  "gap": 18,
+                  "columns": 4,
+                  "align": "stretch"
+                },
+                "children": [
+                  {
+                    "type": "card",
+                    "id": "folder_card_images",
+                    "role": "folder_summary",
+                    "layout": {
+                      "direction": "column",
+                      "gap": 0,
+                      "padding_x": 14,
+                      "padding_y": 16,
+                      "align": "stretch",
+                      "justify": "space-between",
+                      "content_distribution": "media_fills_remaining_space",
+                      "media_alignment": "center",
+                      "text_alignment": "start",
+                      "width": 196,
+                      "height": 250
+                    },
+                    "appearance": {
+                      "border": {
+                        "visible": true,
+                        "sides": [
+                          "all"
+                        ],
+                        "role": "outline"
+                      },
+                      "elevation": "none",
+                      "shape": "rounded"
+                    },
+                    "children": [
+                      {
+                        "type": "image",
+                        "id": "folder_image_images",
+                        "alt": "folder illustration",
+                        "src": null,
+                        "layout": {
+                          "align": "center",
+                          "justify": "center",
+                          "width": 142,
+                          "height": 126
+                        }
+                      },
+                      {
+                        "type": "stack",
+                        "id": "images_text_stack",
+                        "role": "bottom_metadata",
+                        "layout": {
+                          "direction": "column",
+                          "gap": 4,
+                          "align": "start",
+                          "justify": "end",
+                          "content_distribution": "text_anchored_bottom"
+                        },
+                        "children": [
+                          {
+                            "type": "heading",
+                            "id": "images_title",
+                            "level": 3,
+                            "content": "Images"
+                          },
+                          {
+                            "type": "text",
+                            "id": "images_count",
+                            "content": "189 files"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "card",
+                    "id": "folder_card_documents",
+                    "role": "folder_summary",
+                    "layout": {
+                      "direction": "column",
+                      "gap": 0,
+                      "padding_x": 14,
+                      "padding_y": 16,
+                      "align": "stretch",
+                      "justify": "space-between",
+                      "content_distribution": "media_fills_remaining_space",
+                      "media_alignment": "center",
+                      "text_alignment": "start",
+                      "width": 196,
+                      "height": 250
+                    },
+                    "appearance": {
+                      "border": {
+                        "visible": true,
+                        "sides": [
+                          "all"
+                        ],
+                        "role": "outline"
+                      },
+                      "elevation": "none",
+                      "shape": "rounded"
+                    },
+                    "children": [
+                      {
+                        "type": "image",
+                        "id": "folder_image_documents",
+                        "alt": "folder illustration",
+                        "src": null,
+                        "layout": {
+                          "align": "center",
+                          "justify": "center",
+                          "width": 142,
+                          "height": 126
+                        }
+                      },
+                      {
+                        "type": "stack",
+                        "id": "documents_text_stack",
+                        "role": "bottom_metadata",
+                        "layout": {
+                          "direction": "column",
+                          "gap": 4,
+                          "align": "start",
+                          "justify": "end",
+                          "content_distribution": "text_anchored_bottom"
+                        },
+                        "children": [
+                          {
+                            "type": "heading",
+                            "id": "documents_title",
+                            "level": 3,
+                            "content": "Documents"
+                          },
+                          {
+                            "type": "text",
+                            "id": "documents_count",
+                            "content": "100 files"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "card",
+                    "id": "folder_card_videos",
+                    "role": "folder_summary",
+                    "layout": {
+                      "direction": "column",
+                      "gap": 0,
+                      "padding_x": 14,
+                      "padding_y": 16,
+                      "align": "stretch",
+                      "justify": "space-between",
+                      "content_distribution": "media_fills_remaining_space",
+                      "media_alignment": "center",
+                      "text_alignment": "start",
+                      "width": 196,
+                      "height": 250
+                    },
+                    "appearance": {
+                      "border": {
+                        "visible": true,
+                        "sides": [
+                          "all"
+                        ],
+                        "role": "outline"
+                      },
+                      "elevation": "none",
+                      "shape": "rounded"
+                    },
+                    "children": [
+                      {
+                        "type": "image",
+                        "id": "folder_image_videos",
+                        "alt": "folder illustration",
+                        "src": null,
+                        "layout": {
+                          "align": "center",
+                          "justify": "center",
+                          "width": 142,
+                          "height": 126
+                        }
+                      },
+                      {
+                        "type": "stack",
+                        "id": "videos_text_stack",
+                        "role": "bottom_metadata",
+                        "layout": {
+                          "direction": "column",
+                          "gap": 4,
+                          "align": "start",
+                          "justify": "end",
+                          "content_distribution": "text_anchored_bottom"
+                        },
+                        "children": [
+                          {
+                            "type": "heading",
+                            "id": "videos_title",
+                            "level": 3,
+                            "content": "Videos"
+                          },
+                          {
+                            "type": "text",
+                            "id": "videos_count",
+                            "content": "11 files"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "card",
+                    "id": "storage_overview_card",
+                    "role": "storage_overview",
+                    "appearance": {
+                      "border": {
+                        "visible": true,
+                        "sides": [
+                          "all"
+                        ],
+                        "role": "outline"
+                      },
+                      "elevation": "none",
+                      "shape": "rounded"
+                    },
+                    "children": [
+                      {
+                        "type": "label",
+                        "id": "storage_overview_title",
+                        "content": "Storage overview"
+                      },
+                      {
+                        "type": "text",
+                        "id": "storage_amount",
+                        "content": "13.1GB of 25GB"
+                      },
+                      {
+                        "type": "progress",
+                        "id": "storage_progress",
+                        "role": "segmented_storage_usage",
+                        "value": 54,
+                        "segments": [
+                          {
+                            "label": "Images",
+                            "value": "10.3GB"
+                          },
+                          {
+                            "label": "Documents",
+                            "value": "2.1GB"
+                          },
+                          {
+                            "label": "Videos",
+                            "value": "600MB"
+                          },
+                          {
+                            "label": "Audio",
+                            "value": "100MB"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "id": "storage_note",
+                        "content": "54% storage used, review heavy files to organized."
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "card",
+                "id": "recent_files_card",
+                "role": "recent_files_table_panel",
+                "appearance": {
+                  "border": {
+                    "visible": true,
+                    "sides": [
+                      "all"
+                    ],
+                    "role": "outline"
+                  },
+                  "elevation": "none",
+                  "shape": "rounded"
+                },
+                "children": [
+                  {
+                    "type": "header",
+                    "id": "recent_files_header",
+                    "role": "table_header_toolbar",
+                    "layout": {
+                      "direction": "row",
+                      "align": "center",
+                      "justify": "space-between",
+                      "height": 49
+                    },
+                    "children": [
+                      {
+                        "type": "label",
+                        "id": "recent_files_title",
+                        "content": "Recent files"
+                      },
+                      {
+                        "type": "button",
+                        "id": "view_all_button",
+                        "content": "View All",
+                        "appearance": {
+                          "variant": "ghost",
+                          "size": "sm",
+                          "elevation": "none"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "table",
+                    "id": "recent_files_table",
+                    "role": "recent_files",
+                    "columns": [
+                      "Name",
+                      "Folder",
+                      "Size",
+                      "Modified",
+                      "Actions"
+                    ],
+                    "rows": [
+                      [
+                        "job-contract-2026.pdf",
+                        "Documents",
+                        "1.2 MB",
+                        "Today, 10:42",
+                        "starred more"
+                      ],
+                      [
+                        "photoshoot-25.png",
+                        "Images",
+                        "4.8 MB",
+                        "Today, 09:15",
+                        "starred more"
+                      ],
+                      [
+                        "update-resume.pdf",
+                        "Documents",
+                        "340 KB",
+                        "Today, 08:50",
+                        "starred more"
+                      ],
+                      [
+                        "vacation-clips-2025.mp4",
+                        "Videos",
+                        "212 MB",
+                        "Yesterday, 21:30",
+                        "star more"
+                      ],
+                      [
+                        "project-brief-q2.docx",
+                        "Documents",
+                        "88 KB",
+                        "Yesterday, 18:05",
+                        "star more"
+                      ],
+                      [
+                        "bella-headshot-final.jpg",
+                        "Images",
+                        "2.1 MB",
+                        "Yesterday, 14:22",
+                        "star more"
+                      ],
+                      [
+                        "podcast-ep12.mp3",
+                        "Audio",
+                        "34 MB",
+                        "Mar 29, 11:00",
+                        "star more"
+                      ],
+                      [
+                        "brand-kit-v3.png",
+                        "Images",
+                        "780 KB",
+                        "Mar 29, 09:45",
+                        "star more"
+                      ],
+                      [
+                        "invoice-march-2026.pdf",
+                        "Documents",
+                        "210 KB",
+                        "Mar 28, 17:33",
+                        "star more"
+                      ],
+                      [
+                        "screen-recording-demo.mp4",
+                        "Videos",
+                        "95 MB",
+                        "Mar 28, 15:10",
+                        "star more"
+                      ],
+                      [
+                        "logo-dark-mode.svg",
+                        "Images",
+                        "18 KB",
+                        "Mar 28, 12:00",
+                        "star more"
+                      ]
+                    ],
+                    "children": []
+                  },
+                  {
+                    "type": "footer",
+                    "id": "recent_files_footer",
+                    "role": "table_footer",
+                    "layout": {
+                      "direction": "row",
+                      "align": "center",
+                      "justify": "space-between"
+                    },
+                    "children": [
+                      {
+                        "type": "text",
+                        "id": "table_summary",
+                        "content": "1,290 files 13.1GB"
+                      },
+                      {
+                        "type": "pagination",
+                        "id": "table_pagination",
+                        "items": [
+                          "1",
+                          "2",
+                          "3",
+                          "...",
+                          "11",
+                          "12"
+                        ],
+                        "state": {
+                          "active": true,
+                          "selected": true
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
