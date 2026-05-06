@@ -1,0 +1,92 @@
+{
+  "page": {
+    "id": "vyra-health",
+    "title": "Vyra Health",
+    "route": "/pages/vyra-health"
+  },
+  "source_artifacts": {
+    "screenshot": "/Users/jimmy/ai-common-project/image-to-webpage/pages-reference/vyra-health.webp",
+    "design_tokens": "src/pages/vyra-health/artifacts/design-tokens.json",
+    "ui_dsl": "src/pages/vyra-health/artifacts/ui-dsl.json"
+  },
+  "normalization": {
+    "raw_image_width": 2400,
+    "raw_image_height": 1800,
+    "ignored_outer_container": true,
+    "wrapper_candidates": [
+      "outer_gradient_showcase_canvas",
+      "large_white_rounded_showcase_frame"
+    ],
+    "effective_source_bounds": {
+      "x": 168,
+      "y": 229,
+      "width": 2059,
+      "height": 1338
+    },
+    "effective_source_width": 2059,
+    "adaptation_width": 1200,
+    "scale": 0.5828071879553181
+  },
+  "implementation": {
+    "stack": "React + Tailwind-compatible CSS",
+    "files_changed": [
+      "src/pages/vyra-health/VyraHealthPage.jsx",
+      "src/pages/vyra-health/page.config.js",
+      "src/pages/vyra-health/artifacts/design-tokens.json",
+      "src/pages/vyra-health/artifacts/ui-dsl.json",
+      "src/pages/vyra-health/artifacts/render-step3.json",
+      "src/framework/pageRegistry.js"
+    ],
+    "notes": [
+      "The outer full-image gradient canvas and large rounded white frame are ignored presentation wrappers.",
+      "The page root is the internal Vyra dashboard product surface; it does not recreate the outer frame border, radius, shadow, or artboard padding.",
+      "Charts, progress bars, background data texture, and scan portrait are implemented as structured DOM/SVG/CSS."
+    ]
+  },
+  "scroll_architecture": {
+    "desktop": "Full-page dashboard product surface. The browser document scrolls only when the viewport is shorter than the dashboard composition.",
+    "mobile": "Cards collapse into a single column with normal document scrolling and wrapped top controls."
+  },
+  "shadow_mapping": {
+    "cards": "Flat white surfaces with subtle border and xs shadow.",
+    "controls": "Translucent controls use conservative inset highlights.",
+    "ignored_wrappers": "No outer frame shadow or rounded frame is rendered."
+  },
+  "verification": {
+    "commands": [
+      {
+        "command": "node -e \"for (const p of ['src/pages/vyra-health/artifacts/design-tokens.json','src/pages/vyra-health/artifacts/ui-dsl.json','src/pages/vyra-health/artifacts/render-step3.json']) { JSON.parse(require('fs').readFileSync(p, 'utf8')); console.log('valid', p); }\"",
+        "status": "passed",
+        "notes": "All Vyra Health artifact JSON files parsed successfully."
+      },
+      {
+        "command": "npm run build",
+        "status": "passed",
+        "notes": "Production build completed. Vite reported the existing chunk-size warning for a >500 kB minified bundle."
+      },
+      {
+        "command": "rg -n \"vyra-shell|large_white_rounded_showcase_frame|outer_gradient_showcase_canvas|ignored_outer_container|wrapper_candidates|border: 2px|white-space: nowrap\" src/pages/vyra-health src/framework/pageRegistry.js",
+        "status": "passed",
+        "notes": "No old vyra-shell implementation class was present. Wrapper names only appear in artifacts; the only 2px border in implementation is the in-product portrait ellipse."
+      },
+      {
+        "command": "curl -fsS http://127.0.0.1:41761/pages/vyra-health",
+        "status": "passed",
+        "notes": "The local Vite route returned HTML."
+      }
+    ],
+    "browser_checks": [
+      {
+        "target": "http://127.0.0.1:41761/pages/vyra-health",
+        "status": "passed",
+        "notes": "Opened in Chrome. The outer gradient showcase canvas and large white rounded frame are not rendered as an enclosing shell."
+      },
+      {
+        "target": "desktop visual pass",
+        "status": "passed",
+        "notes": "Hero title now remains on one line on desktop, cards fit without visible clipping, and the dashboard renders directly on the blue product background."
+      }
+    ],
+    "status": "passed"
+  }
+}

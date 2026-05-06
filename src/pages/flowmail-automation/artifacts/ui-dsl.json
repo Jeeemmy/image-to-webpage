@@ -1,0 +1,354 @@
+{
+  "request": {
+    "name": "FlowMail Automation",
+    "route": "/pages/flowmail-automation",
+    "adaptation_width": 1200,
+    "source_image": "pages-reference/flowmail-automation.webp",
+    "source_dimensions": {
+      "width": 2400,
+      "height": 1800
+    },
+    "ignored_outer_container": true,
+    "effective_source_bounds": {
+      "x": 118,
+      "y": 58,
+      "width": 2164,
+      "height": 1687
+    },
+    "scale": 0.5545
+  },
+  "root": {
+    "type": "app_shell",
+    "name": "FlowMail automation builder",
+    "layout": {
+      "display": "flex",
+      "height": "100vh",
+      "overflow": "hidden"
+    },
+    "appearance": {
+      "background": "app_canvas",
+      "radius": {
+        "top_left": 0,
+        "top_right": 0,
+        "bottom_right": 0,
+        "bottom_left": 0
+      },
+      "elevation": "none"
+    },
+    "children": [
+      {
+        "id": "sidebar",
+        "type": "sidebar",
+        "persistence": "desktop_sticky",
+        "layout": {
+          "width": 208,
+          "padding": {
+            "top": 24,
+            "right": 18,
+            "bottom": 24,
+            "left": 18
+          }
+        },
+        "behavior": {
+          "overflow": "hidden",
+          "scroll_container": "child",
+          "internal_scroll_container": "child",
+          "clip_content": true
+        },
+        "appearance": {
+          "background": "sidebar",
+          "border": {
+            "visible": true,
+            "sides": ["right"],
+            "color": "border_subtle"
+          },
+          "shadow": {
+            "visible": true,
+            "role": "shell_edge",
+            "sides": ["right"],
+            "strength": "xs"
+          }
+        },
+        "content": {
+          "brand": "FlowMail",
+          "navigation": {
+            "items": [
+              "Dashboard",
+              "Campaigns",
+              "Automations",
+              "Audience",
+              "Analytics",
+              "Templates",
+              "Integrations",
+              "Forms",
+              "Settings"
+            ],
+            "behavior": {
+              "scroll_container": "self",
+              "overflow": "auto",
+              "scroll_axis": "y",
+              "scroll_reason": "viewport_bounded"
+            }
+          },
+          "profile": {
+            "name": "John Doe",
+            "plan": "Pro Plan",
+            "position": "pinned_footer"
+          }
+        }
+      },
+      {
+        "id": "main_pane",
+        "type": "main_pane",
+        "layout": {
+          "flex": 1,
+          "display": "flex",
+          "direction": "column",
+          "overflow": "hidden"
+        },
+        "children": [
+          {
+            "id": "topbar",
+            "type": "topbar",
+            "persistence": "sticky",
+            "layout": {
+              "height": 80,
+              "padding_x": 21,
+              "display": "flex",
+              "align": "center",
+              "justify": "between"
+            },
+            "appearance": {
+              "background": "app_canvas",
+              "border": {
+                "visible": true,
+                "sides": ["bottom"],
+                "color": "border_subtle"
+              }
+            },
+            "content": {
+              "breadcrumb": "Dashboard / Create Automation",
+              "search_placeholder": "Search here...",
+              "ai_button": "Get Ai Insight"
+            }
+          },
+          {
+            "id": "automation_header",
+            "type": "page_header",
+            "layout": {
+              "height": 73,
+              "padding_x": 21,
+              "display": "flex",
+              "align": "center",
+              "justify": "between"
+            },
+            "content": {
+              "title": "New Automation",
+              "status": "Draft - Not active",
+              "actions": [
+                {
+                  "type": "button",
+                  "content": "Test",
+                  "leading_icon": "eye",
+                  "appearance": {
+                    "variant": "secondary",
+                    "shadow": {
+                      "visible": true,
+                      "placement": "inner",
+                      "sides": ["top", "bottom"],
+                      "role": "inner_control",
+                      "strength": "xs",
+                      "strength_confidence": 0.62,
+                      "evidence": "visually_observed",
+                      "notes": "Screenshot shows a subtle inner bevel; exact inset values are estimated, not measured."
+                    },
+                    "elevation": "none"
+                  }
+                },
+                {
+                  "type": "button",
+                  "content": "Save Draft",
+                  "leading_icon": "save",
+                  "appearance": {
+                    "variant": "secondary",
+                    "shadow": {
+                      "visible": true,
+                      "placement": "inner",
+                      "sides": ["top", "bottom"],
+                      "role": "inner_control",
+                      "strength": "xs",
+                      "strength_confidence": 0.62,
+                      "evidence": "visually_observed",
+                      "notes": "Screenshot shows a subtle inner bevel; exact inset values are estimated, not measured."
+                    },
+                    "elevation": "none"
+                  }
+                },
+                {
+                  "type": "button",
+                  "content": "Activate",
+                  "leading_icon": "play",
+                  "appearance": {
+                    "variant": "primary",
+                    "shadow": {
+                      "visible": true,
+                      "placement": "inner",
+                      "sides": ["top", "bottom"],
+                      "role": "inner_control",
+                      "strength": "xs",
+                      "strength_confidence": 0.62,
+                      "evidence": "visually_observed",
+                      "notes": "Screenshot shows a subtle inner bevel on the primary button; exact inset values are estimated, not measured."
+                    },
+                    "elevation": "none"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": "workspace",
+            "type": "automation_canvas",
+            "layout": {
+              "flex": 1,
+              "overflow": "auto",
+              "padding": 20,
+              "min_height": 747
+            },
+            "appearance": {
+              "background": "dot_grid"
+            },
+            "children": [
+              {
+                "id": "palette",
+                "type": "builder_palette",
+                "position": {
+                  "left": 20,
+                  "top": 20,
+                  "width": 230
+                },
+                "layout": {
+                  "height": 707
+                },
+                "behavior": {
+                  "overflow": "hidden",
+                  "scroll_container": "child",
+                  "internal_scroll_container": "child",
+                  "clip_content": true
+                },
+                "content": {
+                  "title": "Automation Builder",
+                  "subtitle": "Drag and drop to build your workflow",
+                  "groups_behavior": {
+                    "scroll_container": "self",
+                    "overflow": "auto",
+                    "scroll_axis": "y",
+                    "scroll_reason": "repeated_list_overflow"
+                  },
+                  "groups": [
+                    {
+                      "title": "Triggers",
+                      "items": [
+                        "User subscribes",
+                        "Opens email",
+                        "Clicks link",
+                        "Makes purchase",
+                        "Tag added"
+                      ]
+                    },
+                    {
+                      "title": "Actions",
+                      "items": ["Send email", "Add tag", "Remove tag"]
+                    },
+                    {
+                      "title": "Logic",
+                      "items": ["If/Else condition", "Wait/Delay"]
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "workflow_nodes",
+                "type": "workflow_graph",
+                "node_size": {
+                  "width": 236,
+                  "height": 62
+                },
+                "nodes": [
+                  {
+                    "label": "User subscribes",
+                    "subtitle": "When this happens",
+                    "icon": "users",
+                    "position": {
+                      "left": 386,
+                      "top": 153
+                    }
+                  },
+                  {
+                    "label": "Opens email",
+                    "subtitle": "When this happens",
+                    "icon": "mail",
+                    "position": {
+                      "left": 647,
+                      "top": 276
+                    }
+                  },
+                  {
+                    "label": "Clicks link",
+                    "subtitle": "When this happens",
+                    "icon": "cursor",
+                    "position": {
+                      "left": 386,
+                      "top": 414
+                    }
+                  },
+                  {
+                    "label": "Makes purchase",
+                    "subtitle": "When this happens",
+                    "icon": "cart",
+                    "position": {
+                      "left": 647,
+                      "top": 552
+                    }
+                  }
+                ],
+                "connectors": [
+                  {
+                    "from": "User subscribes",
+                    "to": "Opens email",
+                    "shape": "horizontal_then_vertical",
+                    "stroke": "connector"
+                  },
+                  {
+                    "from": "Opens email",
+                    "to": "Clicks link",
+                    "shape": "horizontal_then_vertical",
+                    "stroke": "connector"
+                  },
+                  {
+                    "from": "Clicks link",
+                    "to": "Makes purchase",
+                    "shape": "horizontal_then_vertical",
+                    "stroke": "connector"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "scroll_architecture": {
+    "desktop": {
+      "shell": "fixed viewport app shell",
+      "sidebar": "persistent left column",
+      "topbar": "persistent top region in right pane",
+      "workspace": "canvas owns overflow"
+    },
+    "mobile": {
+      "sidebar": "normal-flow compact navigation",
+      "workspace": "horizontal canvas overflow"
+    }
+  }
+}

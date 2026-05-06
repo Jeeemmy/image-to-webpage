@@ -1,0 +1,531 @@
+{
+  "version": "ui-dsl-v2",
+  "request": {
+    "source": "given_snapshot",
+    "ignored_outer_container": true,
+    "effective_source_bounds": {
+      "x": 136,
+      "y": 186,
+      "width": 1728,
+      "height": 1124
+    },
+    "source_image": "/Users/jimmy/ai-common-project/image-to-webpage/pages-reference/dashboard.webp",
+    "source_dimensions": {
+      "width": 2000,
+      "height": 1499
+    },
+    "adaptation": {
+      "orientation": "landscape",
+      "default_width": 1200,
+      "scale": 0.6944444444444444
+    }
+  },
+  "root": {
+    "type": "container",
+    "id": "root",
+    "role": "screen",
+    "children": [
+      {
+        "type": "container",
+        "id": "dashboard_shell",
+        "role": "logistics_dashboard_app_shell",
+        "layout": {
+          "direction": "row",
+          "gap": 0,
+          "width": 1200,
+          "height": 781,
+          "padding": 0
+        },
+        "behavior": {
+          "scroll_container": "child",
+          "overflow": "hidden",
+          "clip_content": true
+        },
+        "appearance": {
+          "variant": "neutral",
+          "tone": "neutral",
+          "border": {
+            "visible": false,
+            "sides": [
+              "all"
+            ],
+            "role": null
+          },
+          "shadow": {
+            "visible": false,
+            "sides": [],
+            "role": null,
+            "strength": null
+          },
+          "elevation": "none",
+          "shape": null,
+          "radius": {
+            "top_left": null,
+            "top_right": null,
+            "bottom_right": null,
+            "bottom_left": null,
+            "role": null
+          }
+        },
+        "children": [
+          {
+            "type": "sidebar",
+            "id": "sidebar",
+            "role": "primary_navigation_icon_rail",
+            "layout": {
+              "direction": "column",
+              "width": 60,
+              "padding_y": 28,
+              "gap": 10,
+              "align": "center",
+              "justify": "space-between"
+            },
+            "behavior": {
+              "positioning": "sticky",
+              "sticky_edge": "top",
+              "scroll_container": null,
+              "overflow": "hidden"
+            },
+            "appearance": {
+              "variant": "neutral",
+              "tone": "neutral",
+              "border": {
+                "visible": false,
+                "sides": [
+                  "all"
+                ],
+                "role": null
+              },
+              "elevation": "none",
+              "shape": null
+            },
+            "children": [
+              {
+                "type": "icon",
+                "id": "brand_mark",
+                "role": "brand_mark",
+                "icon": {
+                  "type": "icon",
+                  "name": "copy",
+                  "aria_label": "Fleety",
+                  "decorative": false,
+                  "position": "standalone"
+                }
+              },
+              {
+                "type": "nav",
+                "id": "primary_nav",
+                "role": "main_navigation",
+                "items": [
+                  {
+                    "type": "nav_item",
+                    "id": "nav_dashboard",
+                    "content": null,
+                    "icon": {
+                      "type": "icon",
+                      "name": "grid",
+                      "aria_label": "Dashboard",
+                      "decorative": false,
+                      "position": "standalone"
+                    },
+                    "state": {
+                      "active": true,
+                      "selected": true
+                    }
+                  },
+                  {
+                    "type": "nav_item",
+                    "id": "nav_vehicles",
+                    "content": null,
+                    "icon": {
+                      "type": "icon",
+                      "name": "truck",
+                      "aria_label": "Vehicles",
+                      "decorative": false,
+                      "position": "standalone"
+                    }
+                  },
+                  {
+                    "type": "nav_item",
+                    "id": "nav_map",
+                    "content": null,
+                    "icon": {
+                      "type": "icon",
+                      "name": "map",
+                      "aria_label": "Map",
+                      "decorative": false,
+                      "position": "standalone"
+                    }
+                  },
+                  {
+                    "type": "nav_item",
+                    "id": "nav_documents",
+                    "content": null,
+                    "icon": {
+                      "type": "icon",
+                      "name": "list",
+                      "aria_label": "Documents",
+                      "decorative": false,
+                      "position": "standalone"
+                    }
+                  },
+                  {
+                    "type": "nav_item",
+                    "id": "nav_team",
+                    "content": null,
+                    "icon": {
+                      "type": "icon",
+                      "name": "users",
+                      "aria_label": "Team",
+                      "decorative": false,
+                      "position": "standalone"
+                    }
+                  },
+                  {
+                    "type": "nav_item",
+                    "id": "nav_shipments",
+                    "content": null,
+                    "icon": {
+                      "type": "icon",
+                      "name": "truck",
+                      "aria_label": "Shipments",
+                      "decorative": false,
+                      "position": "standalone"
+                    }
+                  },
+                  {
+                    "type": "nav_item",
+                    "id": "nav_reports",
+                    "content": null,
+                    "icon": {
+                      "type": "icon",
+                      "name": "id-card",
+                      "aria_label": "Reports",
+                      "decorative": false,
+                      "position": "standalone"
+                    }
+                  },
+                  {
+                    "type": "nav_item",
+                    "id": "nav_settings",
+                    "content": null,
+                    "icon": {
+                      "type": "icon",
+                      "name": "settings",
+                      "aria_label": "Settings",
+                      "decorative": false,
+                      "position": "standalone"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "nav",
+                "id": "sidebar_bottom_nav",
+                "role": "secondary_navigation",
+                "items": [
+                  {
+                    "type": "nav_item",
+                    "id": "nav_send",
+                    "content": null,
+                    "icon": {
+                      "type": "icon",
+                      "name": "send",
+                      "aria_label": "Send",
+                      "decorative": false,
+                      "position": "standalone"
+                    }
+                  },
+                  {
+                    "type": "nav_item",
+                    "id": "nav_collapse",
+                    "content": null,
+                    "icon": {
+                      "type": "icon",
+                      "name": "menu",
+                      "aria_label": "Collapse",
+                      "decorative": false,
+                      "position": "standalone"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "main",
+            "id": "main_scroll_pane",
+            "role": "dashboard_content_scroll_pane",
+            "layout": {
+              "direction": "column",
+              "gap": 0,
+              "padding": 0
+            },
+            "behavior": {
+              "positioning": "static",
+              "scroll_container": "self",
+              "overflow": "auto"
+            },
+            "children": [
+              {
+                "type": "header",
+                "id": "topbar",
+                "role": "global_dashboard_header",
+                "layout": {
+                  "direction": "row",
+                  "height": 82,
+                  "padding_x": 24,
+                  "align": "center",
+                  "justify": "space-between"
+                },
+                "behavior": {
+                  "positioning": "sticky",
+                  "sticky_edge": "top"
+                },
+                "children": [
+                  {
+                    "type": "breadcrumb",
+                    "id": "title_breadcrumb",
+                    "items": [
+                      "Dashboard",
+                      "Fleety"
+                    ]
+                  },
+                  {
+                    "type": "toolbar",
+                    "id": "header_actions",
+                    "items": [
+                      "plus",
+                      "search",
+                      "notification",
+                      "theme",
+                      "moon",
+                      "avatar"
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "id": "dashboard_grid",
+                "role": "dashboard_grid",
+                "layout": {
+                  "direction": "grid",
+                  "gap": 14,
+                  "padding_x": 24,
+                  "padding_bottom": 24
+                },
+                "children": [
+                  {
+                    "type": "grid",
+                    "id": "main_left_column",
+                    "role": "operational_metrics_and_shipments",
+                    "children": [
+                      {
+                        "type": "grid",
+                        "id": "metric_cards",
+                        "role": "summary_metrics",
+                        "children": [
+                          {
+                            "type": "card",
+                            "id": "vehicles_in_transit",
+                            "role": "metric_card",
+                            "content": "Vehicles in Transit",
+                            "items": [
+                              "13/20",
+                              "+2",
+                              "This month"
+                            ]
+                          },
+                          {
+                            "type": "card",
+                            "id": "total_shipments",
+                            "role": "metric_card",
+                            "content": "Total Shipments",
+                            "items": [
+                              "26",
+                              "+12%",
+                              "30-days"
+                            ]
+                          },
+                          {
+                            "type": "card",
+                            "id": "finalized_shipments",
+                            "role": "metric_card",
+                            "content": "Finalized Shipments",
+                            "items": [
+                              "852",
+                              "-3%",
+                              "Annualy"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "grid",
+                        "id": "tracking_and_alerts",
+                        "role": "live_tracking_and_alerts",
+                        "children": [
+                          {
+                            "type": "card",
+                            "id": "live_tracking_map",
+                            "role": "map_card",
+                            "content": "Live Tracking",
+                            "items": [
+                              "More",
+                              "In Transit"
+                            ]
+                          },
+                          {
+                            "type": "list",
+                            "id": "inspection_alerts",
+                            "role": "compliance_alerts",
+                            "items": [
+                              "MOT Inspection",
+                              "Expires in 7 days",
+                              "Vehicle V-10",
+                              "Driver Medical Exam",
+                              "Expires in 14 days",
+                              "J. Smithson"
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "card",
+                        "id": "latest_shipments",
+                        "role": "shipment_table",
+                        "content": "Latest Shipments",
+                        "items": [
+                          "Shipments",
+                          "Route",
+                          "Status",
+                          "Customer",
+                          "Time",
+                          "Vehicle",
+                          "Driver",
+                          "S-8539",
+                          "Warsaw",
+                          "Berlin",
+                          "In Transit",
+                          "Polmlek Sp. z o.o.",
+                          "30 Apr · 08:00",
+                          "V-023",
+                          "S-4920",
+                          "Lodz",
+                          "Munich",
+                          "Foodex GmbH",
+                          "29 Apr · 14:30",
+                          "V-021",
+                          "S-1583",
+                          "Cracow",
+                          "Vienna",
+                          "Picked Up",
+                          "ChemPol S.A.",
+                          "29 Apr · 09:15",
+                          "V-012",
+                          "S-2857",
+                          "Gdansk",
+                          "Hamburg",
+                          "Assigned",
+                          "NordSped GmbH",
+                          "30 Apr · 16:45",
+                          "V-015",
+                          "S-3857",
+                          "Wroclaw",
+                          "Prague",
+                          "Delivered",
+                          "BCD Logistics",
+                          "01 May · 06:00",
+                          "V-007"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "aside",
+                    "id": "profitability_panel",
+                    "role": "profitability_and_documents",
+                    "children": [
+                      {
+                        "type": "header",
+                        "id": "profitability_header",
+                        "content": "Profitability",
+                        "items": [
+                          "Details"
+                        ]
+                      },
+                      {
+                        "type": "card",
+                        "id": "billing_status",
+                        "role": "billing_summary",
+                        "items": [
+                          "€24,850.00",
+                          "Billing Status",
+                          "Annualy"
+                        ]
+                      },
+                      {
+                        "type": "card",
+                        "id": "profitability_chart",
+                        "role": "bar_chart",
+                        "items": [
+                          "16K",
+                          "17K",
+                          "13K",
+                          "18K",
+                          "21K",
+                          "9K",
+                          "13K",
+                          "Mon",
+                          "Tue",
+                          "Wed",
+                          "Thu",
+                          "Fri",
+                          "Sat",
+                          "Sun"
+                        ]
+                      },
+                      {
+                        "type": "grid",
+                        "id": "finance_totals",
+                        "items": [
+                          "323K PLN",
+                          "Total Revenue",
+                          "216K PLN",
+                          "Total Cost",
+                          "107K PLN",
+                          "Net Profit"
+                        ]
+                      },
+                      {
+                        "type": "list",
+                        "id": "recent_documents",
+                        "role": "recent_documents",
+                        "items": [
+                          "Recent Documents",
+                          "INV-2026-04-0134",
+                          "€3,250.00",
+                          "Issued 18 Apr 2026",
+                          "Due 02 May 2026",
+                          "INV-2026-03-0098",
+                          "€5,000.00",
+                          "Issued 10 Mar 2026",
+                          "Due 02 April 2026",
+                          "INV-2026-03-0098",
+                          "€2,400.00",
+                          "Issued 05 Mar 2026",
+                          "Due 02 April 2026"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

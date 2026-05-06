@@ -21,6 +21,15 @@ Requirements:
 - For adjacent large app-shell regions such as a sidebar, topbar, and main stage, compare whether their apparent background colors are semantically the same surface. Do not split them into separate background tokens just because of screenshot compression, antialiasing, noise, slight local contrast, or nearby borders.
 - If sidebar and main stage backgrounds visually read as one continuous app canvas, record a shared semantic alias such as `app_shell.background` and reuse that value for `background.page`, `background.canvas`, and region aliases. Only create a distinct `sidebar.background` or `main.background` when a clear intentional color boundary is visible.
 - When uncertain between very close pale neutrals for the same app shell, prefer one averaged/representative token and document the uncertainty in `meta.assumptions` instead of encoding a visible color mismatch into semantic aliases.
+- Before extracting layout-sensitive tokens, identify outer wrapper candidates such as showcase canvases, centered artboards, decorative rounded frames, browser/device/mock frames, clipping frames, and drop-shadow wrappers. Record them in `raw_observations.image.wrapper_candidates` with approximate bounds, visual signals, decision, confidence, and evidence.
+- Do not decide a wrapper is product UI merely because it contains product controls or cards. Preserve wrapper tokens only when the wrapper boundary itself has product semantics such as app/window chrome, in-product shell layout ownership, scroll/clipping ownership, or alignment with internal product panes.
+- If a presentation wrapper is ignored, record the real product UI bounds in `raw_observations.image.effective_source_bounds` and base layout/token measurements on those bounds. Do not use the full screenshot width/height as the measurement denominator when the screenshot includes an ignored showcase canvas or device/browser frame.
+- If a real product main stage or raised pane is inset from the surrounding app canvas, record the observed shell offset in `raw_observations.measured_elements` and map repeated offset values into spacing tokens when appropriate. Do not treat this as presentation-wrapper padding when it belongs to the product UI.
+- For directional app-shell edge shadows, measure the visible shadow size conservatively. A tight 1-3px edge darkening with a short blur should map to `shadow.xs` or a very subtle `shadow.shell_edge`, not to generic card/popover shadows.
+- `shadow.shell_edge`, `directional_top`, `directional_left`, and `directional_top_left` should represent side-specific product edge treatments. Keep them low-alpha and short-radius unless the screenshot clearly shows a broad cast shadow.
+- Record inner/inset shadows separately from outside cast shadows. Inner shadows are visible inside the component boundary, often as a pressed bevel, top/left inner highlight, or bottom/right inner darkening on buttons and controls. Do not map them to `shadow.button`, `shadow.card`, `shadow.popover`, or generic elevation tokens.
+- If a control has only an inner/inset shadow and no visible outside cast shadow, create an inner control/button shadow token and keep the corresponding outside shadow token null.
+- For shadow tokens, distinguish measured values from visual judgments. If the exact blur/offset/alpha cannot be measured from the screenshot, keep the token conservative and record the uncertainty in `meta.assumptions` or `meta.notes`; do not imply precision that the image does not support.
 
 Schema:
 {
@@ -205,6 +214,18 @@ Schema:
       "modal": null,
       "badge": null,
       "avatar": null
+    },
+    "corner": {
+      "top_left": null,
+      "top_right": null,
+      "bottom_right": null,
+      "bottom_left": null
+    },
+    "shell": {
+      "top_left": null,
+      "top_right": null,
+      "bottom_right": null,
+      "bottom_left": null
     }
   },
   "border": {
@@ -227,6 +248,15 @@ Schema:
     "md": null,
     "lg": null,
     "xl": null,
+    "directional_top": null,
+    "directional_left": null,
+    "directional_top_left": null,
+    "shell_edge": null,
+    "inner_xs": null,
+    "inner_sm": null,
+    "control_inner": null,
+    "button_inner": null,
+    "primary_button_inner": null,
     "card": null,
     "popover": null,
     "modal": null,
@@ -400,6 +430,8 @@ Schema:
     "tabs": {
       "height": null,
       "gap": null,
+      "edge_inset_start": null,
+      "edge_inset_end": null,
       "active_text": null,
       "inactive_text": null,
       "indicator_color": null,
@@ -442,6 +474,13 @@ Schema:
     "touch_target_min": null
   },
   "raw_observations": {
+    "image": {
+      "width": null,
+      "height": null,
+      "wrapper_candidates": [],
+      "wrapper_decision": null,
+      "effective_source_bounds": null
+    },
     "visible_text_samples": [],
     "detected_color_samples": [],
     "measured_elements": []

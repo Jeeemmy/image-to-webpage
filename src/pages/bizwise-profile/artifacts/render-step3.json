@@ -1,0 +1,150 @@
+{
+  "version": "render-step3-v4",
+  "source": {
+    "screenshot": "pages-reference/bizwise-profile.webp",
+    "screenshot_width": 2048,
+    "screenshot_height": 1539,
+    "design_tokens": "src/pages/bizwise-profile/artifacts/design-tokens.json",
+    "ui_dsl": "src/pages/bizwise-profile/artifacts/ui-dsl.json",
+    "rendering_rules": "skills/image-to-webpage/references/rendering.md"
+  },
+  "adaptation": {
+    "orientation": "landscape",
+    "width": 1440,
+    "scale": 0.703125,
+    "rule": "Landscape screenshots default to 1440px PC layout width unless the user specifies another width.",
+    "confirmed_by_user": true
+  },
+  "implementation": {
+    "stack": "React + Tailwind + Vite",
+    "files_changed": [
+      "src/pages/bizwise-profile/BizwiseProfilePage.jsx",
+      "src/pages/bizwise-profile/page.config.js",
+      "src/pages/bizwise-profile/artifacts/design-tokens.json",
+      "src/pages/bizwise-profile/artifacts/ui-dsl.json",
+      "src/pages/bizwise-profile/artifacts/render-step3.json",
+      "src/framework/pageRegistry.js"
+    ],
+    "strategy": [
+      "Rendered a dedicated Bizwise customer profile page from page-local design-token and UI-DSL artifacts.",
+      "Ignored the gray presentation canvas, outer rounded showcase frame, and showcase drop shadow; the inner application shell is the rendered root.",
+      "Used normalized desktop proportions for the 236px sidebar, 321px customer profile column, 105px page header, 57px tab row, and activity cards.",
+      "Regenerated the tabbar under the updated skill rules as edge-spread, content-sized tabs instead of equal tracks or space-around outer gutters.",
+      "Regenerated boundary ownership under the updated skill rules: the sidebar is borderless and the visible vertical line is owned by the adjacent workspace/profile edge.",
+      "Regenerated the main-stage shell under the updated per-corner radius rules: the top-left corner is rounded and the other shell corners remain square.",
+      "Used local SVG/CSS approximations for icons, the bizwise brand mark, and the customer avatar because no source icon/avatar assets were available.",
+      "Rendered repeated navigation items, profile details, tags, and event cards from data arrays to keep the React implementation maintainable.",
+      "Applied the updated shell-offset rule: the right product stage is an outer clipped shell with a visible top offset, top/left border, and xs top-left directional edge shadow.",
+      "Moved vertical scrolling to an inner main-stage pane so the sticky opaque page header can prevent content bleed without removing the outer shell top offset.",
+      "Kept most UI surfaces flat with borders and dividers. Only event cards and the filtered button use a very subtle shadow visible in the screenshot."
+    ]
+  },
+  "scroll_architecture": {
+    "desktop": {
+      "root": "lg:flex lg:h-screen lg:overflow-hidden",
+      "sidebar": "lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto",
+      "main": "outer shell no longer owns vertical scrolling; inner pane owns lg/main-stage scrolling",
+      "topbar": "sticky top-0 z-40 solid white page header inside the inner scroll pane",
+      "document_scroll": false,
+      "main_pane_scroll": true,
+      "main_shell": "inner clipped stage shell: lg:h-full overflow-hidden rounded-tl-[8px] border-l border-t xs top-left shadow",
+      "main_inner_pane": "inner main-stage scroll container: h-full overflow-y-auto",
+      "main_canvas": "outer app-canvas wrapper: bg-[#f7f9fc] lg:h-screen lg:pt-[12px], creates visible shell top offset on a painted canvas"
+    },
+    "mobile": {
+      "sidebar": "normal stacked navigation above content",
+      "profile_and_activity": "stacked columns",
+      "document_scroll": true,
+      "large_fixed_sidebar": false
+    },
+    "verification_observed": [
+      "Source inspection confirmed the app-canvas wrapper owns the external top offset and painted background while the inner main shell owns clipping/border/shadow.",
+      "Source inspection confirmed the sidebar no longer renders its own right border; the adjacent workspace/profile edge owns the visible boundary.",
+      "Source inspection confirmed data-scroll-container=main-stage-inner owns lg:overflow-y-auto and the outer main shell owns rounded-tl clipping."
+    ]
+  },
+  "shadow_mapping": {
+    "policy": "Do not infer shadows from active navigation, tabs, panels, borders, or outline buttons.",
+    "avoided": [
+      "Outer showcase shadow",
+      "Active Customer List nav item shadow",
+      "Profile panel generic elevation shadow",
+      "Selected tab item shadow",
+      "Outline Edit Profile button shadow",
+      "Sidebar right border"
+    ],
+    "used": [
+      {
+        "target": "right product stage shell edge",
+        "shadow": "-2px -2px 6px rgba(17,17,20,0.045)",
+        "strength": "xs",
+        "sides": [
+          "top",
+          "left"
+        ],
+        "reason": "The screenshot shows a tight in-product top/left edge darkening; updated skill rules map this to xs shell-edge shadow rather than a broad card-like cast shadow."
+      },
+      {
+        "target": "event cards",
+        "shadow": "0 10px 22px rgba(17,17,20,0.035)",
+        "reason": "A faint card cast shadow is visible beneath activity rows in the screenshot."
+      },
+      {
+        "target": "Filtered button",
+        "shadow": "0 4px 10px rgba(17,17,20,0.035)",
+        "reason": "The control has a faint raised edge in the screenshot."
+      }
+    ]
+  },
+  "verification": {
+    "commands": [
+      {
+        "command": "node -e \"for (const f of ['src/pages/bizwise-profile/artifacts/design-tokens.json','src/pages/bizwise-profile/artifacts/ui-dsl.json','src/pages/bizwise-profile/artifacts/render-step3.json']) { JSON.parse(require('fs').readFileSync(f,'utf8')); } console.log('ok')\"",
+        "result": "passed",
+        "notes": "All page-local JSON artifacts parse successfully."
+      },
+      {
+        "command": "npm run build",
+        "result": "passed",
+        "notes": "Vite production build completed successfully."
+      },
+      {
+        "command": "rg -n \"lg:pt-\\[12px\\]|data-shell-offset-canvas|data-scroll-container=|shadow-\\[-2px_-2px_6px|margin_top|internal_scroll_container|strength\\\": \\\"xs\\\"|shell_offset_top|directional_top_left\" src/pages/bizwise-profile/BizwiseProfilePage.jsx src/pages/bizwise-profile/artifacts/ui-dsl.json src/pages/bizwise-profile/artifacts/design-tokens.json",
+        "result": "passed",
+        "notes": "Confirmed the regenerated page/artifacts include painted external main-stage shell offset, inner scroll-container ownership, and xs directional shell-edge shadow."
+      },
+      {
+        "command": "rg -n \"rounded-tl-\\[8px\\]|data-shell-radius|\\\"visible\\\": false|\\\"top_left\\\": 8|\\\"role\\\": \\\"asymmetric\\\"|sidebar_boundary_ownership\" src/pages/bizwise-profile/BizwiseProfilePage.jsx src/pages/bizwise-profile/artifacts/ui-dsl.json src/pages/bizwise-profile/artifacts/design-tokens.json",
+        "result": "passed",
+        "notes": "Confirmed the regenerated page/artifacts include borderless sidebar ownership and asymmetric top-left shell radius."
+      },
+      {
+        "command": "node -e \"const fs=require('fs'); const jsx=fs.readFileSync('src/pages/bizwise-profile/BizwiseProfilePage.jsx','utf8'); const asideStart=jsx.indexOf('<aside'); const aside=jsx.slice(asideStart, jsx.indexOf('>', asideStart)); const mainStart=jsx.indexOf('<main'); const main=jsx.slice(mainStart, jsx.indexOf('>', mainStart)); if (aside.includes('border-r')) throw new Error('sidebar aside still has border-r'); if (!main.includes('rounded-tl-[8px]')) throw new Error('main stage missing rounded-tl-[8px]'); const dsl=JSON.parse(fs.readFileSync('src/pages/bizwise-profile/artifacts/ui-dsl.json','utf8')); const root=dsl.root.children[0]; const sidebar=root.children.find(n=>n.id==='sidebar'); const stage=root.children.find(n=>n.id==='profile_workspace'); if (sidebar.appearance.border.visible !== false) throw new Error('sidebar DSL border is not false'); if (stage.appearance.radius.role !== 'asymmetric' || stage.appearance.radius.top_left !== 8 || stage.appearance.radius.top_right !== 0) throw new Error('stage DSL asymmetric radius missing'); console.log('ok')\"",
+        "result": "passed",
+        "notes": "Confirmed no sidebar right border remains on the aside, the main shell renders rounded-tl-[8px], and the UI DSL records borderless sidebar plus asymmetric top-left shell radius."
+      },
+      {
+        "command": "rg -n \"shadow-\\[-8px_-8px_20px|-8px -8px 20px|strength\\\": \\\"sm\\\"\" src/pages/bizwise-profile/BizwiseProfilePage.jsx src/pages/bizwise-profile/artifacts/ui-dsl.json src/pages/bizwise-profile/artifacts/design-tokens.json",
+        "result": "passed",
+        "notes": "No old broad shell-edge shadow or sm shell-edge shadow remains in the implementation, DSL, or token artifact."
+      }
+    ],
+    "browser_checks": [
+      {
+        "tool": "Google Chrome via Computer Use",
+        "url_observed": "http://127.0.0.1:41736/pages/bizwise-profile",
+        "result": "passed",
+        "notes": "Final page was inspected after closing DevTools. The main-stage top offset is visible on a pale app-canvas background, not a black/transparent gap. The stage keeps top/left border treatment, the sidebar is borderless, the shell top-left corner is rounded, and the shell shadow is tight/subtle rather than broad."
+      },
+      {
+        "tool": "Google Chrome DevTools DOM inspection",
+        "url_observed": "http://127.0.0.1:41736/pages/bizwise-profile",
+        "result": "passed",
+        "notes": "DOM shows root bg-[#f7f9fc], app-canvas wrapper data-shell-offset-canvas=main-stage with lg:pt-[12px], main shell data-shell-radius=top-left, and inner main-stage scroll container. Visible text includes Customer Profile, tab labels, Filtered 3, and all event titles."
+      }
+    ],
+    "limitations": [
+      "Browser console was not deeply audited; validation focused on build success, JSON validity, DOM structure, and visual shell-offset/shadow checks in Chrome."
+    ]
+  }
+}

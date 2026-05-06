@@ -1,0 +1,376 @@
+{
+  "version": "ui-dsl-v2",
+  "request": {
+    "source": "given_snapshot",
+    "ignored_outer_container": false
+  },
+  "root": {
+    "type": "container",
+    "id": "root",
+    "role": "crypto_trading_dashboard_screen",
+    "layout": {
+      "direction": "column",
+      "gap": 0,
+      "padding": 24,
+      "width": 1440,
+      "height": null
+    },
+    "behavior": {
+      "positioning": "static",
+      "scroll_container": "page",
+      "overflow": "auto"
+    },
+    "appearance": {
+      "variant": "neutral",
+      "border": {
+        "visible": false,
+        "sides": [],
+        "role": null
+      },
+      "shadow": {
+        "visible": false,
+        "sides": [],
+        "role": null,
+        "strength": null
+      },
+      "elevation": "none",
+      "shape": "square"
+    },
+    "children": [
+      {
+        "type": "header",
+        "id": "global_header",
+        "role": "app_header",
+        "layout": {
+          "direction": "row",
+          "align": "center",
+          "justify": "space-between",
+          "height": 48
+        },
+        "children": [
+          {
+            "type": "container",
+            "id": "brand_cluster",
+            "role": "brand",
+            "layout": {
+              "direction": "row",
+              "gap": 14,
+              "align": "center"
+            },
+            "children": [
+              {
+                "type": "icon",
+                "id": "raxon_logo",
+                "role": "logo_mark",
+                "icon": {
+                  "type": "icon",
+                  "name": "menu",
+                  "aria_label": "Raxon logo",
+                  "decorative": false,
+                  "position": "standalone"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "brand_name",
+                "level": 2,
+                "content": "Raxon"
+              }
+            ]
+          },
+          {
+            "type": "nav",
+            "id": "primary_navigation",
+            "role": "primary_navigation",
+            "layout": {
+              "direction": "row",
+              "gap": 9,
+              "padding": 5,
+              "distribution": "fixed-gap",
+              "item_sizing": "content"
+            },
+            "appearance": {
+              "variant": "neutral",
+              "shape": "pill",
+              "border": {
+                "visible": false,
+                "sides": [],
+                "role": null
+              },
+              "shadow": {
+                "visible": false,
+                "sides": [],
+                "role": null,
+                "strength": null
+              },
+              "elevation": "none"
+            },
+            "items": [
+              {
+                "label": "Dashboard",
+                "active": true
+              },
+              {
+                "label": "Trade",
+                "active": false
+              },
+              {
+                "label": "Analytics",
+                "active": false
+              },
+              {
+                "label": "Transfer",
+                "active": false
+              },
+              {
+                "label": "Wallet",
+                "active": false
+              }
+            ]
+          },
+          {
+            "type": "container",
+            "id": "account_actions",
+            "role": "account_actions",
+            "layout": {
+              "direction": "row",
+              "gap": 13,
+              "align": "center"
+            },
+            "children": [
+              {
+                "type": "icon_button",
+                "id": "notifications",
+                "content": null,
+                "icon": {
+                  "type": "icon",
+                  "name": "bell",
+                  "aria_label": "Notifications",
+                  "decorative": false,
+                  "position": "standalone"
+                },
+                "appearance": {
+                  "variant": "neutral",
+                  "size": "lg",
+                  "shape": "circle"
+                }
+              },
+              {
+                "type": "dropdown_button",
+                "id": "profile_dropdown",
+                "content": "Oripio Sajib Admin",
+                "trailing_icon": {
+                  "type": "icon",
+                  "name": "chevron-down",
+                  "aria_label": "Open profile menu",
+                  "decorative": false,
+                  "position": "trailing"
+                },
+                "appearance": {
+                  "variant": "neutral",
+                  "size": "lg",
+                  "shape": "pill"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "section",
+        "id": "welcome_section",
+        "role": "dashboard_intro",
+        "layout": {
+          "direction": "row",
+          "justify": "space-between",
+          "align": "end",
+          "margin_top": 34,
+          "margin_bottom": 30
+        },
+        "children": [
+          {
+            "type": "stack",
+            "id": "welcome_copy",
+            "layout": {
+              "direction": "column",
+              "gap": 5
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "welcome_title",
+                "level": 1,
+                "content": "Welcome, Oripio 👋"
+              },
+              {
+                "type": "paragraph",
+                "id": "welcome_subtitle",
+                "content": "An overview of user behavior, trading activity, and crypto revenue analytics."
+              }
+            ]
+          },
+          {
+            "type": "button",
+            "id": "export_report",
+            "content": "Export Report",
+            "leading_icon": {
+              "type": "icon",
+              "name": "upload",
+              "aria_label": "Export",
+              "decorative": false,
+              "position": "leading"
+            },
+            "appearance": {
+              "variant": "neutral",
+              "size": "lg",
+              "shape": "pill"
+            }
+          }
+        ]
+      },
+      {
+        "type": "grid",
+        "id": "top_dashboard_grid",
+        "role": "analytics_overview",
+        "layout": {
+          "direction": "grid",
+          "columns": 3,
+          "gap": 18
+        },
+        "children": [
+          {
+            "type": "card",
+            "id": "bitcoin_chart_card",
+            "role": "market_chart",
+            "layout": {
+              "direction": "column",
+              "padding": 16,
+              "height": 380
+            },
+            "appearance": {
+              "variant": "neutral",
+              "shape": "rounded",
+              "border": {
+                "visible": false,
+                "sides": [],
+                "role": null
+              },
+              "shadow": {
+                "visible": true,
+                "sides": ["bottom"],
+                "role": "ambient",
+                "strength": "xs"
+              },
+              "elevation": "low"
+            }
+          },
+          {
+            "type": "grid",
+            "id": "metric_cards",
+            "role": "metric_summary_cards",
+            "layout": {
+              "direction": "grid",
+              "columns": 2,
+              "gap": 18
+            },
+            "children": [
+              {
+                "type": "card",
+                "id": "total_balance",
+                "role": "metric_card",
+                "content": "Total Balance $4,450.00 +31% vs Last Week Details"
+              },
+              {
+                "type": "card",
+                "id": "total_revenue",
+                "role": "metric_card",
+                "content": "Total Revenue $2,645.00 +8.9% vs Last Week Details"
+              },
+              {
+                "type": "card",
+                "id": "total_trade",
+                "role": "metric_card",
+                "content": "Total Trade $8,950.00 +1.8% New Customers Details"
+              },
+              {
+                "type": "card",
+                "id": "total_loss",
+                "role": "metric_card",
+                "content": "Total Loss $8,950.00 -12.8% vs Last Week Details"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "grid",
+        "id": "bottom_dashboard_grid",
+        "role": "trading_and_transactions",
+        "layout": {
+          "direction": "grid",
+          "columns": 2,
+          "gap": 18,
+          "margin_top": 18
+        },
+        "children": [
+          {
+            "type": "card",
+            "id": "crypto_trading_card",
+            "role": "swap_crypto_form",
+            "layout": {
+              "direction": "column",
+              "padding": 20,
+              "height": 412
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "crypto_trading_title",
+                "level": 3,
+                "content": "Crypto Trading"
+              },
+              {
+                "type": "form",
+                "id": "swap_form",
+                "role": "crypto_swap_form"
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "id": "recent_transactions_card",
+            "role": "recent_transactions_table",
+            "layout": {
+              "direction": "column",
+              "padding": 16,
+              "height": 412
+            },
+            "children": [
+              {
+                "type": "toolbar",
+                "id": "transactions_toolbar",
+                "layout": {
+                  "direction": "row",
+                  "justify": "space-between",
+                  "align": "center"
+                }
+              },
+              {
+                "type": "table",
+                "id": "transactions_table",
+                "role": "asset_transactions_table",
+                "items": [
+                  "Solana",
+                  "Ethereum",
+                  "Utrust",
+                  "Bitcoin",
+                  "Quant"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

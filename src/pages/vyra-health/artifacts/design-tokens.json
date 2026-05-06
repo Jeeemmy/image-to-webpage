@@ -1,0 +1,434 @@
+{
+  "meta": {
+    "source_type": "ui_snapshot",
+    "extraction_confidence": 0.84,
+    "notes": [
+      "Landscape screenshot measured at 2400x1800. The outer gradient scene and the large white rounded frame are treated as presentation wrappers.",
+      "Effective source bounds use the inner Vyra dashboard content area, excluding the decorative outer frame and surrounding presentation canvas.",
+      "Fine chart geometry, dot-map texture, and portrait details are visually estimated from the source image."
+    ],
+    "assumptions": [
+      "Display headings use a refined high-contrast serif similar to Georgia/Canela; body and controls use Manrope-like rounded sans typography.",
+      "The blue medical data backdrop is part of the inner product UI, but the rounded white border around the full composition is presentation-only.",
+      "Cards are flat white surfaces with subtle borders and very small shadows."
+    ],
+    "unknowns": [
+      "Exact typeface family",
+      "Exact portrait source image",
+      "Exact chart data values"
+    ]
+  },
+  "colors": {
+    "brand": {
+      "primary": "#82B6DF",
+      "primary_hover": "#73A9D7",
+      "primary_active": "#5D98C7",
+      "primary_subtle": "#EAF4FF",
+      "secondary": "#171735",
+      "accent": "#2F85CA"
+    },
+    "background": {
+      "page": "#8EB5E2",
+      "canvas": "#8EB5E2",
+      "surface": "#FFFFFF",
+      "surface_raised": "#F7FAFF",
+      "surface_overlay": "rgba(255, 255, 255, 0.18)",
+      "inverse": "#171735"
+    },
+    "text": {
+      "primary": "#171726",
+      "secondary": "#616872",
+      "tertiary": "#8A93A0",
+      "muted": "#B8C3D3",
+      "disabled": "#CCD5E2",
+      "inverse": "#FFFFFF",
+      "link": "#377FBE",
+      "link_hover": "#276CA8"
+    },
+    "border": {
+      "default": "#E5ECF6",
+      "subtle": "#F0F4FA",
+      "strong": "rgba(255, 255, 255, 0.72)",
+      "focus": "#89BEE6",
+      "divider": "#E8EDF5"
+    },
+    "state": {
+      "success": "#3E9028",
+      "success_bg": "#EEF8EC",
+      "warning": "#C77F23",
+      "warning_bg": "#FFF5E7",
+      "error": "#BC4A4A",
+      "error_bg": "#FFF0F0",
+      "info": "#4C93CD",
+      "info_bg": "#EAF5FF",
+      "disabled_bg": "#EEF2F8",
+      "disabled_text": "#AFB8C8"
+    },
+    "neutral_scale": {
+      "0": "#FFFFFF",
+      "50": "#F8FAFE",
+      "100": "#EEF3FA",
+      "200": "#E4EBF5",
+      "300": "#CEDAE8",
+      "400": "#AEB9C8",
+      "500": "#828B99",
+      "600": "#616872",
+      "700": "#3A3E49",
+      "800": "#232536",
+      "900": "#171726",
+      "1000": "#0E0E1D"
+    },
+    "semantic_aliases": [
+      {
+        "alias": "product.background",
+        "value": "#8EB5E2"
+      },
+      {
+        "alias": "dashboard.card",
+        "value": "#FFFFFF"
+      },
+      {
+        "alias": "chart.blue",
+        "value": "#82B6DF"
+      },
+      {
+        "alias": "deep.indigo",
+        "value": "#171735"
+      }
+    ]
+  },
+  "opacity": {
+    "disabled": 0.45,
+    "hover_overlay": 0.08,
+    "pressed_overlay": 0.12,
+    "scrim": 0.35
+  },
+  "typography": {
+    "font_family": {
+      "primary": "Manrope, ui-sans-serif, system-ui, sans-serif",
+      "secondary": "Georgia, Times New Roman, serif",
+      "mono": null
+    },
+    "font_size": {
+      "display": 41,
+      "h1": 41,
+      "h2": 25,
+      "h3": 20,
+      "h4": 17,
+      "title": 15,
+      "subtitle": 13,
+      "body": 13,
+      "body_sm": 11,
+      "caption": 9,
+      "label": 10,
+      "button": 12
+    },
+    "line_height": {
+      "display": 1.04,
+      "h1": 1.04,
+      "h2": 1.05,
+      "h3": 1.15,
+      "body": 1.45,
+      "caption": 1.25,
+      "button": 1
+    },
+    "font_weight": {
+      "regular": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700
+    },
+    "letter_spacing": {
+      "display": 0,
+      "heading": 0,
+      "body": 0,
+      "caption": 0,
+      "button": 0
+    },
+    "text_transform": {
+      "button": null,
+      "label": null
+    }
+  },
+  "spacing": {
+    "base": 4,
+    "scale": {
+      "0": 0,
+      "2xs": 4,
+      "xs": 7,
+      "sm": 12,
+      "md": 16,
+      "lg": 23,
+      "xl": 33,
+      "2xl": 47,
+      "3xl": 65,
+      "4xl": 84
+    },
+    "component_gap": {
+      "inline": 9,
+      "stack": 12,
+      "section": 33,
+      "page_margin": 0,
+      "card_padding": 18,
+      "form_gap": 12
+    }
+  },
+  "sizing": {
+    "icon": {
+      "xs": 12,
+      "sm": 16,
+      "md": 20,
+      "lg": 28
+    },
+    "control_height": {
+      "xs": 28,
+      "sm": 36,
+      "md": 42,
+      "lg": 49
+    },
+    "container": {
+      "max_width": 1200,
+      "sidebar_width": null,
+      "content_width": 1200
+    }
+  },
+  "radius": {
+    "none": 0,
+    "xs": 4,
+    "sm": 6,
+    "md": 9,
+    "lg": 12,
+    "xl": 18,
+    "2xl": 24,
+    "pill": 999,
+    "circle": 999,
+    "component": {
+      "button": 999,
+      "input": 8,
+      "card": 9,
+      "modal": 18,
+      "badge": 999,
+      "avatar": 999
+    },
+    "corner": {
+      "top_left": 9,
+      "top_right": 9,
+      "bottom_right": 9,
+      "bottom_left": 9
+    },
+    "shell": {
+      "top_left": null,
+      "top_right": null,
+      "bottom_right": null,
+      "bottom_left": null
+    }
+  },
+  "border": {
+    "width": {
+      "none": 0,
+      "hairline": 1,
+      "sm": 1,
+      "md": 2,
+      "lg": 3
+    },
+    "style": {
+      "default": "solid",
+      "focus": "solid"
+    }
+  },
+  "shadow": {
+    "none": "none",
+    "xs": "0 1px 2px rgba(25, 45, 77, 0.05)",
+    "sm": "0 8px 20px rgba(38, 72, 116, 0.07)",
+    "md": "0 14px 34px rgba(28, 54, 95, 0.11)",
+    "lg": "0 24px 70px rgba(26, 55, 96, 0.15)",
+    "xl": "0 38px 110px rgba(26, 55, 96, 0.18)",
+    "directional_top": null,
+    "directional_left": null,
+    "directional_top_left": null,
+    "shell_edge": null,
+    "inner_xs": "inset 0 1px 0 rgba(255, 255, 255, 0.55)",
+    "inner_sm": "inset 0 1px 1px rgba(255, 255, 255, 0.75), inset 0 -1px 2px rgba(46, 86, 132, 0.10)",
+    "control_inner": "inset 0 1px 0 rgba(255, 255, 255, 0.65), inset 0 -1px 2px rgba(59, 91, 132, 0.12)",
+    "button_inner": "inset 0 1px 0 rgba(255, 255, 255, 0.65), inset 0 -1px 2px rgba(59, 91, 132, 0.12)",
+    "primary_button_inner": "inset 0 1px 0 rgba(255, 255, 255, 0.16), inset 0 -1px 2px rgba(0, 0, 0, 0.22)",
+    "card": "0 1px 2px rgba(25, 45, 77, 0.04)",
+    "popover": "0 16px 34px rgba(19, 30, 58, 0.16)",
+    "modal": "0 32px 90px rgba(19, 30, 58, 0.24)"
+  },
+  "components": {
+    "button": {
+      "height": 42,
+      "padding_x": 17,
+      "radius": 999
+    },
+    "card": {
+      "radius": 9,
+      "padding": 18,
+      "border": true,
+      "shadow": "xs"
+    },
+    "tabs": {
+      "height": 40,
+      "gap": 0,
+      "edge_inset_start": 3,
+      "edge_inset_end": 3,
+      "active_text": "#171726",
+      "inactive_text": "#FFFFFF",
+      "indicator_color": "#FFFFFF",
+      "indicator_height": null
+    }
+  },
+  "icons": {
+    "style": "rounded line",
+    "stroke_width": 2,
+    "corner_style": "round",
+    "default_size": 18,
+    "color": null
+  },
+  "imagery": {
+    "style": "soft medical scan render",
+    "corner_radius": 9,
+    "aspect_ratios": [
+      "1:1.12"
+    ],
+    "treatment": "pale-blue diagnostic panel"
+  },
+  "accessibility": {
+    "minimum_text_contrast_observed": null,
+    "focus_visible": null,
+    "touch_target_min": null
+  },
+  "raw_observations": {
+    "image": {
+      "width": 2400,
+      "height": 1800,
+      "wrapper_candidates": [
+        {
+          "id": "outer_gradient_showcase_canvas",
+          "type": "outer_canvas",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 2400,
+            "height": 1800
+          },
+          "visual_signals": [
+            "full-image gradient backdrop",
+            "surrounds all content",
+            "not aligned to any product control"
+          ],
+          "contains_product_ui": true,
+          "boundary_has_product_semantics": false,
+          "decision": "ignore",
+          "confidence": 0.96,
+          "evidence": "The full canvas is a presentation background and has no product chrome boundary or controls."
+        },
+        {
+          "id": "large_white_rounded_showcase_frame",
+          "type": "rounded_frame",
+          "bounds": {
+            "x": 114,
+            "y": 173,
+            "width": 2167,
+            "height": 1449
+          },
+          "visual_signals": [
+            "large centered rounded white outline",
+            "uniform frame around entire composition",
+            "clips nothing that behaves as a product scroll region"
+          ],
+          "contains_product_ui": true,
+          "boundary_has_product_semantics": false,
+          "decision": "ignore",
+          "confidence": 0.9,
+          "evidence": "The frame contains the product dashboard but the boundary itself is a decorative showcase frame, not app/window chrome."
+        }
+      ],
+      "wrapper_decision": {
+        "ignored": true,
+        "effective_source_bounds_reason": "Use the inner Vyra dashboard content area after removing the outer canvas and decorative rounded frame.",
+        "preserved_candidates": [],
+        "ignored_candidates": [
+          "outer_gradient_showcase_canvas",
+          "large_white_rounded_showcase_frame"
+        ],
+        "confidence": 0.9,
+        "notes": "Do not copy the rounded outer frame, its border, or the surrounding display canvas into the render."
+      },
+      "effective_source_bounds": {
+        "x": 168,
+        "y": 229,
+        "width": 2059,
+        "height": 1338
+      }
+    },
+    "visible_text_samples": [
+      "Vyra",
+      "Overview",
+      "Biomarkers",
+      "Reports",
+      "Insights",
+      "Health Intelligence Overview",
+      "Risk Reduction",
+      "Scan result",
+      "Health Score",
+      "Vital Score"
+    ],
+    "detected_color_samples": [
+      "#8EB5E2",
+      "#FFFFFF",
+      "#171735",
+      "#82B6DF"
+    ],
+    "measured_elements": [
+      {
+        "name": "inner_dashboard_effective_bounds",
+        "x": 168,
+        "y": 229,
+        "width": 2059,
+        "height": 1338
+      },
+      {
+        "name": "risk_reduction_card",
+        "x": 168,
+        "y": 573,
+        "width": 674,
+        "height": 513,
+        "radius": 14
+      },
+      {
+        "name": "biomarkers_card",
+        "x": 854,
+        "y": 574,
+        "width": 450,
+        "height": 199,
+        "radius": 14
+      },
+      {
+        "name": "scan_result_card",
+        "x": 1322,
+        "y": 573,
+        "width": 905,
+        "height": 557,
+        "radius": 14
+      },
+      {
+        "name": "health_score_card",
+        "x": 854,
+        "y": 790,
+        "width": 450,
+        "height": 586,
+        "radius": 14
+      },
+      {
+        "name": "vital_score_card",
+        "x": 1322,
+        "y": 1149,
+        "width": 905,
+        "height": 418,
+        "radius": 14
+      }
+    ]
+  }
+}

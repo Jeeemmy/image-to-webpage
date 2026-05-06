@@ -1,0 +1,344 @@
+{
+  "meta": {
+    "source_type": "ui_snapshot",
+    "extraction_confidence": 0.82,
+    "notes": [
+      "Source image is a landscape logistics dashboard presentation image at 2000x1499.",
+      "The outer pale blue showcase canvas and black rounded device frame are presentation-only and ignored for product UI extraction.",
+      "The real product UI is a light logistics dashboard with a compact left icon rail, top toolbar, main analytics grid, and right profitability panel.",
+      "Landscape workflow default adaptation width is 1200px; the ignored wrapper leaves an effective source width of 1728px, so normalized scale is approximately 0.694444."
+    ],
+    "assumptions": [
+      "Typography resembles a rounded geometric sans; the project Manrope font is used as the closest existing stack.",
+      "Measurements are normalized from the inner product bounds rather than the full showcase image.",
+      "Vehicle, chart, map, and document icons are recreated locally with SVG/CSS approximations."
+    ],
+    "unknowns": [
+      "Exact source font family",
+      "Exact map tile data",
+      "Exact original avatar photographs",
+      "Hidden states and interactions"
+    ]
+  },
+  "colors": {
+    "brand": {
+      "primary": "#0836D9",
+      "primary_hover": "#052FC5",
+      "primary_active": "#0829A8",
+      "primary_subtle": "#EEF3FF",
+      "secondary": "#1B58FF",
+      "accent": "#D92A58"
+    },
+    "background": {
+      "page": "#EEF3FF",
+      "canvas": "#F3F6FF",
+      "surface": "#FFFFFF",
+      "surface_raised": "#FDFEFF",
+      "surface_overlay": "#FFFFFF",
+      "inverse": "#101114"
+    },
+    "text": {
+      "primary": "#111640",
+      "secondary": "#5B668E",
+      "tertiary": "#8D97BB",
+      "muted": "#A6AEC8",
+      "disabled": "#C4CAE0",
+      "inverse": "#FFFFFF",
+      "link": "#0836D9",
+      "link_hover": "#052FC5"
+    },
+    "border": {
+      "default": "#E4E9F7",
+      "subtle": "#EEF2FB",
+      "strong": "#D8E0F2",
+      "focus": "#0836D9",
+      "divider": "#E8EDF8"
+    },
+    "state": {
+      "success": "#14B87A",
+      "success_bg": "#DDF8EC",
+      "warning": "#F4B51B",
+      "warning_bg": "#FFF3CF",
+      "error": "#D82955",
+      "error_bg": "#FFE8EE",
+      "info": "#0836D9",
+      "info_bg": "#EDF3FF",
+      "disabled_bg": "#F0F3FB",
+      "disabled_text": "#B7BED5"
+    },
+    "neutral_scale": {
+      "0": "#FFFFFF",
+      "50": "#FAFBFF",
+      "100": "#F6F8FF",
+      "200": "#EEF2FB",
+      "300": "#E2E8F6",
+      "400": "#CDD6EB",
+      "500": "#A6AEC8",
+      "600": "#7C86A9",
+      "700": "#535E82",
+      "800": "#252C55",
+      "900": "#111640",
+      "1000": "#050713"
+    },
+    "semantic_aliases": [
+      {
+        "name": "app_shell.background",
+        "value": "#F3F6FF",
+        "confidence": 0.84
+      },
+      {
+        "name": "nav_item.active.background",
+        "value": "#0836D9",
+        "confidence": 0.9
+      },
+      {
+        "name": "profitability.bar_cost",
+        "value": "#D7DDF0",
+        "confidence": 0.82
+      },
+      {
+        "name": "map.background",
+        "value": "#F2F7FB",
+        "confidence": 0.74
+      },
+      {
+        "name": "document_row.background",
+        "value": "#F6F8FF",
+        "confidence": 0.78
+      }
+    ]
+  },
+  "opacity": {
+    "disabled": 0.52,
+    "hover_overlay": 0.08,
+    "pressed_overlay": 0.12,
+    "scrim": null
+  },
+  "typography": {
+    "font_family": {
+      "primary": "Manrope",
+      "secondary": null,
+      "mono": null
+    },
+    "font_size": {
+      "display": 36,
+      "h1": 28,
+      "h2": 20,
+      "h3": 16,
+      "h4": 14,
+      "title": 16,
+      "subtitle": 13,
+      "body": 13,
+      "body_sm": 12,
+      "caption": 10,
+      "label": 11,
+      "button": 12
+    },
+    "line_height": {
+      "display": 44,
+      "h1": 36,
+      "h2": 28,
+      "h3": 22,
+      "body": 18,
+      "caption": 14,
+      "button": 16
+    },
+    "font_weight": {
+      "regular": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700
+    },
+    "letter_spacing": {
+      "display": 0,
+      "heading": 0,
+      "body": 0,
+      "caption": 0,
+      "button": 0
+    },
+    "text_transform": {
+      "button": "none",
+      "label": "none"
+    }
+  },
+  "spacing": {
+    "base": 4,
+    "scale": {
+      "0": 0,
+      "2xs": 3,
+      "xs": 6,
+      "sm": 9,
+      "md": 12,
+      "lg": 18,
+      "xl": 24,
+      "2xl": 30,
+      "3xl": 36,
+      "4xl": 48
+    },
+    "component_gap": {
+      "inline": 8,
+      "stack": 12,
+      "section": 16,
+      "page_margin": 24,
+      "card_padding": 20,
+      "form_gap": 10
+    }
+  },
+  "sizing": {
+    "icon": {
+      "xs": 12,
+      "sm": 15,
+      "md": 18,
+      "lg": 24
+    },
+    "control_height": {
+      "xs": 28,
+      "sm": 34,
+      "md": 42,
+      "lg": 52
+    },
+    "container": {
+      "max_width": 1200,
+      "sidebar_width": 60,
+      "content_width": 1140
+    }
+  },
+  "radius": {
+    "none": 0,
+    "xs": 5,
+    "sm": 8,
+    "md": 12,
+    "lg": 16,
+    "xl": 20,
+    "2xl": 24,
+    "pill": 999,
+    "circle": 999,
+    "component": {
+      "button": 9,
+      "input": 10,
+      "card": 16,
+      "modal": null,
+      "badge": 4,
+      "avatar": 10
+    },
+    "corner": {
+      "top_left": null,
+      "top_right": null,
+      "bottom_right": null,
+      "bottom_left": null
+    },
+    "shell": {
+      "top_left": null,
+      "top_right": null,
+      "bottom_right": null,
+      "bottom_left": null
+    }
+  },
+  "border": {
+    "width": {
+      "hairline": 1,
+      "thin": 1,
+      "medium": 2,
+      "thick": null
+    },
+    "style": {
+      "default": "solid"
+    }
+  },
+  "shadow": {
+    "none": "none",
+    "xs": "0 1px 2px rgba(20, 33, 74, 0.04)",
+    "sm": "0 8px 18px rgba(28, 45, 90, 0.06)",
+    "md": "0 18px 36px rgba(31, 46, 91, 0.08)",
+    "lg": null,
+    "xl": null,
+    "directional_top": null,
+    "directional_left": null,
+    "directional_top_left": null,
+    "shell_edge": null,
+    "card": "0 10px 24px rgba(37, 53, 103, 0.05)",
+    "popover": null,
+    "modal": null,
+    "focus_ring": "0 0 0 3px rgba(8, 54, 217, 0.18)"
+  },
+  "components": {
+    "button": {
+      "height_sm": 32,
+      "height_md": 42,
+      "padding_x": 12,
+      "radius": 9
+    },
+    "card": {
+      "padding": 20,
+      "radius": 16,
+      "border": true,
+      "shadow": "sm"
+    },
+      "sidebar": {
+      "width": 60,
+      "icon_button_size": 40,
+      "active_item_size": 42
+    },
+      "topbar": {
+      "height": 82,
+      "padding_x": 24
+    },
+    "table": {
+      "row_height": 43,
+      "header_height": 38
+    },
+    "badge": {
+      "height": 18,
+      "padding_x": 6
+    },
+    "tabs": {
+      "height": null,
+      "gap": null,
+      "edge_inset_start": null,
+      "edge_inset_end": null,
+      "active_text": null,
+      "inactive_text": null,
+      "indicator_color": null,
+      "indicator_height": null
+    }
+  },
+  "raw_observations": {
+    "image": {
+      "width": 2000,
+      "height": 1499,
+      "effective_source_bounds": {
+        "x": 136,
+        "y": 186,
+        "width": 1728,
+        "height": 1124
+      },
+      "inner_ui_bounds_estimate": {
+        "x": 136,
+        "y": 186,
+        "width": 1728,
+        "height": 1124
+      }
+    },
+    "measured_elements": [
+      {
+        "name": "product_app_shell",
+        "approx_width": 1728,
+        "approx_height": 1124,
+        "normalized_width": 1200,
+        "normalized_height": 781,
+        "outer_radius": null,
+        "outer_shadow": null
+      },
+      {
+        "name": "left_sidebar",
+        "approx_width": 86,
+        "normalized_width": 60
+      },
+      {
+        "name": "right_profitability_panel",
+        "approx_width": 482,
+        "normalized_width": 335
+      }
+    ]
+  }
+}
