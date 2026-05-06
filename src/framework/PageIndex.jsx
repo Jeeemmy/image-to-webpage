@@ -1,5 +1,9 @@
 import { pages } from "./pageRegistry.js";
 
+function getDeviceLabel(page) {
+  return page.preview?.device === "mobile" ? "Mob" : "PC";
+}
+
 export default function PageIndex() {
   return (
     <main className="min-h-screen bg-[#f7f7f4] px-6 py-10 text-[#171713]">
@@ -18,7 +22,16 @@ export default function PageIndex() {
               className="group rounded-lg border border-[#d9d7cf] bg-white p-5 transition hover:border-[#171713]"
             >
               <div className="flex items-start justify-between gap-4">
-                <div className="min-w-0">
+                <div className="flex min-w-0 items-start gap-3">
+                  <span
+                    className={`mt-1 inline-flex h-6 shrink-0 items-center rounded border px-2 text-[11px] font-bold leading-none ${
+                      page.preview?.device === "mobile"
+                        ? "border-[#2f6f52] bg-[#e7f3ec] text-[#21513b]"
+                        : "border-[#4b5563] bg-[#f3f4f6] text-[#262b32]"
+                    }`}
+                  >
+                    {getDeviceLabel(page)}
+                  </span>
                   <h2 className="text-xl font-semibold">{page.title}</h2>
                 </div>
                 <span className="shrink-0 whitespace-nowrap text-sm font-semibold text-[#171713] group-hover:underline">

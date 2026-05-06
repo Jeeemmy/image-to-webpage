@@ -39,6 +39,11 @@ Requirements:
 - Preserve real in-product shell offsets. If the main stage, raised pane, workspace surface, or app frame is visibly inset from the surrounding app canvas, record that offset on the product node even when an outer showcase wrapper is ignored.
 - Do not collapse a main-stage top offset to zero to satisfy sticky topbar rules. External shell offset and internal scroll-container/topbar padding are separate layout signals.
 - If an inset shell contains a sticky topbar, model the shell as the clipped outer boundary and the scrollable content area as an inner child. The topbar belongs inside the inner scroll container and content begins below it in normal flow.
+- When an important visual element is image-based, decide its layered asset strategy before finalizing the node. If the user has image generation capability, prefer using a screenshot crop/reference to generate a transparent subject cutout that preserves the main subject/material but removes background and interactive overlays. Recreate simple fills, gradients, glows, and backdrop shapes with code/design tokens instead of screenshotting them into the asset.
+- For complex image regions, model the reconstruction as separate layers whenever possible: coded background/gradient, transparent subject image, and floating interactive controls. Use a whole-element source crop as the final rendered asset only when generation is unavailable or the subject/background cannot be separated cleanly.
+- Before selecting `source_crop` for any important image node, run an asset contamination gate. A final source crop must not contain phone hardware, browser/device/mock frames, OS status bars, iOS home indicators, Android gesture/navigation bars, notches/dynamic islands, clock/battery/wifi indicators, app navigation buttons, favorite/share/menu buttons, carousel controls, badges, text overlays, cards, bottom sheets, modals, or any other UI surface that should be rendered separately or ignored as presentation chrome. If the underlying image is obstructed by those elements and cannot be cleanly cropped, choose `generate_clean_asset` or `generate_transparent_subject` and use the crop only as a reference.
+- Treat bottom OS navigation and gesture indicators as ignored system chrome by default. This includes the iOS home indicator/gesture pill, Android gesture bar, Android three-button navigation bar, and customized OEM Android navigation bars. Do not model them as product bottom navs, drag handles, dividers, progress bars, buttons, or decorative pills unless the user explicitly asks to reproduce OS/device chrome or the page itself is an OS UI demonstration. Record visible indicators in `request.ignored_system_chrome` when possible.
+- When a bottom sheet, rounded card, detail panel, player panel, booking panel, or similar surface floats over a hero/photo/map region, record it as an overlay over an underlay, not as two adjacent vertical sections. Include approximate `overlap_px`, underlay image bottom, overlay top, z-order, radius, and shadow. The image asset remains clean; the overlay surface is a separate UI node above it.
 - Preserve all visible text exactly when readable.
 - If visible text is unreadable, keep the component and set content/text/value to null.
 - Preserve every visible icon.
@@ -124,12 +129,93 @@ Root output schema:
       "y": null,
       "width": null,
       "height": null
+    },
+    "ignored_system_chrome": [
+      {
+        "id": "system_home_indicator",
+        "type": "ios_home_indicator | android_gesture_bar | android_three_button_nav | oem_android_navigation_bar | status_bar | device_frame | other",
+        "bounds": {
+          "x": null,
+          "y": null,
+          "width": null,
+          "height": null
+        },
+        "visual_signals": [],
+        "decision": "ignore",
+        "reason": "system_or_device_chrome_not_product_ui",
+        "confidence": null
+      }
+    ],
+    "image_asset_strategy": {
+      "important_image_elements": [
+        {
+          "id": "hero_product_image",
+          "node_id": null,
+          "importance": "primary | supporting | decorative | null",
+          "bounds": {
+            "x": null,
+            "y": null,
+            "width": null,
+            "height": null
+          },
+          "is_obstructed": null,
+          "occluding_element_ids": [],
+          "asset_strategy": "generate_transparent_subject | source_crop | generate_clean_asset | reconstruct_with_css_or_svg | ignore | null",
+          "layering": {
+            "background_strategy": "code | source_crop | generated | none | null",
+            "subject_strategy": "transparent_generated_asset | source_crop | css_or_svg | none | null",
+            "overlay_strategy": "separate_interactive_nodes | baked_in_asset | none | null",
+            "recommended_stack": ["coded_background", "transparent_subject", "interactive_overlays"]
+          },
+          "source_crop": {
+            "required": null,
+            "whole_element": true,
+            "include_occluders": false,
+            "contamination_check": {
+              "passed": null,
+              "contaminants": [],
+              "decision": "clean_source_crop_allowed | reject_source_crop_generate_clean_asset | reject_source_crop_generate_transparent_subject | null"
+            },
+            "bounds": {
+              "x": null,
+              "y": null,
+              "width": null,
+              "height": null
+            }
+          },
+          "generation": {
+            "required": null,
+            "user_image_generation_skill_required": null,
+            "transparent_background_preferred": true,
+            "allow_non_transparent_fallback": null,
+            "reference_image": "source_crop | screenshot_region | null",
+            "preserve_subject": true,
+            "remove_background": true,
+            "remove_interactive_elements": true,
+            "prompt_features": [],
+            "negative_prompt_features": []
+          },
+          "evidence": null
+        }
+      ]
     }
   },
   "root": {
     "type": "container",
     "id": "root",
     "role": "screen",
+    "layering": {
+      "underlays": [],
+      "overlays": [],
+      "overlap_relationships": [
+        {
+          "underlay_id": null,
+          "overlay_id": null,
+          "overlap_px": null,
+          "evidence": null
+        }
+      ]
+    },
     "children": []
   }
 }
@@ -225,6 +311,7 @@ Common node schema:
   "icon": null,
   "leading_icon": null,
   "trailing_icon": null,
+  "asset": "image_asset_strategy_or_null",
   "items": null
 }
 
@@ -503,6 +590,47 @@ Type-specific schema rules:
     "layout": {
       "width": null,
       "height": null
+    },
+    "asset": {
+      "importance": "primary | supporting | decorative | null",
+      "bounds": {
+        "x": null,
+        "y": null,
+        "width": null,
+        "height": null
+      },
+      "is_obstructed": null,
+      "occluding_element_ids": [],
+      "asset_strategy": "generate_transparent_subject | source_crop | generate_clean_asset | reconstruct_with_css_or_svg | ignore | null",
+      "layering": {
+        "background_strategy": "code | source_crop | generated | none | null",
+        "subject_strategy": "transparent_generated_asset | source_crop | css_or_svg | none | null",
+        "overlay_strategy": "separate_interactive_nodes | baked_in_asset | none | null",
+        "recommended_stack": ["coded_background", "transparent_subject", "interactive_overlays"]
+      },
+      "source_crop": {
+        "required": null,
+        "whole_element": true,
+        "include_occluders": false,
+        "bounds": {
+          "x": null,
+          "y": null,
+          "width": null,
+          "height": null
+        }
+      },
+      "generation": {
+        "required": null,
+        "user_image_generation_skill_required": null,
+        "transparent_background_preferred": true,
+        "allow_non_transparent_fallback": null,
+        "reference_image": "source_crop | screenshot_region | null",
+        "preserve_subject": true,
+        "remove_background": true,
+        "remove_interactive_elements": true,
+        "prompt_features": [],
+        "negative_prompt_features": []
+      }
     }
   }
 
@@ -566,6 +694,27 @@ Icon extraction rules:
 - Use leading_icon for search, user, mail, lock, calendar, filter, add, and similar leading affordances.
 - If the exact icon is unclear, use the closest conservative semantic name and set aria_label to null.
 
+Targeted typography role rules:
+- Do not perform per-element font analysis in the DSL. Use global typography for low-visual-weight body copy, descriptions, labels, captions, metadata, secondary navigation labels, and ordinary form text.
+- For high-visual-weight text, add semantic role fields so renderers can look up targeted typography tokens. High-weight text includes prices, brand/logo text, hero headlines, large KPI/counter/stat numbers, and visually dominant CTA labels.
+- For price text, use `role = "price"` or `typography_role = "price"`; for original/struck prices, include `state.discounted` or `style = "line-through"` as appropriate. For brand/logo text, use `role = "brand"`. For hero headlines, use `role = "hero_heading"`. Do not include font family names, availability decisions, user notice decisions, or fallback stacks in the DSL.
+
+Image asset extraction rules:
+- Treat photos, product screenshots, maps, artwork, illustrations, charts that are visually presented as raster images, and branded visual compositions as image nodes when they are important to page fidelity.
+- For each important image node, record `asset.importance`, source-image `asset.bounds`, and whether any interactive element overlaps the visual. Interactive occluders include floating buttons, icon buttons, badges/chips that act as controls, carousel controls, play/save/share actions, hover actions, and clickable overlays.
+- For each important image node, also record a source-crop contamination check before allowing final `source_crop`. Contaminants include device/browser/mock frames, phone hardware, OS status bars, iOS home indicators, Android gesture/navigation bars, notches/dynamic islands, clock/battery/wifi/signal indicators, page navigation/action buttons, carousel controls, chips, badges, text overlays, cards, bottom sheets, modals, popovers, and other UI surfaces that cover or surround the underlying image. A contaminated crop is not valid as the final hero/photo/map/art asset.
+- For generated transparent subjects, record the source subject's visual bounding box separately from the containing image/card bounds when visible or inferable. Include enough information for rendering to preserve the subject's relative size and position after generation/cropping, because generated PNG natural dimensions and transparent padding may differ from the screenshot. If the transparent canvas represents the source crop coordinate system, record that trimming transparent padding is prohibited unless trim offsets are also recorded for placement compensation.
+- When a user image generation skill is available or likely available and the user has not explicitly declined it, prefer `asset.asset_strategy = "generate_transparent_subject"` for important image nodes that have a separable subject. Use the screenshot crop as the reference, set `generation.preserve_subject = true`, `remove_background = true`, `remove_interactive_elements = true`, and `transparent_background_preferred = true`.
+- Record `asset.layering` so renderers know which parts are code and which parts are image assets. Use `background_strategy = "code"` for gradients, solid fills, glows, and simple geometric backdrops that can be recreated with CSS/Tailwind/canvas. Use `subject_strategy = "transparent_generated_asset"` for the extracted subject. Use `overlay_strategy = "separate_interactive_nodes"` for buttons, chips, badges, carousel controls, and hover/action overlays.
+- If no interactive occluder overlaps the important image but the subject can be separated from a gradient or stylized background, still prefer `generate_transparent_subject` over a final whole-element screenshot crop when image generation is available.
+- If image generation is unavailable or explicitly declined by the user, set `asset.asset_strategy = "source_crop"`, `asset.source_crop.required = true`, `whole_element = true`, and `include_occluders = false` only for unobstructed, contamination-free elements. The crop bounds should cover the whole visual element, not just a central patch.
+- If an interactive occluder, system chrome, presentation chrome, or product overlay overlaps the important image and transparent subject extraction is unavailable or inappropriate, set `asset.asset_strategy = "generate_clean_asset"`, `asset.generation.required = true`, and list `asset.occluding_element_ids` plus `asset.source_crop.contamination_check.contaminants`. Preserve product-owned occluding controls as separate DSL nodes so rendering can place them back above the clean generated asset.
+- Fill `asset.generation.prompt_features` with concise visual descriptors needed to preserve/regenerate the subject, such as subject, composition, perspective, colors, material, crop, lighting, style, and visible relationship to the coded background. Also set `asset.generation.reference_image` to `"source_crop"` or `"screenshot_region"` when a crop can serve as a reference. Fill `asset.generation.negative_prompt_features` with every contaminant to remove, such as phone frame, status bar, iOS home indicator, Android navigation bar, gesture pill, dynamic island, battery/wifi icons, back/favorite/share buttons, bottom sheet, text overlay, cards, badges, and modal surfaces.
+- Set `asset.generation.user_image_generation_skill_required = true` for generated subject/clean asset strategies. Set `allow_non_transparent_fallback = true` only because some user-provided image generation skills may not support transparency.
+- Do not include overlay buttons, badges, text labels, or controls inside a transparent subject or clean generated asset. Those remain independent UI nodes layered above the image.
+- Do not include phone frames, browser/device mockups, OS status bars, iOS home indicators, Android gesture/navigation bars, dynamic islands/notches, clock/battery/wifi indicators, bottom sheets, cards, text overlays, or page action buttons inside a final source crop, transparent subject, or clean generated asset unless the user explicitly asked to reproduce those pixels as part of the image itself.
+- For product/hero image areas with a visible gradient or tonal image backdrop, explicitly model the backdrop as a coded background layer. Do not choose final `source_crop` when the crop would bake obvious gradient/background pixels into a subject that can be separated.
+
 State extraction rules:
 - Set state.active = true for currently active nav items, tabs, filters, or segmented controls.
 - Set state.selected = true for selected options or selected rows/items.
@@ -589,6 +738,9 @@ Layout extraction rules:
 - For horizontal navigation, tabs, segmented controls, toolbars, and button groups, record both the overall distribution and item sizing. Use `distribution = "edge-spread"` with `justify = "space-between"` when the first and last items align close to the container edges and extra space is primarily between items. Use `distribution = "equal-tracks"` and `item_sizing = "equal"` when each item occupies an equal-width column and text is centered inside each track. Use `distribution = "centered-group"` when the items form a centered cluster with outer gutters. Use `distribution = "fixed-gap"` when gaps appear constant and unused space remains at one end.
 - Do not infer equal grid tracks for tabs just because there are three tabs. If tab labels are content-width and the first/last labels sit near the tabbar edges, record content-sized edge-spread behavior rather than equal tracks.
 - For tabbars, estimate `edge_inset_start` and `edge_inset_end` when useful. These values describe the visual outer gutter from the tabbar edge to the first/last tab content or active indicator, not generic container padding.
+- For horizontal scrollers inside padded mobile content, record whether the scroll strip is clipped to the content column or bleeds through the page padding to the screen edge. Use a hint such as `edge_behavior = "full_bleed_scroll_with_inner_padding"` when the first item aligns to page padding but later items extend into the right/left padding area. Do not model these rows as plain children of a padded column if the screenshot shows chips/cards continuing to the device edge.
+- On mobile, do not model ordinary browser scrollbars as UI nodes. Scrollbar visibility is handled by rendering; scrollbars are hidden by default unless the source screenshot shows a meaningful in-product scrollbar or scroll indicator.
+- For hero/photo/map plus bottom sheet layouts, compare the underlay image bottom to the sheet/card top. If the sheet visually covers the image, record `overlap_px` and keep the image underlay extending behind the sheet. Do not normalize the geometry into `hero.bottom == sheet.top` just because the sheet starts near the bottom of the visible image.
 - Capture internal card distribution when visible. If a card has an illustration/media area that occupies the available remaining vertical space while text/metadata sits at the bottom, set a layout hint such as `content_distribution = "media_fills_remaining_space"` or `"text_anchored_bottom"` on the card and use a separate child stack/group for bottom text when useful.
 - For folder/product/file cards where the image is centered in the free space and labels are bottom-aligned, record `media_alignment = "center"` and `text_alignment = "start"` with bottom anchoring intent. Do not model this as a plain natural vertical stack.
 - If a card's content appears bottom anchored, prefer explicit layout intent over only listing children in visual order; the renderer needs to know which region flexes and which region stays pinned.
@@ -611,6 +763,9 @@ Scroll and persistence extraction rules:
 - Capture persistent viewport behavior as layout intent for dashboard, SaaS app, admin panel, mail app, CRM, analytics UI, editor, or workspace-style screenshots.
 - Desktop sidebar primary navigation should be persistent: use a behavior hint such as positioning = "sticky" or "fixed" and sticky_edge = "top" when extension fields are allowed.
 - Global topbars containing search, notifications, account actions, or primary app actions should be persistent: positioning = "sticky", sticky_edge = "top" when extension fields are allowed.
+- For mobile screens, identify page-level navigation and page-switching tabbars from interaction semantics. Top back/action bars, top tabbars, bottom tabbars, floating bottom tabbars, and primary section switchers should be persistent by default: use behavior hints such as positioning = "sticky" or "fixed", sticky_edge/fixed_edge = "top" or "bottom", and scroll_behavior = "persistent" when extension fields are allowed.
+- Distinguish page-level navigation from content-local controls. Tabs, segmented controls, filters, chips, and section controls inside a scrollable content area should scroll with their owner unless they clearly switch pages/routes or primary app sections.
+- When persistent mobile chrome is extracted from the normal scroll stack, preserve visual spacing without assigning it all to the scroll pane. Record the nav bar's internal safe padding/gutter around buttons/tabs/icons separately from `content_insets.top` or first-content `margin_top` for the source gap between status/top navigation chrome and the first scrollable content. Record bottom nav/tabbar internal padding separately from `content_insets.bottom` or scroll-pane `padding_bottom`. Do not collapse these gaps to zero unless the screenshot shows actual contact, and do not leave controls flush against content after scrolling.
 - Main content should be identified as the scrollable content pane.
 - If the main content pane is inside an inset/clipped app stage, record the outer stage as the shell boundary and the inner pane as the scroll container instead of making the whole document scroll.
 - Sidebar content that may exceed viewport height should scroll internally.

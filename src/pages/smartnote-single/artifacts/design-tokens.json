@@ -1,0 +1,101 @@
+{
+  "page": "smartnote-single",
+  "source": {
+    "path": "pages-reference/Mobile-single/smartnote-single.png",
+    "raw_size": {
+      "width": 682,
+      "height": 1408
+    },
+    "effective_source_bounds": {
+      "x": 29,
+      "y": 22,
+      "width": 625,
+      "height": 1358
+    },
+    "ignored_outer_container": true,
+    "adaptation_width": 402,
+    "scale": 0.6432
+  },
+  "ignored_system_chrome": [
+    {
+      "type": "phone_hardware_frame",
+      "decision": "ignore",
+      "reason": "Presentation/device frame around the real app screen."
+    },
+    {
+      "type": "ios_home_indicator",
+      "decision": "ignore",
+      "reason": "Bottom OS gesture indicator is not product UI."
+    }
+  ],
+  "colors": {
+    "background_base": "#020307",
+    "background_purple": "#524396",
+    "surface_glass": "rgba(255, 255, 255, 0.12)",
+    "surface_glass_dark": "rgba(25, 22, 27, 0.48)",
+    "text_primary": "#FFFFFF",
+    "text_secondary": "rgba(255, 255, 255, 0.72)",
+    "text_muted": "rgba(255, 255, 255, 0.58)",
+    "dock_warm": "rgba(151, 118, 128, 0.54)"
+  },
+  "typography": {
+    "global_stack": "\"SF Pro Display\", \"SF Pro Text\", Manrope, Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+    "high_visual_weight": [
+      {
+        "role": "hero_headline",
+        "text": "Hey, smarter notes start with AI",
+        "font_family_candidates": [
+          "SF Pro Display",
+          "Manrope"
+        ],
+        "selected_fallback": "Manrope/system sans",
+        "exact_available": null,
+        "close_style_fallback_available": true,
+        "user_notice_required": false
+      }
+    ]
+  },
+  "radii": {
+    "pill": 999,
+    "agent_card": 23,
+    "hub_panel": 24,
+    "note_card": 16
+  },
+  "assets": [
+    {
+      "id": "avatar",
+      "path": "src/pages/smartnote-single/assets/avatar.png",
+      "strategy": "source_crop_clean",
+      "crop": {
+        "x": 544,
+        "y": 123,
+        "width": 82,
+        "height": 82
+      }
+    },
+    {
+      "id": "travel_journal_visual",
+      "path": "src/pages/smartnote-single/assets/travel-journal-visual.png",
+      "strategy": "source_crop_fallback",
+      "crop": {
+        "x": 79,
+        "y": 664,
+        "width": 276,
+        "height": 168
+      },
+      "notes": "Used only for the card illustration area; card surfaces, text, and controls are rendered separately."
+    },
+    {
+      "id": "class_summary_visual",
+      "path": "src/pages/smartnote-single/assets/class-summary-visual.png",
+      "strategy": "source_crop_fallback",
+      "crop": {
+        "x": 425,
+        "y": 662,
+        "width": 228,
+        "height": 172
+      },
+      "notes": "Used only for the card illustration area; card surfaces, text, and controls are rendered separately."
+    }
+  ]
+}

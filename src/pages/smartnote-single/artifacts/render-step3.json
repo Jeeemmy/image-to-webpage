@@ -1,0 +1,61 @@
+{
+  "page": "smartnote-single",
+  "route": "/pages/smartnote-single",
+  "adaptation_width": 402,
+  "source_artifacts": [
+    "src/pages/smartnote-single/artifacts/design-tokens.json",
+    "src/pages/smartnote-single/artifacts/ui-dsl.json"
+  ],
+  "files_changed": [
+    "src/pages/smartnote-single/SmartnoteSinglePage.jsx",
+    "src/pages/smartnote-single/SmartnoteSinglePage.css",
+    "src/pages/smartnote-single/page.config.js",
+    "src/pages/smartnote-single/artifacts/design-tokens.json",
+    "src/pages/smartnote-single/artifacts/ui-dsl.json",
+    "src/pages/smartnote-single/artifacts/render-step3.json",
+    "src/pages/smartnote-single/assets/avatar.png",
+    "src/pages/smartnote-single/assets/travel-journal-visual.png",
+    "src/pages/smartnote-single/assets/class-summary-visual.png",
+    "src/framework/pageRegistry.js"
+  ],
+  "implementation": {
+    "framework": "React + Vite",
+    "styling": "Page-scoped CSS selectors for fidelity-critical visual rules",
+    "status_bar": {
+      "rendered": true,
+      "strategy": "reuse_existing_component",
+      "component_reused": "MobileStatusBar",
+      "tone": "light",
+      "scroll_behavior": "persistent"
+    },
+    "bottom_os_navigation": {
+      "rendered": false,
+      "ignored_system_chrome": "ios_home_indicator"
+    },
+    "scroll_architecture": {
+      "screen": "fixed mobile screen in phone preview iframe",
+      "status_bar": "persistent top layer",
+      "bottom_dock": "persistent absolute quick-action dock",
+      "browser_scrollbars": "not used for the fixed first-screen reconstruction"
+    }
+  },
+  "style_asset_integrity_checks": [
+    {
+      "command": "node skills/image-to-webpage/scripts/check-build-integrity.mjs --dist dist --css-contains .smartnote-phone --css-contains .smartnote-hero --css-contains .smartnote-agent-card --css-contains .smartnote-hub --css-contains .smartnote-bottom-dock --css-contains radial-gradient --asset-name-contains avatar --asset-name-contains travel-journal-visual --asset-name-contains class-summary-visual --js-contains \"Hey, smarter notes start with AI\"",
+      "status": "passed",
+      "result": "build integrity ok: 0 classes, 6 CSS strings, 1 JS strings, 3 asset checks"
+    }
+  ],
+  "verification": {
+    "browser_validation": "skipped_by_repository_instruction",
+    "commands": [
+      "npm run build",
+      "node skills/image-to-webpage/scripts/check-build-integrity.mjs --dist dist --css-contains .smartnote-phone --css-contains .smartnote-hero --css-contains .smartnote-agent-card --css-contains .smartnote-hub --css-contains .smartnote-bottom-dock --css-contains radial-gradient --asset-name-contains avatar --asset-name-contains travel-journal-visual --asset-name-contains class-summary-visual --js-contains \"Hey, smarter notes start with AI\""
+    ],
+    "status": "passed",
+    "notes": [
+      "npm run build passed with the existing Vite large chunk warning.",
+      "Browser, Playwright, Puppeteer, E2E, and render validation were skipped by repository instruction."
+    ]
+  }
+}

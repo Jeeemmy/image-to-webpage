@@ -1,0 +1,305 @@
+{
+  "meta": {
+    "source_type": "ui_snapshot",
+    "source_file": "pages-reference/Mobile-single/homeservice-single.png",
+    "extraction_confidence": 0.86,
+    "notes": [
+      "Portrait mobile app screen with no presentation wrapper; full bitmap is the product UI.",
+      "Image crops are used only for visible photographic content and thumbnails."
+    ],
+    "assumptions": [
+      "The status bar is product-visible mobile chrome in the requested reconstruction.",
+      "Font appears close to Manrope/geometric sans; project global Manrope is reused.",
+      "Shadow-like paper layers behind the green promo banner are real in-product decoration and preserved."
+    ],
+    "unknowns": []
+  },
+  "raw_observations": {
+    "image": {
+      "width": 592,
+      "height": 1284,
+      "orientation": "portrait",
+      "wrapper_candidates": [
+        {
+          "id": "full_mobile_screen",
+          "type": "other",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 592,
+            "height": 1284
+          },
+          "visual_signals": [
+            "edge-to-edge mobile app surface",
+            "status bar aligned to content",
+            "fixed bottom app navigation"
+          ],
+          "decision": "preserve",
+          "confidence": 0.92,
+          "evidence": "The boundary is the actual mobile screen/app canvas, not a centered decorative board or device mock frame."
+        }
+      ],
+      "effective_source_bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 592,
+        "height": 1284
+      }
+    },
+    "measured_elements": [
+      {
+        "id": "screen",
+        "width": 592,
+        "height": 1284
+      },
+      {
+        "id": "search_bar",
+        "x": 17,
+        "y": 209,
+        "width": 555,
+        "height": 75
+      },
+      {
+        "id": "active_category",
+        "x": 17,
+        "y": 316,
+        "width": 188,
+        "height": 70
+      },
+      {
+        "id": "promo_banner",
+        "x": 18,
+        "y": 419,
+        "width": 547,
+        "height": 287
+      },
+      {
+        "id": "service_card",
+        "x": 17,
+        "y": 738,
+        "width": 468,
+        "height": 363
+      },
+      {
+        "id": "bottom_nav",
+        "x": 128,
+        "y": 1142,
+        "width": 335,
+        "height": 87
+      }
+    ]
+  },
+  "colors": {
+    "brand": {
+      "primary": "#008253",
+      "primary_hover": null,
+      "primary_active": "#001F1A",
+      "primary_subtle": "#006743",
+      "secondary": "#005236",
+      "accent": "#FF100B"
+    },
+    "background": {
+      "page": "#EEEAE7",
+      "canvas": "#EEEAE7",
+      "surface": "#FFFFFF",
+      "surface_raised": "#FFFFFF",
+      "surface_overlay": "#EEEAE7",
+      "inverse": "#001F1A"
+    },
+    "text": {
+      "primary": "#001714",
+      "secondary": "#293231",
+      "tertiary": "#3C4240",
+      "muted": "#C5C5C5",
+      "disabled": null,
+      "inverse": "#FFFFFF",
+      "link": null,
+      "link_hover": null
+    },
+    "border": {
+      "default": "#D8D2CE",
+      "subtle": "#F1EEEE",
+      "strong": "#001714",
+      "focus": null,
+      "divider": "#F1EEEE"
+    },
+    "state": {
+      "success": "#008253",
+      "success_bg": "#EAF7F1",
+      "warning": null,
+      "warning_bg": null,
+      "error": "#FF100B",
+      "error_bg": "#EEEAE7",
+      "info": null,
+      "info_bg": null,
+      "disabled_bg": "#EEEAE7",
+      "disabled_text": "#C5C5C5"
+    },
+    "neutral_scale": {
+      "0": "#FFFFFF",
+      "50": "#F8F7F6",
+      "100": "#EEEAE7",
+      "200": "#D8D2CE",
+      "300": "#C5C5C5",
+      "400": "#7B807E",
+      "500": "#3C4240",
+      "600": "#293231",
+      "700": "#111817",
+      "800": "#001F1A",
+      "900": "#001714",
+      "1000": "#000000"
+    },
+    "semantic_aliases": [
+      {
+        "name": "app_shell.background",
+        "value": "#EEEAE7"
+      },
+      {
+        "name": "service_card.background",
+        "value": "#FFFFFF"
+      },
+      {
+        "name": "promo.background",
+        "value": "#006743"
+      }
+    ]
+  },
+  "opacity": {
+    "disabled": null,
+    "hover_overlay": null,
+    "pressed_overlay": null,
+    "scrim": null
+  },
+  "typography": {
+    "font_family": {
+      "primary": "Manrope",
+      "secondary": null,
+      "mono": null
+    },
+    "font_size": {
+      "display": null,
+      "h1": 26,
+      "h2": 24,
+      "h3": 18,
+      "h4": 17,
+      "title": 17,
+      "subtitle": 18,
+      "body": 16,
+      "body_sm": 15,
+      "caption": 14,
+      "label": 15,
+      "button": 16
+    },
+    "line_height": {
+      "display": null,
+      "h1": 27,
+      "h2": 24,
+      "h3": 21,
+      "body": 19,
+      "caption": 16,
+      "button": 16
+    },
+    "font_weight": {
+      "regular": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700,
+      "extrabold": 800
+    },
+    "letter_spacing": {
+      "display": 0,
+      "heading": 0,
+      "body": 0,
+      "caption": 0,
+      "button": 0
+    },
+    "text_transform": {
+      "button": null,
+      "label": null
+    }
+  },
+  "spacing": {
+    "base": 4,
+    "scale": {
+      "0": 0,
+      "2xs": 4,
+      "xs": 8,
+      "sm": 12,
+      "md": 16,
+      "lg": 24,
+      "xl": 31,
+      "2xl": 39,
+      "3xl": 58,
+      "4xl": 110
+    },
+    "component_gap": {
+      "inline": 14,
+      "stack": 23,
+      "section": 24,
+      "page_margin": 12,
+      "card_padding": 14,
+      "form_gap": 13
+    }
+  },
+  "sizing": {
+    "icon": {
+      "xs": 16,
+      "sm": 18,
+      "md": 21,
+      "lg": 29
+    },
+    "control_height": {
+      "xs": 37,
+      "sm": 40,
+      "md": 49,
+      "lg": 51
+    },
+    "container": {
+      "max_width": 414,
+      "sidebar_width": null,
+      "content_width": 390
+    }
+  },
+  "radius": {
+    "none": 0,
+    "xs": 0,
+    "sm": 0,
+    "md": 0,
+    "lg": 0,
+    "xl": 0,
+    "2xl": 0,
+    "pill": 999,
+    "circle": 999,
+    "component": {
+      "button": 0,
+      "input": 0,
+      "card": 0,
+      "modal": null,
+      "badge": 7,
+      "avatar": 0
+    },
+    "corner": {
+      "top_left": 0,
+      "top_right": 0,
+      "bottom_right": 0,
+      "bottom_left": 0
+    }
+  },
+  "border": {
+    "width": {
+      "hairline": 1,
+      "thin": 1,
+      "medium": 2,
+      "thick": null
+    }
+  },
+  "shadow": {
+    "none": "none",
+    "xs": null,
+    "sm": null,
+    "md": null,
+    "lg": null,
+    "inner_control": null,
+    "shell_edge": null
+  }
+}

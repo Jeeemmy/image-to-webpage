@@ -11,12 +11,16 @@ This skill has exactly three core production steps. Do not skip the first two ar
 
 ## First Response
 
-When this skill triggers, keep the first user-facing reply limited to confirming only:
+When this skill triggers, keep the first user-facing reply limited to confirming:
 
+- The recognized target device type: PC/desktop or mobile.
 - Default adaptation width: `1200px` for PC/landscape screenshots unless the user specified another width.
+- Default adaptation width: `414px` for mobile/portrait screenshots unless the user specified another width.
 - Planned page route and page name.
+- Whether image generation is available for this session when important image-based visuals are likely present. If available, explicitly say image generation will be used to restore separable image subjects with transparent backgrounds and coded backgrounds/overlays. If the user explicitly declines image generation, use the no-AI asset fallback path and record that choice.
+- A font availability notice only when high-visual-weight text appears to use a font that is not installed and no project/local/system font with a close visual style is available. Do not warn for low-visual-weight text or when a close style fallback is available. Use this form: "识别到截图中 <part> 部分文字推测是 <font> 字体。当前系统没有安装，也没有检测到近似风格字体，建议安装 <font>。如果没有，将使用 <fallback> 字体替代。"
 
-Do not include implementation details, file lists, or extended plans in the first reply.
+Do not include file lists or extended implementation plans in the first reply.
 
 ### Step 1: Generate Design Tokens
 
@@ -44,6 +48,10 @@ Record the wrapper candidates and final decision in the DSL request metadata. If
 
 When a presentation wrapper is ignored, record the effective source bounds of the real product UI and use those bounds as the render source. The ignored wrapper must not reappear later as body/page padding, a centered artboard, a rounded outer frame, a device/browser shell, or a background band around the rendered page.
 
+For important visual elements that are rendered as images, record a layered asset strategy in the DSL. When the user has an image generation skill available and the user has not explicitly declined it, use the screenshot crop as a reference to generate a transparent subject cutout: preserve the main subject/material, erase the visual background, and erase interactive overlays. Recreate simple or gradient backgrounds with code/design tokens, then layer the transparent subject asset and any floating interactive controls above it. Use a whole-element source crop as the final asset only when image generation is unavailable, the user explicitly declined image generation, or the element cannot be separated cleanly.
+
+Before accepting any screenshot crop as a final image asset, run an asset contamination gate. A crop is contaminated if it contains presentation/device chrome or interactive UI that should be rendered separately, including phone frames, browser/device mockups, OS status bars, iOS home indicators, Android gesture/navigation bars, notches/dynamic islands, battery/wifi indicators, app back/favorite/share buttons, carousel controls, badges, text labels, cards, bottom sheets, modals, or floating action surfaces. For primary hero photos, venue/product photos, map tiles, artwork, and other high-visual-weight raster regions, a contaminated crop is not a valid final `source_crop`. If the underlying image cannot be cleanly cropped without those elements, set the strategy to `generate_clean_asset` or `generate_transparent_subject` and include explicit generation negative prompt features for every contaminant. Render the removed UI chrome and controls as normal DOM/components above the clean asset when they belong to the product UI; ignore presentation-only chrome.
+
 ### Step 3: Render The Page
 
 Use the generated Design Tokens, generated UI DSL, and `references/rendering.md` to implement the page in the repo's existing frontend stack.
@@ -52,6 +60,7 @@ Before rendering, confirm adaptation width:
 
 - Landscape screenshots default to `1200px` PC layout width.
 - Portrait screenshots default to `414px` mobile layout width.
+- Tell the user whether the screenshot was recognized as PC/desktop or mobile.
 - Tell the user which width will be used in the first reply.
 - Continue if the user confirms.
 - If the user gives a specific width, use the user's width instead.
@@ -62,9 +71,20 @@ Record the render result locally, for example:
 workflow-artifacts/<name>-render-step3.json
 ```
 
-Include source artifacts, adaptation width, scale, files changed, scroll architecture, verification commands, and browser checks.
+Include source artifacts, adaptation width, scale, files changed, scroll architecture, verification commands, style/asset integrity checks, and browser checks.
 
-After implementation and verification, always start the page locally and open it for the user. Prefer the repo's existing dev/preview command; if the intended port is occupied, use another available port and open the final page route.
+For DSL image nodes with `asset_strategy = "generate_transparent_subject"`, use the user's available image generation skill with the screenshot crop/reference to preserve the subject while removing background and interactive elements, then render any background gradients in code and overlay controls separately. If image generation is available and not explicitly declined, do not downgrade a separable important image to `source_crop`; correct the DSL/render plan instead. For `asset_strategy = "source_crop"`, create/use the recorded whole-element crop only as a fallback final asset when image generation is unavailable, the user declined image generation, or the DSL documents why transparent separation is unsuitable. Before saving a `source_crop`, inspect the crop bounds against the screenshot and artifact: if the crop includes device/browser chrome, status bars, iOS/Android system navigation indicators, notches, navigation buttons, bottom sheets, text/cards, badges, or any other overlay that should not be part of the underlying image, reject that source crop and switch to `generate_clean_asset` or a clean crop that excludes contaminants. For `asset_strategy = "generate_clean_asset"`, use the DSL prompt features or reference crop to generate a clean non-layered asset only when transparent subject extraction is not supported or not appropriate; prompts must explicitly ask to remove all detected contaminating UI and presentation chrome.
+
+After implementation and verification, always start the page locally and open it for the user when the environment allows browser/page opening. Prefer the repo's existing dev/preview command; if the intended port is occupied, use another available port and open the final page route.
+
+If browser/page opening is unavailable or prohibited by project instructions, build success alone is not sufficient for a visual reconstruction. Run a non-browser style and asset integrity gate before reporting success:
+
+- For React + Tailwind or generated utility CSS, identify the fidelity-critical classes or style values for the page root, persistent chrome, primary cards/hero/gallery, main image asset, key buttons/CTA, and high-visual-weight text.
+- Inspect the built CSS emitted by the actual build output and confirm those critical selectors or equivalent CSS values exist. If critical utility classes are absent, fix the implementation with static class strings, a safelist, inline styles, or page-scoped CSS before finalizing.
+- Inspect the built JS/asset output and confirm imported image assets used by important image nodes are present and referenced by the bundle.
+- Prefer the bundled non-browser helper for this gate when the project emits static build assets:
+  `node skills/image-to-webpage/scripts/check-build-integrity.mjs --dist dist --class "<critical-tailwind-class>" --asset-name-contains "<asset-substring>" --js-contains "<asset-or-page-substring>"`.
+- If the user will view an already-running dev server, assume Tailwind/content-scanner CSS can be stale after new files are created. Restart the dev/preview server when allowed, or explicitly tell the user a refresh/restart is required. Do not claim visual fidelity from a stale server.
 
 ## Required References
 
@@ -81,6 +101,20 @@ After implementation and verification, always start the page locally and open it
 - Use `null` for unknown or ambiguous values in JSON artifacts.
 - Do not silently fall back to mock data, fake success, or broad defensive degradation.
 - Treat borders, surface contrast, elevation, scroll behavior, and overlay behavior as separate signals.
+- Keep global typography extraction broad, but record targeted typography for high-visual-weight text. High-weight text includes prices, brand/logo text, hero headlines, large KPI/counter numbers, and visually dominant CTA labels. For these, record role, text sample, font-family candidates, digit style when relevant, confidence, evidence, and fallback/availability notes. Low-visual-weight body/supporting text may use the global typography fallback without per-element font analysis.
+- For high-visual-weight font availability, distinguish exact-font absence from style absence. If the exact inferred font is missing but a close project/local/system font exists in the same visual class, use that fallback silently and record it in the artifact. Tell the user only when no close visual fallback is available.
+- For mobile/system status bars, prefer an existing project-level default status bar component or standard status bar style when one exists. Do not hand-roll a per-page status bar unless no reusable default exists, the screenshot shows product-specific status bar customization, or the user explicitly asks for exact custom reconstruction. Record the status bar strategy and reason in the render artifact.
+- If a status bar is rendered, it is persistent system chrome and must never scroll with page content. Render it outside the scrolling content region, or as a fixed/sticky top layer with an opaque background and content offset/compensation so page content cannot pass under or through it.
+- Treat bottom OS navigation and gesture indicators as ignored system chrome by default, not as product UI. This includes the iOS home indicator/gesture pill, Android gesture bar, Android three-button navigation bar, and customized OEM Android navigation bars. Do not model or render them as dividers, progress bars, handles, bottom navs, buttons, or decorative page elements unless the user explicitly asks to reproduce OS/device chrome or the page itself is an OS UI demonstration. Record them as ignored system chrome in artifacts when visible.
+- For mobile page-level navigation, default to persistent scroll behavior. If an element is identified as page navigation, route navigation, screen switching, or a page-level tabbar, render it outside the content scroll region or fixed/sticky to its edge so it does not scroll away. This includes top back/action navigation bars, top tabbars, bottom tabbars, and floating bottom tabbars. Only content-local tabs/filters inside a scrollable section should scroll with that section.
+- Persistent mobile navigation must own its own internal safe padding around buttons/tabs/icons. Do not create all visible separation by putting a large `padding-top` on the scroll pane while the nav buttons sit flush against the nav boundary. Split the measured chrome-to-content distance between nav internal padding/height and scroll content inset so controls still have breathing room when content scrolls.
+- When persistent status bars or page-level navigation are moved outside the scrollable content, preserve the original visual gap between the bottom of the persistent top chrome and the first scrollable content, and between the last scrollable content and persistent bottom chrome. Allocate that measured space across the chrome's own internal padding and the scroll pane's `padding-top`/`padding-bottom` or first/last content margin. Do not collapse chrome and content until they touch, and do not keep increasing only the content inset when the nav itself lacks safe padding.
+- Treat important image-based visual elements as layered assets, not approximations by default. When a user image generation skill is available, prefer transparent subject extraction from a screenshot reference: preserve the subject/material, erase backgrounds and interactive overlays, recreate gradients/backgrounds with code, and layer controls separately. Whole-element source crops are fallback final assets, not the first choice when transparent extraction is viable.
+- Treat screenshot crops for important image nodes as unsafe until proven clean. A crop that includes phone hardware, device/browser frames, OS status bars, iOS home indicators, Android gesture/navigation bars, dynamic islands/notches, app navigation/action buttons, text overlays, cards, bottom sheets, badges, modals, or other UI chrome must not become the final hero/photo asset. Either crop a clean unobstructed image-only region, or generate/edit a clean asset using the contaminated crop only as reference and record the contaminants removed. Do not bake UI chrome into a photo and then render another copy of the same chrome in DOM.
+- Treat hero/photo underlap and floating content panels as an explicit layering relationship. If a bottom sheet, rounded card, booking panel, player panel, or detail panel visually floats over the hero/photo/map area, record the sheet's top edge, the underlay image's bottom edge, `overlap_px`, z-order, corner radius, and shadow. Do not collapse these into adjacent vertical regions where `hero.bottom === sheet.top`; the image must continue underneath the overlay enough for rounded corners and shadows to reveal the layered depth.
+- Preserve image subject size from the screenshot, not from the generated asset's natural dimensions. For generated transparent subjects, record the source subject visual bounding box inside its container and render the asset so the visible subject occupies the same scaled width/height and position. Do not trim transparent padding when that padding preserves the source crop/canvas coordinate system needed for placement. If a generated/trimmed PNG fills its canvas more tightly than the source subject did, prefer using the untrimmed alpha asset or regenerate with source-like transparent padding; only trim when trim offsets/insets are recorded and compensated in CSS.
+- For horizontal scrollers inside padded mobile content, decide whether the screenshot shows edge bleed. Chip rows, carousels, tab strips, and horizontal option lists often align the first item with page padding but let subsequent content scroll into the left/right padding area up to the screen edge. Render those as full-bleed scroll containers with negative inline margins and matching internal padding/scroll-padding, not as rows clipped to the padded content column.
+- For mobile render targets, hide scrollbars by default on page and local scroll containers while preserving touch scrolling. Use `scrollbar-width: none`, `-ms-overflow-style: none`, and `::-webkit-scrollbar { display: none; width: 0; height: 0; }` on the mobile scroll owner. Do not hide scrollbars only when the source screenshot explicitly shows a meaningful scrollbar/scroll indicator that should be reconstructed.
 - Treat inner/inset control shadows as separate from outside cast shadows and elevation. If a button/control only has an inner bevel, record and render an inset shadow without adding outside drop shadow.
 - Do not present guessed shadow strength as measured. When shadow strength is extracted, record confidence/evidence/notes or leave strength null when the screenshot only proves placement.
 - Ignore design-presentation wrappers such as gray showcase backgrounds, decorative rounded frames, device/browser mockups, and outer drop shadows unless they are part of the actual product UI.
@@ -96,4 +130,5 @@ After implementation and verification, always start the page locally and open it
 - Bounded repeated-content containers such as sidebars, navigation lists, builder palettes, menus, and inspector panels must own local scrolling when content can exceed their visible height. Do not hide overflow on repeated list content without an inner scroll pane.
 - For directional shell-edge shadows, preserve strength separately. Default to `xs` for tight, barely visible top/left edge shadows unless the screenshot clearly shows a larger cast shadow.
 - For tabbars and horizontal navigation, capture and render edge distribution explicitly. Do not silently substitute equal grid tracks or `space-around` gutters for source layouts that use content-sized `space-between`/edge-spread alignment.
+- When using Tailwind arbitrary values or generated utility CSS, treat compiled style availability as part of correctness. A page that relies on uncompiled classes can degrade into mostly default text while still passing build. Do not consider build-only verification complete unless critical visual utilities/assets are present in the built output or the same styles are applied by inline/page-scoped CSS.
 - Verify with a real build and browser checks when possible.

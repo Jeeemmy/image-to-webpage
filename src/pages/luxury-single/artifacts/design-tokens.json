@@ -1,0 +1,200 @@
+{
+  "artifact": "design-tokens",
+  "source": {
+    "image": "pages-reference/Mobile-single/luxury-single.png",
+    "screenshot_px": {
+      "width": 552,
+      "height": 1192
+    },
+    "recognized_device": "mobile",
+    "adaptation_width": 414,
+    "scale": 0.75
+  },
+  "wrapper_classification": {
+    "candidates": [
+      {
+        "id": "full_mobile_capture",
+        "bounds_px": {
+          "x": 0,
+          "y": 0,
+          "width": 552,
+          "height": 1192
+        },
+        "decision": "preserve",
+        "reason": "The screenshot is a direct mobile app screen capture. The boundary is the requested viewport, not a decorative presentation wrapper."
+      }
+    ],
+    "ignored_outer_container": false,
+    "effective_source_bounds_px": {
+      "x": 0,
+      "y": 0,
+      "width": 552,
+      "height": 1192
+    }
+  },
+  "colors": {
+    "canvas": "#ded6cf",
+    "product_card": "#ece9e1",
+    "product_card_gradient_bottom": "#f0ddc5",
+    "nav_button": "#efede6",
+    "size_chip": "#eee9e3",
+    "primary_text": "#17140e",
+    "secondary_text": "#645c55",
+    "muted_text": "#504842",
+    "sale_red": "#d53a2d",
+    "star": "#ffc21b",
+    "cta_background": "#17140e",
+    "cta_text": "#ffffff"
+  },
+  "typography": {
+    "global": {
+      "primary": "Georgia",
+      "fallback": "Georgia, Times New Roman, serif",
+      "generic_class": "serif",
+      "confidence": 0.63,
+      "notes": "The screen uses a soft editorial serif for product copy. Low-visual-weight body/supporting text uses the global serif fallback."
+    },
+    "high_visual_weight_text": [
+      {
+        "role": "price",
+        "sample": "$615.99",
+        "font_family_candidates": [
+          "Didot",
+          "Bodoni 72",
+          "Bodoni 72 Oldstyle",
+          "Times New Roman",
+          "Georgia"
+        ],
+        "generic_class": "serif",
+        "digit_style": {
+          "figure_style": "lining",
+          "spacing": "proportional",
+          "contrast": "high",
+          "evidence": "The price numerals have narrow proportions, bracketed serif terminals, and higher stroke contrast than the body copy."
+        },
+        "font_size": 30,
+        "font_weight": 400,
+        "letter_spacing": 0,
+        "confidence": 0.72,
+        "evidence": "The current price is the largest text after the product image and carries the main commercial hierarchy.",
+        "availability": {
+          "checked": true,
+          "project_font": false,
+          "local_asset": false,
+          "system_font_candidates": [
+            "Didot",
+            "Bodoni 72",
+            "Times New Roman",
+            "Georgia"
+          ],
+          "selected_stack": "Didot, Bodoni 72, Bodoni 72 Oldstyle, Times New Roman, Georgia, serif"
+        },
+        "fallback": {
+          "strategy": "system_fallback_stack",
+          "reason": "No project font asset matches the screenshot price face. Use common high-contrast serif system candidates before global Georgia fallback."
+        }
+      },
+      {
+        "role": "price_original",
+        "sample": "$700.00",
+        "font_family_candidates": [
+          "Didot",
+          "Bodoni 72",
+          "Bodoni 72 Oldstyle",
+          "Times New Roman",
+          "Georgia"
+        ],
+        "generic_class": "serif",
+        "digit_style": {
+          "figure_style": "lining",
+          "spacing": "proportional",
+          "contrast": "high",
+          "evidence": "The original price shares the current price's high-contrast serif numeric shape and is visually important because it is red and struck through."
+        },
+        "font_size": 24,
+        "font_weight": 400,
+        "letter_spacing": 0,
+        "confidence": 0.72,
+        "evidence": "The original price sits next to the sale price and remains a high-weight commercial numeric element.",
+        "availability": {
+          "checked": true,
+          "project_font": false,
+          "local_asset": false,
+          "system_font_candidates": [
+            "Didot",
+            "Bodoni 72",
+            "Times New Roman",
+            "Georgia"
+          ],
+          "selected_stack": "Didot, Bodoni 72, Bodoni 72 Oldstyle, Times New Roman, Georgia, serif"
+        },
+        "fallback": {
+          "strategy": "system_fallback_stack",
+          "reason": "Use the same role-specific stack as the current price; fall back to global serif only if the higher-contrast candidates are unavailable."
+        }
+      }
+    ]
+  },
+  "spacing": {
+    "page_padding_x": 17,
+    "status_bar_height": 62,
+    "top_navigation_height": 64,
+    "source_nav_to_content_gap": 20,
+    "gallery_to_price_gap": 29,
+    "price_to_title_row_gap": 16,
+    "summary_to_size_gap": 29,
+    "size_to_description_gap": 27,
+    "description_to_cta_gap": 35
+  },
+  "radius": {
+    "nav_button": 8,
+    "gallery": 4,
+    "size_chip": 4,
+    "cta": 3
+  },
+  "shadows": {
+    "nav_button": "0 10px 18px rgba(62,45,33,0.04)",
+    "gallery_arrow_button": "0 9px 18px rgba(83,67,49,0.08)",
+    "size_chip": "inset 0 1px 0 rgba(255,255,255,0.35)"
+  },
+  "assets": {
+    "ring": {
+      "strategy": "generate_transparent_subject",
+      "final_path": "src/pages/luxury-single/assets/diamond-ring.png",
+      "generation_mode": "imagegen_builtin_chroma_key_then_local_alpha",
+      "source_reference": "pages-reference/Mobile-single/luxury-single.png",
+      "generated_source": "/Users/jimmy/.codex/generated_images/019dfc4c-1561-7161-bd2c-f9ff438a0e51/ig_09a0658201f7d7070169fb0b414ba881918b2c9d459c300c14.png",
+      "background_handling": "The product card background and warm bottom gradient are recreated in CSS. They are not baked into the ring asset.",
+      "source_subject_visual_bbox_px": {
+        "measurement": "source screenshot threshold measurement inside crop 300x300+130+250",
+        "x": 166,
+        "y": 299,
+        "width": 244,
+        "height": 251
+      },
+      "source_subject_visual_bbox_scaled": {
+        "scale": 0.75,
+        "x": 124.5,
+        "y": 224.25,
+        "width": 183,
+        "height": 188.25
+      },
+      "asset_canvas_px": {
+        "width": 1254,
+        "height": 1254
+      },
+      "asset_alpha_bbox_px": {
+        "x": 282,
+        "y": 168,
+        "width": 780,
+        "height": 832
+      },
+      "rendering_basis": "Render by matching the source subject visual bbox, not by sizing the full transparent PNG canvas to the old tight-crop box.",
+      "trim": {
+        "skipped": true,
+        "reason": "The alpha PNG preserves transparent padding. Running ImageMagick trim would discard placement information; the CSS image box is instead derived from source subject bbox divided by the asset alpha fill ratio."
+      },
+      "notes": "The generated image used a flat chroma-key background and was post-processed to alpha without ImageMagick trim. Earlier artifacts that described a trimmed PNG were stale."
+    }
+  }
+}

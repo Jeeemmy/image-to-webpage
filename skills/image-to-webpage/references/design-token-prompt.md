@@ -30,6 +30,17 @@ Requirements:
 - Record inner/inset shadows separately from outside cast shadows. Inner shadows are visible inside the component boundary, often as a pressed bevel, top/left inner highlight, or bottom/right inner darkening on buttons and controls. Do not map them to `shadow.button`, `shadow.card`, `shadow.popover`, or generic elevation tokens.
 - If a control has only an inner/inset shadow and no visible outside cast shadow, create an inner control/button shadow token and keep the corresponding outside shadow token null.
 - For shadow tokens, distinguish measured values from visual judgments. If the exact blur/offset/alpha cannot be measured from the screenshot, keep the token conservative and record the uncertainty in `meta.assumptions` or `meta.notes`; do not imply precision that the image does not support.
+- When important image visuals sit on gradients, solid fills, glows, or simple geometric backdrops, extract those backgrounds as code-renderable color/gradient tokens instead of treating them as part of a screenshot asset. The render step should be able to layer a coded background behind a transparent subject image.
+- Record imagery treatment with layered restoration in mind: transparent subject assets should preserve the subject/material while background gradients and floating controls remain separate code/UI layers.
+- Record source subject visual bounds for important generated/transparent image subjects when visible or inferable. The rendered subject should keep the same relative width/height and position inside its image/card container even if the generated asset has different natural dimensions. When transparent padding preserves source crop/canvas coordinates, record that the alpha asset should remain untrimmed or that any trim offsets/insets must be compensated during rendering.
+- For every important image area that might be saved as a screenshot crop, record an asset contamination check. Contaminants include phone/device/browser/mock frames, OS status bars, iOS home indicators, Android gesture/navigation bars, notches/dynamic islands, clock/battery/wifi/signal indicators, app navigation/action buttons, carousel controls, chips, badges, text overlays, cards, bottom sheets, modals, popovers, and any UI surface that should be rendered separately or ignored as presentation chrome. If contaminants are present, record that final `source_crop` is disallowed and that a clean generated/edited asset is required unless a clean unobstructed crop exists.
+- When a bottom sheet, rounded card, booking panel, player panel, detail panel, or similar surface floats over a hero/photo/map region, record the overlap as a design token or measured element. Include approximate `underlay_bottom`, `overlay_top`, `overlap_px`, overlay radius, shadow confidence, and whether the image is visible behind the sheet's rounded corners. This is a layering token, not part of the clean image asset.
+- For mobile screens with status bars, top page navigation, bottom navigation, or page-level tabbars, record measured chrome-to-content gaps and the navigation's own internal safe padding around controls. Include the source-image distance from the bottom of persistent top chrome to the first scrollable content element, the local gutter around top-nav buttons/tabs/icons, and the distance from the last scrollable content element to the top of persistent bottom chrome when visible. These gaps must survive when chrome is moved outside the scrollable content during rendering, split between chrome internal padding and scroll content inset rather than assigned entirely to one layer.
+- For bottom OS navigation and gesture indicators, record them as ignored system chrome rather than product UI tokens. This includes the iOS home indicator/gesture pill, Android gesture bar, Android three-button navigation bar, and customized OEM Android navigation bars. Do not create color, radius, size, divider, bottom-nav, or drag-handle tokens from these elements unless the user explicitly asks to recreate OS/device chrome.
+- If a product image area contains a visible gradient or tonal backdrop behind the subject, extract that backdrop as gradient/background tokens even when the subject will be restored by image generation. Do not let a screenshot crop bake a visible gradient into the subject asset when the gradient can be recreated with code.
+- Keep global typography concise, but add targeted typography records for high-visual-weight text only. High-weight text includes prices, brand/logo text, hero headlines, large KPI/counter numbers, and visually dominant CTA labels. For these records, include role, visible text sample, font-family candidates, generic class (serif/sans/mono/display), digit style when relevant (lining/oldstyle, tabular/proportional, high/low contrast), weight, size, letter spacing, confidence, visual evidence, and fallback notes. Do not spend this detail on low-visual-weight body/supporting text; global typography is enough for those.
+- If an exact font is uncertain, record candidates and confidence instead of a single overconfident family. If the likely font may not be available in the project/browser, record `availability.exact_font = "unknown"` and a recommended fallback class rather than silently pretending it is installed.
+- For high-visual-weight typography, record both exact font availability and close visual fallback availability. Use fields such as `availability.exact_installed`, `availability.close_style_available`, `availability.close_style_candidates`, `fallback.selected`, and `user_notice_required`. Set `user_notice_required = true` only when the inferred font is not installed and no close project/local/system font with a similar visual style is available. If a close style fallback exists, set `user_notice_required = false` and record the fallback silently.
 
 Schema:
 {
@@ -153,7 +164,41 @@ Schema:
     "text_transform": {
       "button": null,
       "label": null
-    }
+    },
+    "high_visual_weight_text": [
+      {
+        "role": "price | brand | hero_heading | kpi | primary_cta | other",
+        "sample": null,
+        "font_family_candidates": [],
+        "generic_class": "serif | sans | mono | display | script | null",
+        "digit_style": {
+          "numeric_forms": "lining | oldstyle | unknown | null",
+          "spacing": "tabular | proportional | unknown | null",
+          "contrast": "high | medium | low | unknown | null"
+        },
+        "font_size": null,
+        "font_weight": null,
+        "letter_spacing": null,
+        "confidence": null,
+        "evidence": null,
+        "availability": {
+          "exact_font": "available | unavailable | unknown | null",
+          "exact_installed": null,
+          "project_font": null,
+          "local_asset": null,
+          "close_style_available": null,
+          "close_style_candidates": [],
+          "checked_sources": ["project_css", "local_assets", "system_fonts"]
+        },
+        "fallback": {
+          "strategy": "project_font | system_fallback | import_font | global_typography | null",
+          "selected": null,
+          "family_stack": [],
+          "notes": null
+        },
+        "user_notice_required": null
+      }
+    ]
   },
   "spacing": {
     "base": null,
@@ -466,7 +511,12 @@ Schema:
     "style": null,
     "corner_radius": null,
     "aspect_ratios": [],
-    "treatment": null
+    "treatment": null,
+    "layering": {
+      "background_rendering": "code | image | mixed | null",
+      "transparent_subject_preferred": null,
+      "overlay_controls_separate": null
+    }
   },
   "accessibility": {
     "minimum_text_contrast_observed": null,
@@ -479,7 +529,22 @@ Schema:
       "height": null,
       "wrapper_candidates": [],
       "wrapper_decision": null,
-      "effective_source_bounds": null
+      "effective_source_bounds": null,
+      "ignored_system_chrome": [
+        {
+          "type": "ios_home_indicator | android_gesture_bar | android_three_button_nav | oem_android_navigation_bar | status_bar | device_frame | other",
+          "bounds": {
+            "x": null,
+            "y": null,
+            "width": null,
+            "height": null
+          },
+          "visual_signals": [],
+          "decision": "ignore",
+          "reason": "system_or_device_chrome_not_product_ui",
+          "confidence": null
+        }
+      ]
     },
     "visible_text_samples": [],
     "detected_color_samples": [],

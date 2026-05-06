@@ -1,5 +1,8 @@
 import { useEffect } from "react";
 import PageIndex from "./PageIndex.jsx";
+import PhonePreviewFrame, {
+  isPhoneContentPreview,
+} from "./PhonePreviewFrame.jsx";
 import { findPageByRoute } from "./pageRegistry.js";
 import { normalizePathname } from "./routing.js";
 
@@ -44,5 +47,12 @@ export default function PageRouter() {
   }
 
   const PageComponent = page.component;
+  if (
+    page.preview?.device === "mobile" &&
+    !isPhoneContentPreview(window.location.search)
+  ) {
+    return <PhonePreviewFrame page={page} />;
+  }
+
   return <PageComponent artifacts={page.artifacts} />;
 }

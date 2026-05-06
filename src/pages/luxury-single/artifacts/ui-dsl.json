@@ -1,0 +1,317 @@
+{
+  "artifact": "ui-dsl",
+  "source": {
+    "image": "pages-reference/Mobile-single/luxury-single.png",
+    "recognized_device": "mobile",
+    "adaptation_width": 414,
+    "scale": 0.75
+  },
+  "request": {
+    "page_id": "luxury-single",
+    "page_name": "Luxury Single",
+    "route": "/pages/luxury-single",
+    "wrapper_decision": {
+      "ignored_outer_container": false,
+      "candidates": [
+        {
+          "id": "full_mobile_capture",
+          "decision": "preserve",
+          "evidence": "Direct mobile viewport capture containing status bar, page navigation, product content, and bottom CTA. No decorative outer showcase frame was detected."
+        }
+      ]
+    }
+  },
+  "scroll_architecture": {
+    "root": {
+      "id": "mobile_screen",
+      "width": 414,
+      "height_behavior": "viewport",
+      "overflow": "hidden"
+    },
+    "status_bar": {
+      "id": "system_status_bar",
+      "rendered": true,
+      "strategy": "reuse_project_component",
+      "component": "MobileStatusBar",
+      "tone": "dark",
+      "height": 62,
+      "scroll_behavior": "persistent",
+      "outside_scroll_region": true,
+      "background": "#ded6cf"
+    },
+    "page_navigation": [
+      {
+        "id": "top_product_nav",
+        "kind": "top_back_action_navigation",
+        "edge": "top",
+        "height": 64,
+        "scroll_behavior": "persistent",
+        "outside_scroll_region": true,
+        "background": "#ded6cf",
+        "content": [
+          "back",
+          "favorite"
+        ]
+      }
+    ],
+    "content_region": {
+      "id": "product_scroll",
+      "overflow_y": "auto",
+      "content_insets": {
+        "top": 20,
+        "bottom": 26
+      },
+      "reason": "The visible source gap between the top navigation buttons and the image card is preserved after persistent chrome is split out of the scroll stack."
+    }
+  },
+  "root": {
+    "id": "luxury_product_screen",
+    "type": "mobile_screen",
+    "layout": {
+      "direction": "column",
+      "width": 414,
+      "background": "#ded6cf"
+    },
+    "children": [
+      {
+        "id": "persistent_top_chrome",
+        "type": "chrome_region",
+        "behavior": {
+          "positioning": "static_outside_scroll_region",
+          "scroll_behavior": "persistent"
+        },
+        "children": [
+          {
+            "id": "system_status_bar",
+            "type": "status_bar",
+            "component_reuse": "MobileStatusBar",
+            "height": 62,
+            "tone": "dark"
+          },
+          {
+            "id": "top_product_nav",
+            "type": "navigation_bar",
+            "role": "page_navigation",
+            "height": 64,
+            "behavior": {
+              "positioning": "static_outside_scroll_region",
+              "scroll_behavior": "persistent",
+              "sticky_edge": "top"
+            },
+            "children": [
+              {
+                "id": "back_button",
+                "type": "icon_button",
+                "icon": "arrow-left",
+                "bounds": {
+                  "x": 17,
+                  "y": 10,
+                  "width": 54,
+                  "height": 54
+                },
+                "appearance": {
+                  "background": "#efede6",
+                  "radius": 8,
+                  "shadow": "xs"
+                }
+              },
+              {
+                "id": "favorite_button",
+                "type": "icon_button",
+                "icon": "heart",
+                "bounds": {
+                  "x": 343,
+                  "y": 10,
+                  "width": 54,
+                  "height": 54
+                },
+                "appearance": {
+                  "background": "#efede6",
+                  "radius": 8,
+                  "shadow": "xs"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "product_scroll",
+        "type": "scroll_region",
+        "layout": {
+          "padding_x": 17,
+          "padding_top": 20,
+          "padding_bottom": 26
+        },
+        "children": [
+          {
+            "id": "product_gallery",
+            "type": "image_gallery",
+            "bounds": {
+              "width": 380,
+              "height": 333
+            },
+            "appearance": {
+              "radius": 4,
+              "background_layers": [
+                {
+                  "type": "radial_gradient",
+                  "description": "soft light center haze behind ring"
+                },
+                {
+                  "type": "linear_gradient",
+                  "description": "warm beige bottom wash"
+                }
+              ]
+            },
+            "asset_strategy": {
+              "type": "generate_transparent_subject",
+              "subject": "intertwined diamond ring",
+              "output": "assets/diamond-ring.png",
+              "background": "code_gradient",
+              "overlays": [
+                "gallery arrows",
+                "pagination indicators",
+                "zoom controls"
+              ]
+            },
+            "children": [
+              {
+                "id": "ring_subject",
+                "type": "image",
+                "src": "assets/diamond-ring.png",
+                "asset_strategy": "generate_transparent_subject",
+                "source_subject_visual_bbox_px": {
+                  "x": 166,
+                  "y": 299,
+                  "width": 244,
+                  "height": 251,
+                  "measurement": "source screenshot threshold measurement inside crop 300x300+130+250"
+                },
+                "asset_canvas_px": {
+                  "width": 1254,
+                  "height": 1254
+                },
+                "asset_alpha_bbox_px": {
+                  "x": 282,
+                  "y": 168,
+                  "width": 780,
+                  "height": 832
+                },
+                "bounds": {
+                  "x": 41,
+                  "y": 39,
+                  "width": 294
+                },
+                "sizing_rule": {
+                  "basis": "source_subject_visual_bbox",
+                  "formula": "css_width = scaled_source_subject_width / (asset_alpha_bbox_width / asset_canvas_width)",
+                  "trim_compensation": false,
+                  "notes": "The untrimmed transparent canvas is retained. The rendered image box is wider than the visible subject so the alpha bbox, not the full image canvas, matches the source subject size."
+                }
+              },
+              {
+                "id": "gallery_prev",
+                "type": "icon_button",
+                "icon": "arrow-left",
+                "role": "carousel_navigation"
+              },
+              {
+                "id": "gallery_next",
+                "type": "icon_button",
+                "icon": "arrow-right",
+                "role": "carousel_navigation"
+              },
+              {
+                "id": "gallery_pagination",
+                "type": "pagination_indicator",
+                "items": 3,
+                "active_index": 0
+              },
+              {
+                "id": "zoom_controls",
+                "type": "segmented_icon_control",
+                "items": [
+                  "zoom-out",
+                  "zoom-in"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "product_summary",
+            "type": "section",
+            "layout": {
+              "margin_top": 29
+            },
+            "children": [
+              {
+                "id": "sale_price",
+                "type": "text",
+                "role": "price",
+                "typography_role": "price",
+                "content": "$615.99"
+              },
+              {
+                "id": "original_price",
+                "type": "text",
+                "role": "price",
+                "typography_role": "price_original",
+                "content": "$700.00",
+                "state": {
+                  "discounted": true
+                },
+                "style": "line-through"
+              },
+              {
+                "id": "product_title",
+                "type": "text",
+                "content": "Diamond Ring"
+              },
+              {
+                "id": "rating",
+                "type": "rating",
+                "content": "4.9 (985 reviews)",
+                "icon": "star"
+              }
+            ]
+          },
+          {
+            "id": "ring_size",
+            "type": "option_group",
+            "title": "Ring Size",
+            "options": [
+              "Small 16",
+              "Small 18",
+              "Medium 20",
+              "Large 22"
+            ],
+            "layout": {
+              "scroll_x": true,
+              "margin_top": 29
+            }
+          },
+          {
+            "id": "description",
+            "type": "text_section",
+            "title": "Description",
+            "content": "Sleek modern dual-band ring with intertwined curves white and rose gold, featuring two brilliant diamonds in a clean minimal setting See All...",
+            "layout": {
+              "margin_top": 27
+            }
+          },
+          {
+            "id": "buy_now",
+            "type": "button",
+            "role": "primary_cta",
+            "content": "Buy Now",
+            "layout": {
+              "height": 57,
+              "margin_top": 35
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

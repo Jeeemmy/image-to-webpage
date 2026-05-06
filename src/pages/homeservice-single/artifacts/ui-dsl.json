@@ -1,0 +1,530 @@
+{
+  "version": "ui-dsl-v2",
+  "request": {
+    "source": "given_snapshot",
+    "source_file": "pages-reference/Mobile-single/homeservice-single.png",
+    "ignored_outer_container": false,
+    "wrapper_candidates": [
+      {
+        "id": "full_mobile_screen",
+        "type": "other",
+        "bounds": {
+          "x": 0,
+          "y": 0,
+          "width": 592,
+          "height": 1284
+        },
+        "visual_signals": [
+          "edge-to-edge portrait mobile app surface",
+          "status bar belongs to visible screen",
+          "bottom navigation is positioned within the screen"
+        ],
+        "contains_product_ui": true,
+        "boundary_has_product_semantics": true,
+        "decision": "preserve",
+        "confidence": 0.92,
+        "evidence": "The bitmap boundary is the requested mobile app screen itself, not a decorative frame around a smaller product surface."
+      }
+    ],
+    "wrapper_decision": {
+      "ignored": false,
+      "effective_source_bounds_reason": "No centered artboard, browser frame, device frame, or showcase canvas surrounds the UI.",
+      "preserved_candidates": [
+        "full_mobile_screen"
+      ],
+      "ignored_candidates": [],
+      "confidence": 0.92,
+      "notes": "The whole screenshot is used as the source bounds."
+    },
+    "effective_source_bounds": {
+      "x": 0,
+      "y": 0,
+      "width": 592,
+      "height": 1284
+    }
+  },
+  "root": {
+    "type": "container",
+    "id": "home_service_screen",
+    "role": "mobile_app_screen",
+    "layout": {
+      "direction": "column",
+      "gap": 0,
+      "width": 414,
+      "height": null
+    },
+    "behavior": {
+      "positioning": "static",
+      "scroll_container": "page",
+      "overflow": "hidden",
+      "scroll_axis": "y",
+      "scroll_reason": "canvas_overflow"
+    },
+    "appearance": {
+      "variant": "neutral",
+      "tone": "neutral",
+      "border": {
+        "visible": false,
+        "sides": [],
+        "role": null
+      },
+      "shadow": {
+        "visible": false,
+        "placement": null,
+        "sides": [],
+        "role": null,
+        "strength": null,
+        "strength_confidence": null,
+        "evidence": null,
+        "notes": null
+      },
+      "elevation": "none",
+      "shape": "square",
+      "radius": {
+        "top_left": 0,
+        "top_right": 0,
+        "bottom_right": 0,
+        "bottom_left": 0,
+        "role": "none"
+      }
+    },
+    "children": [
+      {
+        "type": "header",
+        "id": "status_bar",
+        "role": "mobile_status_bar",
+        "children": [
+          {
+            "type": "text",
+            "id": "status_time",
+            "content": "9:41"
+          },
+          {
+            "type": "container",
+            "id": "status_indicators",
+            "role": "system_indicators",
+            "layout": {
+              "direction": "row",
+              "gap": 6,
+              "align": "center"
+            },
+            "children": [
+              {
+                "type": "icon",
+                "id": "signal_icon",
+                "icon": {
+                  "type": "icon",
+                  "name": "signal",
+                  "aria_label": "cellular signal",
+                  "decorative": false,
+                  "position": "standalone"
+                }
+              },
+              {
+                "type": "icon",
+                "id": "wifi_icon",
+                "icon": {
+                  "type": "icon",
+                  "name": "wifi",
+                  "aria_label": "wifi",
+                  "decorative": false,
+                  "position": "standalone"
+                }
+              },
+              {
+                "type": "badge",
+                "id": "battery_badge",
+                "content": "76"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "id": "greeting_header",
+        "role": "app_header",
+        "layout": {
+          "direction": "row",
+          "justify": "space-between",
+          "align": "start",
+          "padding_x": 12
+        },
+        "children": [
+          {
+            "type": "container",
+            "id": "greeting_text",
+            "children": [
+              {
+                "type": "text",
+                "id": "hello_text",
+                "content": "Hello,"
+              },
+              {
+                "type": "heading",
+                "id": "user_name_heading",
+                "content": "Koushik Sarkar!"
+              }
+            ]
+          },
+          {
+            "type": "container",
+            "id": "profile_actions",
+            "role": "notification_and_avatar",
+            "layout": {
+              "direction": "row",
+              "align": "center",
+              "justify": "space-between",
+              "width": 99,
+              "height": 52
+            },
+            "appearance": {
+              "border": {
+                "visible": true,
+                "sides": [
+                  "all"
+                ],
+                "role": "outline"
+              },
+              "elevation": "none"
+            },
+            "children": [
+              {
+                "type": "icon_button",
+                "id": "notification_button",
+                "icon": {
+                  "type": "icon",
+                  "name": "bell",
+                  "aria_label": "notifications",
+                  "decorative": false,
+                  "position": "standalone"
+                }
+              },
+              {
+                "type": "avatar",
+                "id": "user_avatar",
+                "role": "profile_photo"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "search_input",
+        "id": "search_service",
+        "content": "Search...",
+        "layout": {
+          "height": 51,
+          "margin_top": 31,
+          "margin_x": 12
+        },
+        "leading_icon": {
+          "type": "icon",
+          "name": "search",
+          "aria_label": "search",
+          "decorative": false,
+          "position": "leading"
+        },
+        "trailing_icon": {
+          "type": "icon",
+          "name": "sliders",
+          "aria_label": "filters",
+          "decorative": false,
+          "position": "trailing"
+        },
+        "appearance": {
+          "variant": "neutral",
+          "border": {
+            "visible": false,
+            "sides": [],
+            "role": null
+          },
+          "elevation": "none",
+          "shape": "square"
+        }
+      },
+      {
+        "type": "nav",
+        "id": "service_categories",
+        "role": "horizontal_service_categories",
+        "layout": {
+          "direction": "row",
+          "gap": 16,
+          "margin_top": 23,
+          "padding_x": 12,
+          "item_sizing": "mixed",
+          "distribution": "fixed-gap"
+        },
+        "behavior": {
+          "scroll_container": "self",
+          "overflow": "auto",
+          "scroll_axis": "x",
+          "scroll_reason": "repeated_list_overflow"
+        },
+        "children": [
+          {
+            "type": "nav_item",
+            "id": "category_plumber",
+            "content": "Plumber",
+            "state": {
+              "active": true,
+              "selected": true
+            },
+            "appearance": {
+              "variant": "selected",
+              "tone": "brand",
+              "elevation": "none"
+            }
+          },
+          {
+            "type": "nav_item",
+            "id": "category_painting",
+            "content": null
+          },
+          {
+            "type": "nav_item",
+            "id": "category_electric",
+            "content": null
+          },
+          {
+            "type": "nav_item",
+            "id": "category_carpenter",
+            "content": null
+          },
+          {
+            "type": "nav_item",
+            "id": "category_repair",
+            "content": null
+          }
+        ]
+      },
+      {
+        "type": "card",
+        "id": "promo_banner",
+        "role": "promotional_offer",
+        "layout": {
+          "height": 181,
+          "margin_top": 14,
+          "margin_x": 12
+        },
+        "appearance": {
+          "variant": "primary",
+          "tone": "brand",
+          "border": {
+            "visible": false,
+            "sides": [],
+            "role": null
+          },
+          "shadow": {
+            "visible": false,
+            "placement": null,
+            "sides": [],
+            "role": null,
+            "strength": null,
+            "strength_confidence": null,
+            "evidence": null,
+            "notes": "Layered paper shapes are background decoration, not cast shadow."
+          },
+          "elevation": "none",
+          "shape": "square"
+        },
+        "children": [
+          {
+            "type": "heading",
+            "id": "promo_discount",
+            "content": "30% OFF"
+          },
+          {
+            "type": "text",
+            "id": "promo_title",
+            "content": "Smart Home Service"
+          },
+          {
+            "type": "button",
+            "id": "promo_book_button",
+            "content": "Book Now",
+            "leading_icon": {
+              "type": "icon",
+              "name": "calendar",
+              "aria_label": "calendar",
+              "decorative": false,
+              "position": "leading"
+            }
+          },
+          {
+            "type": "image",
+            "id": "promo_cleaner_image",
+            "role": "cleaning_person_photo"
+          }
+        ]
+      },
+      {
+        "type": "list",
+        "id": "service_offers",
+        "role": "horizontal_service_cards",
+        "layout": {
+          "direction": "row",
+          "gap": 15,
+          "margin_top": 24,
+          "padding_x": 12,
+          "item_sizing": "fixed",
+          "distribution": "fixed-gap"
+        },
+        "behavior": {
+          "scroll_container": "self",
+          "overflow": "auto",
+          "scroll_axis": "x",
+          "scroll_reason": "repeated_list_overflow"
+        },
+        "children": [
+          {
+            "type": "card",
+            "id": "home_cleaning_card",
+            "role": "service_offer_card",
+            "layout": {
+              "width": 328,
+              "height": 253
+            },
+            "appearance": {
+              "variant": "neutral",
+              "elevation": "none",
+              "shape": "square"
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "service_discount",
+                "content": "35% off"
+              },
+              {
+                "type": "icon_button",
+                "id": "favorite_button",
+                "icon": {
+                  "type": "icon",
+                  "name": "heart",
+                  "aria_label": "favorite",
+                  "decorative": false,
+                  "position": "standalone"
+                },
+                "state": {
+                  "active": true,
+                  "selected": true
+                }
+              },
+              {
+                "type": "image",
+                "id": "service_person_image",
+                "role": "cleaning_service_person"
+              },
+              {
+                "type": "heading",
+                "id": "service_title",
+                "content": "Quick Home Cleaning Service"
+              },
+              {
+                "type": "button",
+                "id": "service_book_button",
+                "content": "Book Now",
+                "leading_icon": {
+                  "type": "icon",
+                  "name": "bag",
+                  "aria_label": "booking",
+                  "decorative": false,
+                  "position": "leading"
+                }
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "id": "partial_next_service_card",
+            "role": "service_offer_card",
+            "layout": {
+              "width": 328,
+              "height": 253
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "next_discount",
+                "content": "40% off"
+              },
+              {
+                "type": "heading",
+                "id": "next_title",
+                "content": "Quick Home Cleaning Service"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "nav",
+        "id": "bottom_navigation",
+        "role": "primary_bottom_nav",
+        "layout": {
+          "direction": "row",
+          "width": 236,
+          "height": 61,
+          "item_sizing": "equal",
+          "distribution": "equal-tracks"
+        },
+        "behavior": {
+          "positioning": "fixed",
+          "fixed_edge": "bottom",
+          "scroll_container": null
+        },
+        "children": [
+          {
+            "type": "nav_item",
+            "id": "bottom_home",
+            "icon": {
+              "type": "icon",
+              "name": "home",
+              "aria_label": "home",
+              "decorative": false,
+              "position": "standalone"
+            },
+            "state": {
+              "active": true,
+              "selected": true
+            }
+          },
+          {
+            "type": "nav_item",
+            "id": "bottom_calendar",
+            "icon": {
+              "type": "icon",
+              "name": "calendar",
+              "aria_label": "calendar",
+              "decorative": false,
+              "position": "standalone"
+            }
+          },
+          {
+            "type": "nav_item",
+            "id": "bottom_message",
+            "icon": {
+              "type": "icon",
+              "name": "message",
+              "aria_label": "messages",
+              "decorative": false,
+              "position": "standalone"
+            }
+          },
+          {
+            "type": "nav_item",
+            "id": "bottom_user",
+            "icon": {
+              "type": "icon",
+              "name": "user",
+              "aria_label": "profile",
+              "decorative": false,
+              "position": "standalone"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

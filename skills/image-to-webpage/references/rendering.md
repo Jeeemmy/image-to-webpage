@@ -6,6 +6,7 @@ Before implementation, confirm adaptation width with the user.
 
 - Landscape screenshot default: `1200px` PC layout width.
 - Portrait screenshot default: `414px` mobile layout width.
+- First tell the user whether the screenshot was recognized as PC/desktop or mobile.
 - If the user provides a width, use that width.
 
 Keep raw image dimensions in artifacts, but normalize implementation measurements:
@@ -24,12 +25,75 @@ Prefer existing project conventions. In React + Tailwind projects:
 
 - Build semantic components from the DSL rather than dumping one huge JSX tree.
 - Use Design Tokens for color, typography, radius, border, spacing, and control size.
+- Apply targeted typography only where the design-token artifact records high-visual-weight text roles. Prices, brand/logo text, hero headlines, large KPI/counter numbers, and dominant CTA labels may use role-specific font candidates, digit style, and fallback stacks. Low-visual-weight text should normally use the global typography tokens and should not trigger extra font work.
+- For targeted typography, check whether the chosen font is already available through project CSS, local assets, or normal system fonts. If it is unavailable and the project/request does not allow adding a font, use the recorded fallback stack and write the fallback decision in the render artifact. Do not silently claim an unavailable exact font is being used.
+- Distinguish exact font availability from close visual fallback availability. If the inferred exact font for high-visual-weight text is missing but a close project/local/system font exists in the same visual class, use the close fallback without a user-facing warning and record the fallback in the artifact. Tell the user only when no close visual fallback is available; the notice should identify the affected text part, inferred font, missing installation, recommended install, and fallback that will be used.
 - Use Tailwind arbitrary values for fidelity-critical dimensions.
+- Keep Tailwind class names statically discoverable by the project's content scanner. Do not build fidelity-critical classes through runtime string interpolation unless the exact complete class strings also appear statically, are safelisted, or are replaced by inline/page-scoped CSS.
+- If the page relies on many arbitrary Tailwind values, add a build-output style integrity check. Confirm the compiled CSS contains the critical utilities or equivalent CSS for the page root, persistent chrome, main card/gallery, important image positioning/sizing, controls, CTA, and high-visual-weight text. If any are missing, fix before reporting success.
 - Keep repeated components data-driven.
 - Use local SVG/CSS approximations for logos/icons when external assets are unavailable.
 - Preserve responsive behavior explicitly: grids collapse, toolbars wrap, inputs keep usable widths.
 - Respect shared app-shell background tokens. If tokens or DSL indicate sidebar, topbar, and main stage share one app canvas color, apply the same background to all of those large regions and sticky header cover layers. Do not introduce a visible seam by choosing nearby but different neutral colors.
 - Render card internal distribution from DSL hints. For media cards with `media_fills_remaining_space` or `text_anchored_bottom`, use a fixed/min height flex column, a `flex-1` media region with centered content, and a bottom text stack pinned with `mt-auto` or equivalent. Do not render those cards as a plain natural vertical stack that leaves accidental bottom whitespace.
+
+## Image Asset Rendering
+
+Use the DSL `asset` or `request.image_asset_strategy` fields to decide how important image-based visual elements are restored. Prefer layered restoration when image generation is available: coded background, transparent subject asset, then separate interactive overlays.
+
+## Hero Underlay And Floating Sheet Overlap
+
+When a mobile screen has a hero/photo/map area with a rounded bottom sheet, booking card, player panel, profile panel, or detail panel floating over it, render that as layered geometry rather than adjacent blocks.
+
+- The hero/photo/map is the underlay and should extend behind the floating panel by the measured overlap amount.
+- The floating sheet/card is the overlay and owns the rounded top corners, surface fill, shadow, content padding, and scroll behavior.
+- Record and render `overlap_px = hero_underlay_bottom - overlay_top` when the screenshot shows the panel covering part of the image. Do not set `hero.height` equal to `sheet.top` unless the source truly has a hard seam with no overlap.
+- Keep the image asset itself clean: do not bake the sheet/card pixels into the hero asset. The sheet/card is DOM/CSS above the image.
+- If the top corners of the sheet reveal image behind them, the hero underlay must continue underneath at least far enough to fill those corner/shadow areas.
+- If the sheet has a subtle top shadow, cast it over the image underlay rather than over a blank page background.
+
+### Asset Contamination Gate
+
+Before creating or accepting any screenshot crop as a final rendered asset, inspect whether the crop is clean. This gate is mandatory for primary hero photos, venue/product photos, maps, artwork, preview images, and any high-visual-weight raster region.
+
+A crop is contaminated when it includes pixels from elements that should be separate UI or ignored presentation chrome, including:
+
+- Device/browser/mockup frames or screenshot presentation shells.
+- OS status bars, battery/wifi/signal indicators, clock text, notches, dynamic islands, iOS home indicators, or Android gesture/navigation bars.
+- Product navigation/action controls such as back, favorite, share, menu, carousel arrows, zoom buttons, chips, badges, or floating buttons.
+- Text overlays, price/title cards, bottom sheets, dialogs, modals, popovers, toolbars, or other UI surfaces covering the underlying image.
+
+Contaminated crops must not be used as final `source_crop` assets for important image nodes. If a clean unobstructed crop of the same underlying image exists in the screenshot, crop only that clean image region. If a clean crop does not exist, switch to `asset_strategy = "generate_clean_asset"` or `generate_transparent_subject` and use the contaminated crop only as a reference. The generation prompt must explicitly list every contaminant to remove. Render product-owned controls and overlays as DOM/components above the clean asset; do not bake them into the asset. Ignore presentation-only contaminants entirely.
+
+For `asset_strategy = "generate_transparent_subject"`:
+
+- Use the screenshot crop/reference with the user's image generation skill to preserve the main subject/material while removing the visual background and interactive elements.
+- Ask for transparent background output. The generation instruction should explicitly say to keep the subject, erase/remove the background, and erase/remove buttons, badges, chips, text overlays, carousel controls, and other interactive UI elements.
+- Recreate simple backgrounds with code instead of screenshots: CSS/Tailwind gradients, solid fills, glows, noise-free shapes, blurred blobs that are actually in the product, and geometric backdrops should live in DOM/CSS/canvas layers.
+- Render the final composition as layers, typically: coded background/gradient, transparent generated subject image, then floating buttons/chips/badges/controls as separate DOM nodes.
+- Record the generated transparent asset path, reference crop, coded background strategy, overlay node ids, and any fallback in the render artifact.
+
+For `asset_strategy = "source_crop"`:
+
+- Treat this as a fallback final asset when image generation is unavailable, explicitly declined by the user, or transparent subject separation is not suitable. Create or use a single crop covering the whole visual element from the source screenshot.
+- If image generation is available and not explicitly declined, do not render a separable important image as final `source_crop`. Correct the DSL/render artifact to `generate_transparent_subject` or document concrete evidence that separation is unsuitable.
+- Do not crop only an internal patch when the DSL says `whole_element = true`.
+- Do not include overlay controls in the crop. If an element is actually obstructed by interactive controls, correct the strategy to `generate_clean_asset` rather than saving an occluded crop as the final asset.
+- Do not include presentation or system chrome in the crop, including phone frames, browser/device mockups, OS status bars, iOS home indicators, Android gesture/navigation bars, notches/dynamic islands, clock/battery/wifi indicators, or outer screenshot chrome. If those pixels are present, the crop fails the asset contamination gate.
+- Do not include bottom sheets, cards, text blocks, price panels, buttons, badges, or navigation controls in a photo/hero asset just because they overlap the source screenshot. Those overlays must be reconstructed separately as UI.
+- Do not bake obvious gradient/tonal background pixels into a subject asset when the background can be recreated with CSS. Use coded background plus transparent subject instead.
+- Render the crop with the recorded aspect ratio, object-fit, radius, clipping, and surrounding layout from the DSL/design tokens.
+
+For `asset_strategy = "generate_clean_asset"`:
+
+- Use this when a clean non-layered image is needed and transparent subject extraction is unavailable or inappropriate.
+- Use the DSL `generation.prompt_features` and `generation.reference_image` or source screenshot region as the generation brief/reference.
+- Request a clean asset without the occluding controls, system chrome, and presentation/device chrome. Preserve product-owned controls as separate UI nodes layered above the asset.
+- Include explicit negative prompt features for detected contaminants, for example: "no phone frame", "no status bar", "no iOS home indicator", "no Android navigation bar", "no gesture pill", "no dynamic island", "no battery/wifi icons", "no back/favorite/share buttons", "no bottom sheet", "no text/card overlay".
+- Ask for transparent background output first because it usually blends most reliably with the reconstructed page. Fall back to a non-transparent generated asset only when the user's image generation skill cannot create transparency.
+- Record the generated asset path, whether transparency was supported, reference used, and any fallback in the render artifact.
+
+If generation is required but no user image generation skill is available, do not silently invent a low-fidelity placeholder. Use the best available source crop as a temporary reference/fallback asset if needed, record the limitation in the render artifact, and keep backgrounds and occluding controls separate where possible so the asset can be regenerated cleanly later.
 
 ## Presentation Wrapper Removal And Preservation Audit
 
@@ -98,6 +162,43 @@ Use a two-layer pattern when an inset shell contains a sticky topbar:
 
 Do not remove the outer shell offset to satisfy topbar bleed prevention. The rule against top padding outside a sticky topbar applies inside the scroll container; it does not prohibit a product shell wrapper from having a visible external top margin.
 
+## Mobile Status Bars
+
+When rendering a mobile/system status bar, treat it as persistent system chrome rather than ordinary page content.
+
+- First search for an existing project-level status bar component or standard status bar style, such as `MobileStatusBar`, and reuse it when available. Prefer tone/variant props over hand-built per-page SVG or HTML.
+- Hand-roll a status bar only when no reusable default exists, the screenshot shows product-specific status bar customization that the default cannot represent, or the user explicitly asks for exact custom reconstruction. Record that reason in the render artifact.
+- If a status bar is rendered, it must not scroll with content. Put the status bar outside the scrollable content region, or render it as `position: sticky` / `position: fixed` at the top of the mobile viewport/screen.
+- Give the status bar an opaque background matching the app canvas or top surface. Do not leave transparent status-bar gutters where scrolled content can show through.
+- Offset the scrollable content below the status bar with normal flow, padding, or an explicit top inset so the first content is not hidden under the fixed/sticky layer.
+- The render artifact must include a `status_bar` or equivalent entry in `scroll_architecture`, recording `rendered`, `strategy`, `component_reused`, and `scroll_behavior: "persistent" | "not_rendered"`.
+
+## Mobile System Navigation Indicators
+
+Bottom OS navigation and gesture indicators are system chrome by default and should not be reconstructed as page UI.
+
+- Treat the iOS home indicator/gesture pill, Android gesture bar, Android three-button navigation bar, and customized OEM Android navigation bars as ignored system chrome unless the user explicitly asks to reproduce device/OS chrome or the target page is itself an OS UI demonstration.
+- Do not model these elements as product bottom navs, drag handles, dividers, progress bars, buttons, decorative pills, or sheet controls. A product-owned bottom nav or sheet drag handle must have product semantics or contextual attachment to a product surface; an isolated pill at the physical screen edge is system chrome.
+- Do not render a visible home indicator or Android navigation bar in the final page. If bottom spacing is needed after ignoring it, use normal product safe-area padding or content padding without drawing the OS indicator.
+- Treat these indicators as asset contaminants. They must not appear inside hero/photo/map/image crops or generated assets; include them in negative prompt features when generating clean assets from contaminated references.
+- Record visible indicators in artifacts as ignored system chrome, for example `ignored_system_chrome: [{ "type": "ios_home_indicator", "decision": "ignore" }]`, so the omission is intentional and auditable.
+
+## Mobile Page Navigation
+
+When rendering mobile page-level navigation, treat it as persistent app chrome by default.
+
+- Classify navigation from interaction semantics, not just shape. Elements that navigate back, switch screens/routes, switch primary app sections, or act as page-level tabs are page navigation.
+- Page-level navigation includes top back/action navigation bars, top tabbars, bottom tabbars, floating bottom tabbars, bottom navigation rails, and compact icon/tab bars that switch pages or major app sections.
+- Render page-level navigation outside the scrollable content region, or as `position: sticky` / `position: fixed` attached to the appropriate viewport/screen edge. It should not scroll away with product/content text, cards, lists, or forms.
+- For top page navigation, keep it below the persistent status bar when one is rendered. Use an opaque background and offset the content pane below it so content cannot slide under or show through the nav layer.
+- For bottom or floating bottom page navigation, use fixed/sticky bottom positioning and add bottom padding or inset compensation to the scrollable content so the final content is reachable and not hidden behind the nav.
+- Persistent navigation bars must include internal safe padding around their controls. A top back/action bar, top tabbar, bottom tabbar, or floating tabbar should not place buttons/tabs flush against the nav boundary and rely entirely on scroll-content padding for visual separation.
+- When persistent top chrome is split out of the content scroll stack, preserve the source distance from navigation controls to the first scrollable content by splitting it between nav internal padding/height and content pane `padding-top` or the first content node's `margin-top`. The fact that chrome is persistent must not collapse a visible source gap, but also must not move the whole gap into the scroll pane if that leaves the nav controls visually touching the scrolling content once the page moves.
+- When persistent bottom chrome is split out, preserve the source gap/overlap relationship with content by splitting it between nav internal padding and content pane `padding-bottom` or bottom inset compensation.
+- Distinguish page navigation from content-local controls. Tabs, segmented controls, filters, sort chips, card tabs, or section tabs inside a scrollable content area should scroll with that content unless they clearly switch pages/routes or primary app sections.
+- If the semantic level is ambiguous, prefer persistent behavior only when the element is visually/positionally global or clearly page-switching; otherwise record the ambiguity in the DSL/render artifact.
+- The render artifact must include page-level navigation entries in `scroll_architecture`, recording each nav's `id`, `kind`, `edge`, `scroll_behavior: "persistent"`, and whether it is outside the scroll region, fixed, or sticky.
+
 ## Scroll Architecture
 
 Decide scroll architecture before coding. Do not let the browser document become the default scroll container for dashboard/app-shell layouts unless the UI is clearly a static document page.
@@ -119,9 +220,14 @@ For desktop dashboards with sidebar plus topbar:
 For mobile layouts:
 
 - Do not keep a large desktop sidebar fixed on screen.
-- Convert primary navigation to a top nav, drawer, bottom nav, or horizontally scrollable nav according to the screenshot.
-- Bottom navs are usually `fixed bottom-0` when they are persistent app controls.
-- Add bottom padding to scrollable content when a fixed bottom nav or FAB overlaps the viewport.
+- If a status bar is rendered, keep it persistent at the top and out of the scrolling content. Page scrolling must begin below the status bar, and scrolling the product content must not move the status bar off screen.
+- Convert primary navigation to a top nav, drawer, bottom nav, floating bottom nav, or horizontally scrollable nav according to the screenshot.
+- Top page navigation, including back/action bars and page-level tabbars, is persistent by default and should sit outside the scrolling content or use sticky/fixed top positioning.
+- Bottom page navigation, bottom tabbars, and floating bottom tabbars are persistent by default and should sit outside the scrolling content or use fixed/sticky bottom positioning.
+- Add top or bottom padding/inset compensation to scrollable content when fixed/sticky status bars, top navs, bottom navs, tabbars, or FABs overlap the viewport, and also when the screenshot shows a visible gap between persistent chrome and content. Preserve measured chrome-to-content spacing, not just overlap safety, but first give persistent navigation controls their own internal safe padding so scrolling content never appears tightly attached to the buttons/tabs.
+- Hide scrollbars by default on mobile page scroll owners and local mobile scroll containers, unless the source screenshot explicitly shows a meaningful scrollbar or scroll indicator that should be reconstructed. Keep scrolling enabled with touch momentum; do not replace `overflow-y-auto` with `overflow-hidden`.
+- Use a cross-browser mobile scrollbar-hidden utility or page-scoped CSS on each mobile scroll owner:
+  `scrollbar-width: none; -ms-overflow-style: none;` plus `selector::-webkit-scrollbar { display: none; width: 0; height: 0; }`.
 
 For floating and overlay components:
 
@@ -149,6 +255,15 @@ For tables and dense data regions:
 Verification checklist for scrolling:
 
 - On desktop, scrolling main content does not move persistent sidebar or global topbar.
+- On mobile, any rendered system status bar remains visible and fixed/sticky while page content scrolls; it is not part of the scrolling content stack.
+- On mobile, bottom OS navigation indicators are intentionally not rendered. If a source screenshot shows an iOS home indicator, Android gesture bar, Android three-button bar, or OEM navigation strip, the render artifact records it as ignored system chrome and the final DOM/CSS does not draw it.
+- On mobile, page-level navigation and page-switching tabbars remain visible and fixed/sticky while page content scrolls; top back/action navs, top tabbars, bottom tabbars, and floating bottom tabbars are not part of the content scroll stack.
+- No content is visible inside the status-bar occlusion region while scrolling, including through transparent status-bar gutters, padding strips, or rounded clipping gaps.
+- No content is hidden behind persistent mobile navigation; scrollable content has top/bottom inset compensation for fixed/sticky nav layers.
+- Persistent mobile navigation controls have safe internal padding around buttons/tabs/icons. Scrolling content should not visually attach to the nav controls after the initial top content scrolls away.
+- Persistent mobile chrome does not collapse visible source spacing. The first scrollable content preserves the measured source gap below status/top navigation chrome, and bottom content preserves measured spacing or inset above bottom navigation/tabbars, with spacing allocated between chrome internal padding and scroll content inset rather than dumped into only one layer.
+- Horizontal scrollers in padded mobile content preserve edge behavior. If source chips/cards/tabs extend into the screen-edge padding area, render the scroll strip full-bleed with negative inline margins and matching inner padding/scroll-padding so the first item aligns with the text column but overflow continues to the screen edge.
+- Mobile scrollbars are hidden by default on the owning scroll containers while scrolling remains possible. If a visible scrollbar is kept, the render artifact documents that the source screenshot showed a meaningful scrollbar/scroll indicator.
 - Sticky/fixed regions do not cover content without padding/offset compensation.
 - No content is visible inside the topbar occlusion region while scrolling, including through scroll-container padding, rounded clipping gaps, transparent header margins, or partially covered toolbar gutters.
 - Sidebar can still access bottom profile/account controls.
@@ -224,8 +339,24 @@ Always run the available build command. Then verify in a real browser when possi
 - Shared boundaries are rendered once and attached to the correct owner; borderless sidebars remain borderless when the visible line belongs to an adjacent pane.
 - Asymmetric corner radii are preserved per corner and are not normalized to a uniform rounded rectangle.
 - Main-stage shell offsets are preserved when visible in the source, and those offsets do not create transparent sticky-topbar bleed because scrolling is owned by the inner pane.
+- Important image elements use layered restoration when image generation is available: coded background/gradient, transparent subject asset, and separate interactive overlays.
+- Whole-element source crops are used only as fallback final assets or when the DSL documents that the subject/background cannot be separated cleanly.
+- Generated image assets omit overlay controls, prefer transparent backgrounds, and preserve the subject/material from the screenshot reference.
+- Generated transparent subjects must preserve the source subject's visual size. Render from the source subject bbox inside the gallery/hero, not from the generated PNG's natural or trimmed dimensions. Do not run `trim`, `-trim`, tight crop, or equivalent transparent-padding removal on a subject asset when the original transparent canvas represents the source crop coordinate system. If trimming is necessary for optimization, record the removed top/right/bottom/left transparent insets and compensate the CSS `left`/`top`/`width`/`height` so the visible subject keeps the same source bbox. If the generated asset has less transparent padding than the screenshot subject area, use the untrimmed alpha asset, reduce CSS display size, or regenerate with transparent padding so the visible product/hero subject does not become larger than the reference.
+- When image generation is available and not declined, separable product/hero subjects are not left as source crops with baked-in gradient/background pixels. The render artifact records the generated transparent asset and coded background strategy.
+- The built CSS contains the page's fidelity-critical visual rules. For Tailwind, inspect the actual emitted CSS file after build for key root/card/gallery/control/CTA/high-weight text utilities, especially arbitrary color, dimension, positioning, radius, shadow, and background-gradient classes. Build success is not enough when missing CSS would leave only default text/flow visible.
+- Important imported image assets are present in the built output and referenced by the built JS/CSS bundle. Product/hero/gallery assets must not disappear because of a bad import path, missing file, stale dev server, or unreferenced generated asset.
+- When available, run the bundled helper for non-browser integrity checks, for example:
+  `node skills/image-to-webpage/scripts/check-build-integrity.mjs --dist dist --class "h-[333px]" --class "bg-[#17140e]" --asset-name-contains "diamond-ring" --js-contains "Diamond ring"`.
 - Persistent sidebar/topbar/bottom nav/floating controls keep the correct scroll behavior.
+- Rendered mobile/system status bars reuse the project default component or record a justified custom strategy, and they remain persistent instead of scrolling away with page content.
+- Mobile page-level navigation and page-switching tabbars are persistent by default, while content-local tabs/filters scroll with their owning content region unless explicitly identified as page navigation.
+- Persistent mobile navigation bars include their own safe padding/gutter around controls; chrome-to-content spacing is split between nav internal padding and scroll content inset so scrolling does not make controls appear glued to content.
+- Mobile scroll containers hide browser scrollbars by default without disabling scrolling, unless the source explicitly includes a scrollbar/scroll indicator that should be visible.
+- Image subjects match source visual bbox size after generation/cropping, and horizontal scrollers match source edge bleed instead of being clipped by page padding when the screenshot shows edge-to-edge overflow.
 - If `ignored_outer_container = true`, no ignored wrapper leaks into the implementation: no all-sides viewport padding, centered artboard wrapper, copied showcase background band, copied device/browser frame radius, fixed artboard height, or copied outer-frame shadow remains around the real product UI.
 - If `ignored_outer_container = false` and wrapper candidates exist, each rendered outer wrapper has documented product-semantics evidence. No large centered decorative artboard/frame is preserved solely because it contains the product UI.
 
-After verification, always start the local page and open it for the user. Use the project's normal dev or preview server, choose another available port if needed, and open the rendered page route.
+After verification, always start the local page and open it for the user when the environment allows it. Use the project's normal dev or preview server, choose another available port if needed, and open the rendered page route.
+
+When project instructions prohibit browser/page opening, do not substitute only a build and text presence check. Record that browser verification was skipped, and include non-browser integrity checks for compiled CSS and asset references in the render artifact. If the user is viewing an existing dev server, warn that a stale Tailwind/Vite process may not include classes from newly created files; restart the server when allowed, or ask the user to restart it.

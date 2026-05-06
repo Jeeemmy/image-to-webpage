@@ -6,6 +6,10 @@ import { raxonTradingPage } from "../pages/raxon-trading/page.config.js";
 import { dashboardPage } from "../pages/dashboard/page.config.js";
 import { vyraHealthPage } from "../pages/vyra-health/page.config.js";
 import { evilRabbitOverviewPage } from "../pages/evilrabbit-overview/page.config.js";
+import { homeserviceSinglePage } from "../pages/homeservice-single/page.config.js";
+import { luxurySinglePage } from "../pages/luxury-single/page.config.js";
+import { smartnoteSinglePage } from "../pages/smartnote-single/page.config.js";
+import { weddingSinglePage } from "../pages/wedding-single/page.config.js";
 
 export const pages = [
   flowmailPage,
@@ -16,6 +20,10 @@ export const pages = [
   dashboardPage,
   vyraHealthPage,
   evilRabbitOverviewPage,
+  homeserviceSinglePage,
+  luxurySinglePage,
+  weddingSinglePage,
+  smartnoteSinglePage,
 ];
 
 export function findPageByRoute(pathname) {

@@ -1,0 +1,135 @@
+{
+  "page_id": "wedding-single",
+  "implementation": {
+    "component": "src/pages/wedding-single/WeddingSinglePage.jsx",
+    "stylesheet": "src/pages/wedding-single/WeddingSinglePage.css",
+    "route": "/pages/wedding-single",
+    "registry": "src/framework/pageRegistry.js"
+  },
+  "rendering_strategy": {
+    "framework": "React + page-owned CSS",
+    "mobile_preview": "Uses shared PhonePreviewFrame with camera frame outside the page route.",
+    "status_bar": "Uses MobileStatusBar tone=light instead of custom per-page status chrome.",
+    "ignored_system_chrome": [
+      {
+        "type": "ios_home_indicator",
+        "source_bounds": {
+          "x": 247,
+          "y": 1103,
+          "width": 114,
+          "height": 5
+        },
+        "rendered": false,
+        "reason": "OS gesture/navigation chrome, not product UI.",
+        "implementation": "No DOM/CSS home-indicator node is rendered; the sheet keeps ordinary bottom content padding instead."
+      }
+    ],
+    "critical_styles": "Stable .wedding-* selectors own root sizing, hero image, top controls, detail sheet, cards, CTA, and scrollbar hiding.",
+    "hero_sheet_overlap": {
+      "underlay": "wedding-hero-image",
+      "overlay": "wedding-sheet",
+      "underlay_height": 462,
+      "overlay_top": 435,
+      "overlap_px": 27,
+      "implementation": "Hero image extends behind the bottom detail sheet; the sheet owns z-index, top radius, fill, and top shadow."
+    },
+    "assets": [
+      {
+        "path": "src/pages/wedding-single/assets/wedding-hero-clean.png",
+        "derivation": "488x390 clean crop from supplied screenshot photo area, resized to 402x435",
+        "reason": "The original 510x590 crop contained phone hardware, status bar, action buttons, and bottom sheet contamination. Image generation was preferred but unavailable in this session, so a clean unobstructed crop was used as fallback.",
+        "asset_contamination_gate": {
+          "rejected_asset": "src/pages/wedding-single/assets/wedding-hero-contaminated-reference.png",
+          "passed": true,
+          "removed_contaminants": [
+            "iphone hardware frame",
+            "OS status bar",
+            "dynamic island",
+            "back button",
+            "favorite button",
+            "share button",
+            "bottom detail sheet"
+          ]
+        },
+        "generation_prompt_if_available": {
+          "mode": "generate_clean_asset",
+          "prompt": "Create a clean mobile app hero photo of a romantic beach wedding venue at sunset, matching the reference composition: white drapes framing the scene, palm trees on both sides, floral wedding arch centered on the beach, ocean horizon, tables with white cloth and pale pink accents, lanterns in the sand, soft evening lighting. Remove all UI and device elements.",
+          "negative_prompt_features": [
+            "phone frame",
+            "status bar",
+            "dynamic island",
+            "clock",
+            "battery icon",
+            "wifi icon",
+            "back button",
+            "favorite button",
+            "share button",
+            "bottom sheet",
+            "text overlay",
+            "price card"
+          ],
+          "not_used_reason": "No callable built-in image generation tool was exposed to this session and CLI fallback had no OPENAI_API_KEY."
+        }
+      },
+      {
+        "path": "src/pages/wedding-single/assets/host-avatar.png",
+        "derivation": "72x72 crop from supplied screenshot contact avatar"
+      },
+      {
+        "path": "src/pages/wedding-single/assets/reviewer-1.png",
+        "derivation": "32x32 crop from supplied screenshot reviewer cluster"
+      },
+      {
+        "path": "src/pages/wedding-single/assets/reviewer-2.png",
+        "derivation": "32x32 crop from supplied screenshot reviewer cluster"
+      },
+      {
+        "path": "src/pages/wedding-single/assets/reviewer-3.png",
+        "derivation": "32x32 crop from supplied screenshot reviewer cluster"
+      }
+    ]
+  },
+  "non_browser_validation_plan": {
+    "allowed_by_project": [
+      "JSON parsing",
+      "npm run build",
+      "compiled CSS/JS asset integrity checks"
+    ],
+    "skipped_by_instruction": [
+      "Playwright",
+      "Puppeteer",
+      "headless browser",
+      "E2E",
+      "rendering or screenshot validation"
+    ]
+  },
+  "integrity_targets": {
+    "css_classes": [
+      ".wedding-phone",
+      ".wedding-hero-image",
+      ".wedding-sheet",
+      ".wedding-facility-card",
+      ".wedding-contact-card",
+      ".wedding-book-button"
+    ],
+    "bundle_text": [
+      "Blue hill at stone barns",
+      "Most popular facilities",
+      "Josep Colins",
+      "Book now"
+    ],
+    "emitted_or_inlined_assets": [
+      "wedding-hero-clean",
+      "host-avatar",
+      "reviewer-1",
+      "reviewer-2",
+      "reviewer-3"
+    ]
+  },
+  "notes": [
+    "The implementation intentionally hides scrollbars on local mobile scroll owners while keeping overflow behavior.",
+    "The outer screenshot canvas and phone hardware frame are not rendered by the page itself because the project preview shell owns that chrome.",
+    "The iOS bottom home indicator visible in the source screenshot is recorded as ignored system chrome and is not rendered.",
+    "No new dependencies were introduced."
+  ]
+}
