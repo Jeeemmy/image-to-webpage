@@ -8,7 +8,9 @@ function usage() {
 node skills/image-to-webpage/scripts/check-build-integrity.mjs --dist dist \\
   --class "h-[333px]" \\
   --css-contains "radial-gradient" \\
+  --css-regex "\\.page\\{[^}]*height:100dvh" \\
   --js-contains "diamond-ring" \\
+  --js-regex "Diamond\\s+ring" \\
   --asset-name-contains "diamond-ring"
 
 Checks built CSS/JS/assets without opening a browser. Use --class for complete
@@ -20,7 +22,9 @@ function readArgs(argv) {
     dist: "dist",
     classes: [],
     cssContains: [],
+    cssRegex: [],
     jsContains: [],
+    jsRegex: [],
     assetNameContains: [],
   };
 
@@ -48,8 +52,14 @@ function readArgs(argv) {
       case "--css-contains":
         args.cssContains.push(value);
         break;
+      case "--css-regex":
+        args.cssRegex.push(value);
+        break;
       case "--js-contains":
         args.jsContains.push(value);
+        break;
+      case "--js-regex":
+        args.jsRegex.push(value);
         break;
       case "--asset-name-contains":
         args.assetNameContains.push(value);
@@ -128,9 +138,23 @@ function main() {
     }
   }
 
+  for (const pattern of args.cssRegex) {
+    const regex = new RegExp(pattern);
+    if (!regex.test(css)) {
+      failures.push(`missing CSS pattern /${pattern}/`);
+    }
+  }
+
   for (const needle of args.jsContains) {
     if (!js.includes(needle)) {
       failures.push(`missing JS text ${JSON.stringify(needle)}`);
+    }
+  }
+
+  for (const pattern of args.jsRegex) {
+    const regex = new RegExp(pattern);
+    if (!regex.test(js)) {
+      failures.push(`missing JS pattern /${pattern}/`);
     }
   }
 
@@ -150,7 +174,7 @@ function main() {
   }
 
   console.log(
-    `build integrity ok: ${args.classes.length} classes, ${args.cssContains.length} CSS strings, ${args.jsContains.length} JS strings, ${args.assetNameContains.length} asset checks`,
+    `build integrity ok: ${args.classes.length} classes, ${args.cssContains.length} CSS strings, ${args.cssRegex.length} CSS patterns, ${args.jsContains.length} JS strings, ${args.jsRegex.length} JS patterns, ${args.assetNameContains.length} asset checks`,
   );
 }
 

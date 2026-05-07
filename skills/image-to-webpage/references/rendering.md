@@ -30,8 +30,8 @@ Do not implement the root, body, page shell, or primary scroll container as a fi
 
 Prefer these implementation patterns:
 
-- Desktop app shells: `width: 100%` or `100vw`, `min-height: 100vh`/dynamic viewport units, grid or flex tracks such as fixed sidebar plus `minmax(0, 1fr)` content, and local scroll panes for viewport-bounded areas.
-- Desktop document/marketing pages: fluid sections with content-level `max-width`, responsive gutters via `clamp()`/breakpoints, and `min-height` only where the screenshot shows a first-viewport composition.
+- Desktop app shells with persistent sidebar/topbar chrome: `width: 100%` or `100vw`, `height: 100vh`/`100dvh` or an equivalent bounded viewport height, `overflow: hidden` on the shell, grid or flex tracks such as fixed sidebar plus `minmax(0, 1fr)` content, `min-height: 0` on every grid/flex ancestor of the scroll pane, and local scroll panes for viewport-bounded areas. Do not rely on `min-height: 100vh`/`100dvh` alone for dashboard shells because content can still make the browser document scroll and carry sticky chrome away.
+- Desktop document/marketing pages: `width: 100%` or `100vw`, `min-height: 100vh`/dynamic viewport units, fluid sections with content-level `max-width`, responsive gutters via `clamp()`/breakpoints, and `min-height` only where the screenshot shows a first-viewport composition.
 - Mobile screens: a fluid screen width, `min-height: 100dvh` or equivalent, persistent chrome outside the scroll pane when appropriate, safe-area compensation, and content scrolling instead of a fixed phone-height wrapper.
 - Repeated grids/toolbars/form rows: preserve the confirmed-width layout at the calibration width, then wrap, stack, collapse columns, or use scoped horizontal scroll for genuinely wide content on smaller viewports.
 
@@ -266,10 +266,12 @@ Decide scroll architecture before coding. Do not let the browser document become
 
 For desktop dashboards with sidebar plus topbar:
 
-- Use an app shell such as `lg:h-screen lg:overflow-hidden lg:flex`.
+- Use an app shell such as `lg:h-screen lg:overflow-hidden lg:flex`, or page-scoped CSS equivalent: `height: 100dvh; overflow: hidden; display: grid/flex;`.
+- Treat the shell as viewport-bounded, not document-length. A root rule like `.page { min-height: 100dvh; }` is insufficient and should be rejected when content can exceed the viewport.
 - Keep the desktop sidebar persistent with `lg:sticky lg:top-0 lg:h-screen` or an equivalent fixed grid column.
 - If sidebar content may exceed viewport height, make the sidebar body/nav scroll internally with `overflow-y-auto`; do not scroll the whole shell.
 - Put the right-side app pane in `lg:h-screen lg:overflow-y-auto` or equivalent when it is flush with the app canvas.
+- Ensure every grid/flex ancestor between the shell and the intended scroll pane has `min-height: 0` and, for horizontal overflow safety, `min-width: 0`. Without this chain, the child may expand the shell and force document scrolling even when the child has `overflow-y: auto`.
 - If the DSL shows an inset main-stage shell, put the offset on an outer non-scrolling/clipped shell and put `overflow-y-auto` on an inner pane. Size the outer shell with a height calculation or flex constraints so the visible offset does not create document scrolling.
 - Keep the global topbar persistent with `sticky top-0 z-*`.
 - Give sticky/fixed regions solid backgrounds and appropriate `z-index` so content does not bleed underneath.
@@ -318,6 +320,9 @@ For tables and dense data regions:
 Verification checklist for scrolling:
 
 - On desktop, scrolling main content does not move persistent sidebar or global topbar.
+- On desktop dashboard/app-shell pages, the browser document is not the scroll owner. Scrolling the intended content pane changes that pane's `scrollTop`, while `window.scrollY` remains `0` and the sidebar/topbar bounding boxes keep the same viewport top/left positions.
+- On desktop dashboard/app-shell pages, built CSS/source proves the viewport-bound scroll chain: shell `height: 100vh`/`100dvh` or equivalent, shell `overflow: hidden`, intermediate panes `min-height: 0`, intended content pane `overflow-y: auto`, and persistent chrome `sticky`/`fixed` with opaque backgrounds.
+- On desktop dashboard/app-shell pages, `min-height: 100vh`/`100dvh` is allowed only as a fallback/minimum paired with a real bounded height or another rule that prevents document scrolling. It is not acceptable as the only shell height constraint.
 - On mobile, any rendered system status bar remains visible and fixed/sticky while page content scrolls; it is not part of the scrolling content stack.
 - On mobile, bottom OS navigation indicators are intentionally not rendered. If a source screenshot shows an iOS home indicator, Android gesture bar, Android three-button bar, or OEM navigation strip, the render artifact records it as ignored system chrome and the final DOM/CSS does not draw it.
 - On mobile, page-level navigation and page-switching tabbars remain visible and fixed/sticky while page content scrolls; top back/action navs, top tabbars, bottom tabbars, and floating bottom tabbars are not part of the content scroll stack.
@@ -395,6 +400,8 @@ Always run the available build command. Then verify in a real browser when possi
 - Desktop and mobile layouts do not clip, overlap, or overflow incoherently.
 - The page root/app shell is viewport-adaptive, not a fixed screenshot-size artboard. Search the implemented files for hard-coded root patterns such as `w-[1200px]`, `h-[854px]`, `width: 1200px`, `height: 854px`, `width: 402px`, or fixed `body`/root dimensions. If such values exist, they must be justified as component internals or replaced with fluid shell sizing.
 - The render artifact includes a `viewport_adaptation` or equivalent section recording calibration width, fluid root behavior, dynamic viewport units, breakpoints/wrapping behavior, and any intentional fixed panels/min-width scroll regions.
+- For dashboard/app-shell pages, run a browser scroll-owner check when browser verification is allowed: record initial `window.scrollY`, sidebar/topbar bounding boxes, scroll the declared content pane, then assert `window.scrollY` is still `0`, the pane's `scrollTop` increased, and persistent chrome bounding boxes did not move.
+- If browser verification is prohibited, run a non-browser scroll-invariant gate on source and built CSS. The gate must confirm shell viewport height uses `height`/`h-screen`/`h-dvh` rather than only `min-height`, shell overflow is hidden, the main scroll pane has `overflow-y: auto` or equivalent, all flex/grid ancestors in the scroll chain have `min-height: 0`, and persistent sidebar/topbar selectors include sticky/fixed positioning with opaque backgrounds. Record each boolean in the render artifact and fix any false result before reporting success.
 - Enabled interactive controls expose pointer affordance: buttons, nav items, tabs, icon buttons, card action menus, switches, row actions, and links use semantic controls and `cursor: pointer` on hover; disabled controls do not.
 - Sidebar/navigation rail and main canvas backgrounds match the source relationship. Distinct tints remain distinct; shared app-shell backgrounds are used only when the source reads as a continuous surface.
 - KPI/stat/summary cards preserve internal spacing: title/action row, inner tinted value band/metric well, band padding, and band bottom/right/left inset match the source instead of collapsing to the card edge.
@@ -417,6 +424,7 @@ Always run the available build command. Then verify in a real browser when possi
 - When image generation is available and not declined, separable product/hero subjects are not left as source crops with baked-in gradient/background pixels. The render artifact records the generated transparent asset and coded background strategy.
 - The built CSS contains the page's fidelity-critical visual rules. For Tailwind, inspect the actual emitted CSS file after build for key root/card/gallery/control/CTA/high-weight text utilities, especially arbitrary color, dimension, positioning, radius, shadow, cursor, and background-gradient classes. Build success is not enough when missing CSS would leave only default text/flow visible.
 - The built CSS/JS does not make the reconstruction root a fixed screenshot-size page. When browser checks are prohibited, use text/build-output inspection to confirm responsive root rules such as `width:100%`, `100vw`, `min-height:100vh`/`100dvh`, flex/grid `minmax(0,1fr)`, `clamp()`, or breakpoint rules are present where relevant, and that fixed screenshot dimensions are absent from root-level selectors.
+- For desktop dashboard/app-shell pages, built CSS/JS inspection must also confirm local scroll ownership. A result that only proves `min-height:100vh`/`100dvh` and `position:sticky` is incomplete because the document can still scroll.
 - Important imported image assets are present in the built output and referenced by the built JS/CSS bundle. Product/hero/gallery assets must not disappear because of a bad import path, missing file, stale dev server, or unreferenced generated asset.
 - When available, run the bundled helper for non-browser integrity checks, for example:
   `node skills/image-to-webpage/scripts/check-build-integrity.mjs --dist dist --class "h-[333px]" --class "bg-[#17140e]" --asset-name-contains "diamond-ring" --js-contains "Diamond ring"`.
