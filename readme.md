@@ -42,7 +42,7 @@ The current project scripts cover the development server, production build, and 
 
 During testing, this project was tested with codex and gpt-5.5/5.4/5.3 throughout. Results in other IDEs or with other models are not guaranteed. For best results, the model should support image input and ideally image generation capabilities; this document uses codex's image gen skill.
 
-完整安装，拉取本项目之后，在项目内执行 npm run dev。
+完整安装，拉取本项目之后，在项目内执行 npm install，npm run dev。
 
 ##  核心技能 Core Skill
 

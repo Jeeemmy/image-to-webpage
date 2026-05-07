@@ -17,9 +17,13 @@ description: >-
 
 This skill has exactly three core production steps. Do not skip the first two artifacts when rendering from an image.
 
-## First Response
+## First Response Confirmation Gate
 
-When this skill triggers, keep the first user-facing reply limited to confirming:
+When this skill triggers, the first user-facing reply MUST be a confirmation request only. The user's request that triggered this skill, such as "recreate this screenshot" or "还原截图为页面", does not count as confirmation because the user has not yet seen the device classification, adaptation width, page target, or asset-generation decision.
+
+Before the first reply, inspect the project structure and dependencies only enough to determine the page target. Do not generate artifacts, edit files, implement the page, run builds, or proceed to any production step before this confirmation gate is completed.
+
+The first reply must include only these confirmation items:
 
 - The recognized target device type: PC/desktop or mobile.
 - Default adaptation width: `1200px` for PC/landscape screenshots unless the user specified another width.
@@ -28,7 +32,9 @@ When this skill triggers, keep the first user-facing reply limited to confirming
 - Whether image generation is available for this session when important image-based visuals are likely present. If available, explicitly say image generation will be used to restore separable image subjects with transparent backgrounds and coded backgrounds/overlays. If the user explicitly declines image generation, use the no-AI asset fallback path and record that choice.
 - A font availability notice only when high-visual-weight text appears to use a font that is not installed and no project/local/system font with a close visual style is available. Do not warn for low-visual-weight text or when a close style fallback is available. Use this form: "识别到截图中 <part> 部分文字推测是 <font> 字体。当前系统没有安装，也没有检测到近似风格字体，建议安装 <font>。如果没有，将使用 <fallback> 字体替代。"
 
-Do not include file lists or extended implementation plans in the first reply.
+End the first reply by asking the user to confirm before reconstruction starts. After sending the first reply, STOP and wait for an explicit user confirmation, such as "确认", "继续", "OK", "按这个做", or a corrected width/target followed by approval.
+
+Do not include file lists or extended implementation plans in the first reply. Do not continue to Step 1, Step 2, or Step 3 until the user explicitly confirms after this first reply.
 
 ### Step 1: Generate Design Tokens
 
@@ -66,15 +72,15 @@ Before accepting any screenshot crop as a final image asset, run an asset contam
 
 ### Step 3: Render The Page
 
-Use the generated Design Tokens, generated UI DSL, and `references/rendering.md` to implement the page in the repo's existing frontend stack.
+Use the generated Design Tokens, generated UI DSL, `references/rendering.md`, and `references/frontend-design.md` to implement the page in the repo's existing frontend stack. Treat `references/frontend-design.md` as a hard design-quality reference for the rendering process: load it before editing code and apply its production-grade frontend standards for typography, composition, spacing, visual detail, motion, and avoiding generic AI aesthetics. For screenshot reconstruction, these standards constrain execution quality and polish; they must not override source-image fidelity, exact readable text, measured layout, wrapper decisions, asset strategy, user-specified width, or the project's existing stack. If a frontend-design guideline conflicts with clear screenshot evidence, follow the screenshot and record the decision in the render artifact.
 
-Before rendering, confirm adaptation width:
+Before rendering, verify that the First Response Confirmation Gate has completed and the user has explicitly confirmed the adaptation width after seeing the first reply:
 
 - Landscape screenshots default to `1200px` PC layout width.
 - Portrait screenshots default to `414px` mobile layout width.
 - Tell the user whether the screenshot was recognized as PC/desktop or mobile.
 - Tell the user which width will be used in the first reply.
-- Continue if the user confirms.
+- Continue only if the user confirms after the first reply.
 - If the user gives a specific width, use the user's width instead.
 
 Record the render result locally, for example:
@@ -103,6 +109,7 @@ If browser/page opening is unavailable or prohibited by project instructions, bu
 - `references/design-token-prompt.md`: canonical Step 1 prompt template. Load it before generating Design Tokens.
 - `references/ui-dsl-prompt.md`: canonical Step 2 prompt template. Load it before generating UI DSL.
 - `references/rendering.md`: Step 3 rendering, normalization, shadow, scroll, and verification rules. Load it before editing code.
+- `references/frontend-design.md`: hard Step 3 design-quality reference. Load it before editing code and apply it during reconstruction, while preserving screenshot fidelity as the higher-priority contract.
 
 ## Constraints
 

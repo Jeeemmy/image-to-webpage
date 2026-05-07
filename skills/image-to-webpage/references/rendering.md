@@ -2,11 +2,12 @@
 
 ## Viewport Normalization
 
-Before implementation, confirm adaptation width with the user.
+Before implementation, confirm adaptation width with the user and verify that the First Response Confirmation Gate in `SKILL.md` has completed. The user's original screenshot reconstruction request does not count as confirmation. If the user has not explicitly confirmed after seeing the device classification, adaptation width, page target, and asset-generation decision, stop and ask for confirmation before implementing.
 
 - Landscape screenshot default: `1200px` PC layout width.
 - Portrait screenshot default: `414px` mobile layout width.
 - First tell the user whether the screenshot was recognized as PC/desktop or mobile.
+- Continue only after the user explicitly confirms the first reply or approves a corrected width/target.
 - If the user provides a width, use that width.
 
 Keep raw image dimensions in artifacts, but normalize implementation measurements:
@@ -26,6 +27,8 @@ Integrate the generated page at the narrowest existing page boundary. If the pro
 Keep generated page assets and workflow artifacts namespaced by page when the project supports it. Prefer a page-local `artifacts/` or equivalent folder beside the generated page over a shared flat artifact directory that can collide across multiple reconstructions. For standalone static output, keep the HTML, CSS, assets, and artifacts grouped by the generated page name.
 
 ## React + Tailwind Implementation
+
+Before editing code, load `references/frontend-design.md` as a hard design-quality reference. Apply its production-grade frontend standards to the reconstruction's typography, composition, spacing, visual detail, motion, and avoidance of generic AI aesthetics. Use it to raise implementation polish while preserving screenshot fidelity as the higher-priority contract. Do not reinterpret the screenshot into a new creative direction when the source provides clear evidence; measured layout, exact readable text, wrapper decisions, asset strategy, adaptation width, and existing project conventions remain authoritative.
 
 Prefer existing project conventions. In React + Tailwind projects:
 
