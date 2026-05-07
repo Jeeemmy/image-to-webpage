@@ -76,6 +76,12 @@ Recreate the screenshot as a page.
 
 ### Case 1：常规后台 Regular Dashboard
 
-| 原图 Original | GPT-5.5 | GPT-5.4 | GPT-5.3 | 
-|---|---|---|---|
-| ![原图](./docs/screenshots/case-01-original.png) | ![A 模型效果](./docs/screenshots/case-01-model-a.png) | ![B 模型效果](./docs/screenshots/case-01-model-b.png) |  |
+最常规的后台，比较常规的设计，几乎不用图片素材作为内容填充。
+
+| 原图 Original | GPT-5.5 |
+|---|---|
+| ![Original](comparison-image/regular/flowmail-email.png) | ![GPT-5.5](comparison-image/regular/flowmail-email-gpt-5.5.png) |
+
+| GPT-5.4 | GPT-5.3-codex | 
+|---|---|
+| ![GPT-5.4](comparison-image/regular/flowmail-email-gpt-5.4.png) | ![GPT-5.3-codex](comparison-image/regular/flowmail-email-gpt-5.3-codex.png) |
