@@ -43,8 +43,6 @@ Keep generated page assets and workflow artifacts namespaced by page when the pr
 
 ## React + Tailwind Implementation
 
-Before editing code, load `references/frontend-design.md` as a hard design-quality reference. Apply its production-grade frontend standards to the reconstruction's typography, composition, spacing, visual detail, motion, and avoidance of generic AI aesthetics. Use it to raise implementation polish while preserving screenshot fidelity as the higher-priority contract. Do not reinterpret the screenshot into a new creative direction when the source provides clear evidence; measured layout, exact readable text, wrapper decisions, asset strategy, adaptation width, and existing project conventions remain authoritative.
-
 Prefer existing project conventions. In React + Tailwind projects:
 
 - Build semantic components from the DSL rather than dumping one huge JSX tree.

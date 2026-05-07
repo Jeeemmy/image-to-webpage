@@ -74,7 +74,7 @@ Before accepting any screenshot crop as a final image asset, run an asset contam
 
 ### Step 3: Render The Page
 
-Use the generated Design Tokens, generated UI DSL, `references/rendering.md`, and `references/frontend-design.md` to implement the page in the repo's existing frontend stack. Treat `references/frontend-design.md` as a hard design-quality reference for the rendering process: load it before editing code and apply its production-grade frontend standards for typography, composition, spacing, visual detail, motion, and avoiding generic AI aesthetics. For screenshot reconstruction, these standards constrain execution quality and polish; they must not override source-image fidelity, exact readable text, measured layout, wrapper decisions, asset strategy, user-specified width, or the project's existing stack. If a frontend-design guideline conflicts with clear screenshot evidence, follow the screenshot and record the decision in the render artifact.
+Use the generated Design Tokens, generated UI DSL, and `references/rendering.md` to implement the page in the repo's existing frontend stack.
 
 Before rendering, verify that the First Response Confirmation Gate has completed and the user has explicitly confirmed the adaptation width after seeing the first reply:
 
@@ -115,7 +115,6 @@ If browser/page opening is unavailable or prohibited by project instructions, bu
 - `references/ui-dsl-prompt.md`: canonical Step 2 prompt template. Load it before generating UI DSL.
 - `references/dsl-extraction.md`: hard Step 2 extraction rules. Load it before generating UI DSL.
 - `references/rendering.md`: Step 3 rendering, normalization, shadow, scroll, and verification rules. Load it before editing code.
-- `references/frontend-design.md`: hard Step 3 design-quality reference. Load it before editing code and apply it during reconstruction, while preserving screenshot fidelity as the higher-priority contract.
 
 ## Constraints
 
