@@ -1,6 +1,14 @@
 ---
 name: image-to-webpage
-description: Recreate images, UI screenshots, style board images, app snapshots, or webpage screenshots as real high-fidelity web pages. Use when the user sends or references an image and asks Codex to restore, recreate, copy, reproduce, convert, implement, or render it as a real page, especially with React, Tailwind, HTML/CSS, or the current frontend stack. The skill runs three core steps: generate Design Tokens from the screenshot with the preset prompt, generate UI DSL from the screenshot with the preset prompt, then render and verify the page from those artifacts.
+description: >-
+  Recreate images, UI screenshots, style board images, app snapshots, or webpage
+  screenshots as real high-fidelity web pages. Use when the user sends or
+  references an image and asks Codex to restore, recreate, copy, reproduce,
+  convert, implement, or render it as a real page, especially with React,
+  Tailwind, HTML/CSS, or the current frontend stack. The skill runs three core
+  steps: generate Design Tokens from the screenshot with the preset prompt,
+  generate UI DSL from the screenshot with the preset prompt, then render and
+  verify the page from those artifacts.
 ---
 
 # Image To Webpage
