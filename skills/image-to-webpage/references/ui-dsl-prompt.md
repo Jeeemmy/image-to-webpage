@@ -43,6 +43,7 @@ Requirements:
 - If an inset shell contains a sticky topbar, model the shell as the clipped outer boundary and the scrollable content area as an inner child. The topbar belongs inside the inner scroll container and content begins below it in normal flow.
 - When an important visual element is image-based, decide its layered asset strategy before finalizing the node. If the user has image generation capability, prefer using a screenshot crop/reference to generate a transparent subject cutout that preserves the main subject/material but removes background and interactive overlays. Recreate simple fills, gradients, glows, and backdrop shapes with code/design tokens instead of screenshotting them into the asset.
 - For complex image regions, model the reconstruction as separate layers whenever possible: coded background/gradient, transparent subject image, and floating interactive controls. Use a whole-element source crop as the final rendered asset only when generation is unavailable or the subject/background cannot be separated cleanly.
+- Record every source crop or crop reference in absolute source screenshot pixels. Do not convert crop bounds by the adaptation width scale and do not infer crop bounds from CSS display size. Keep source crop size and intended rendered display size as separate fields when they differ.
 - Before selecting `source_crop` for any important image node, run an asset contamination gate. A final source crop must not contain phone hardware, browser/device/mock frames, OS status bars, iOS home indicators, Android gesture/navigation bars, notches/dynamic islands, clock/battery/wifi indicators, app navigation buttons, favorite/share/menu buttons, carousel controls, badges, text overlays, cards, bottom sheets, modals, or any other UI surface that should be rendered separately or ignored as presentation chrome. If the underlying image is obstructed by those elements and cannot be cleanly cropped, choose `generate_clean_asset` or `generate_transparent_subject` and use the crop only as a reference.
 - Treat bottom OS navigation and gesture indicators as ignored system chrome by default. This includes the iOS home indicator/gesture pill, Android gesture bar, Android three-button navigation bar, and customized OEM Android navigation bars. Do not model them as product bottom navs, drag handles, dividers, progress bars, buttons, or decorative pills unless the user explicitly asks to reproduce OS/device chrome or the page itself is an OS UI demonstration. Record visible indicators in `request.ignored_system_chrome` when possible.
 - When a bottom sheet, rounded card, detail panel, player panel, booking panel, or similar surface floats over a hero/photo/map region, record it as an overlay over an underlay, not as two adjacent vertical sections. Include approximate `overlap_px`, underlay image bottom, overlay top, z-order, radius, and shadow. The image asset remains clean; the overlay surface is a separate UI node above it.
@@ -191,6 +192,12 @@ Root output schema:
             "required": null,
             "whole_element": true,
             "include_occluders": false,
+            "coordinate_space": "absolute_source_image_pixels",
+            "pixel_copy_required": true,
+            "display_size": {
+              "width": null,
+              "height": null
+            },
             "contamination_check": {
               "passed": null,
               "contaminants": [],
@@ -688,6 +695,12 @@ Type-specific schema rules:
         "required": null,
         "whole_element": true,
         "include_occluders": false,
+        "coordinate_space": "absolute_source_image_pixels",
+        "pixel_copy_required": true,
+        "display_size": {
+          "width": null,
+          "height": null
+        },
         "bounds": {
           "x": null,
           "y": null,
@@ -718,6 +731,27 @@ Type-specific schema rules:
     "layout": {
       "width": null,
       "height": null
+    },
+    "asset": {
+      "importance": "supporting | decorative | null",
+      "asset_strategy": "source_crop | generate_clean_asset | ignore | null",
+      "source_crop": {
+        "required": null,
+        "whole_element": true,
+        "include_occluders": false,
+        "coordinate_space": "absolute_source_image_pixels",
+        "pixel_copy_required": true,
+        "display_size": {
+          "width": null,
+          "height": null
+        },
+        "bounds": {
+          "x": null,
+          "y": null,
+          "width": null,
+          "height": null
+        }
+      }
     }
   }
 
@@ -791,12 +825,13 @@ Targeted typography role rules:
 Image asset extraction rules:
 - Treat photos, product screenshots, maps, artwork, illustrations, charts that are visually presented as raster images, and branded visual compositions as image nodes when they are important to page fidelity.
 - For each important image node, record `asset.importance`, source-image `asset.bounds`, and whether any interactive element overlaps the visual. Interactive occluders include floating buttons, icon buttons, badges/chips that act as controls, carousel controls, play/save/share actions, hover actions, and clickable overlays.
+- For each crop-backed bitmap node, including avatars and small thumbnails, record `asset.source_crop.bounds` in absolute source screenshot pixels and set `asset.source_crop.coordinate_space = "absolute_source_image_pixels"`. These bounds are not scaled by the adaptation width and are not the CSS display size. If the source crop is `69 x 69` and the page displays it as `36 x 36`, record `bounds.width = 69`, `bounds.height = 69`, and `display_size.width = 36`, `display_size.height = 36`.
 - For each important image node, also record a source-crop contamination check before allowing final `source_crop`. Contaminants include device/browser/mock frames, phone hardware, OS status bars, iOS home indicators, Android gesture/navigation bars, notches/dynamic islands, clock/battery/wifi/signal indicators, page navigation/action buttons, carousel controls, chips, badges, text overlays, cards, bottom sheets, modals, popovers, and other UI surfaces that cover or surround the underlying image. A contaminated crop is not valid as the final hero/photo/map/art asset.
 - For generated transparent subjects, record the source subject's visual bounding box separately from the containing image/card bounds when visible or inferable. Include enough information for rendering to preserve the subject's relative size and position after generation/cropping, because generated PNG natural dimensions and transparent padding may differ from the screenshot. If the transparent canvas represents the source crop coordinate system, record that trimming transparent padding is prohibited unless trim offsets are also recorded for placement compensation.
 - When a user image generation skill is available or likely available and the user has not explicitly declined it, prefer `asset.asset_strategy = "generate_transparent_subject"` for important image nodes that have a separable subject. Use the screenshot crop as the reference, set `generation.preserve_subject = true`, `remove_background = true`, `remove_interactive_elements = true`, and `transparent_background_preferred = true`.
 - Record `asset.layering` so renderers know which parts are code and which parts are image assets. Use `background_strategy = "code"` for gradients, solid fills, glows, and simple geometric backdrops that can be recreated with CSS/Tailwind/canvas. Use `subject_strategy = "transparent_generated_asset"` for the extracted subject. Use `overlay_strategy = "separate_interactive_nodes"` for buttons, chips, badges, carousel controls, and hover/action overlays.
 - If no interactive occluder overlaps the important image but the subject can be separated from a gradient or stylized background, still prefer `generate_transparent_subject` over a final whole-element screenshot crop when image generation is available.
-- If image generation is unavailable or explicitly declined by the user, set `asset.asset_strategy = "source_crop"`, `asset.source_crop.required = true`, `whole_element = true`, and `include_occluders = false` only for unobstructed, contamination-free elements. The crop bounds should cover the whole visual element, not just a central patch.
+- If image generation is unavailable or explicitly declined by the user, set `asset.asset_strategy = "source_crop"`, `asset.source_crop.required = true`, `whole_element = true`, `include_occluders = false`, `coordinate_space = "absolute_source_image_pixels"`, and `pixel_copy_required = true` only for unobstructed, contamination-free elements. The crop bounds should cover the whole visual element, not just a central patch.
 - If an interactive occluder, system chrome, presentation chrome, or product overlay overlaps the important image and transparent subject extraction is unavailable or inappropriate, set `asset.asset_strategy = "generate_clean_asset"`, `asset.generation.required = true`, and list `asset.occluding_element_ids` plus `asset.source_crop.contamination_check.contaminants`. Preserve product-owned occluding controls as separate DSL nodes so rendering can place them back above the clean generated asset.
 - Fill `asset.generation.prompt_features` with concise visual descriptors needed to preserve/regenerate the subject, such as subject, composition, perspective, colors, material, crop, lighting, style, and visible relationship to the coded background. Also set `asset.generation.reference_image` to `"source_crop"` or `"screenshot_region"` when a crop can serve as a reference. Fill `asset.generation.negative_prompt_features` with every contaminant to remove, such as phone frame, status bar, iOS home indicator, Android navigation bar, gesture pill, dynamic island, battery/wifi icons, back/favorite/share buttons, bottom sheet, text overlay, cards, badges, and modal surfaces.
 - Set `asset.generation.user_image_generation_skill_required = true` for generated subject/clean asset strategies. Set `allow_non_transparent_fallback = true` only because some user-provided image generation skills may not support transparency.

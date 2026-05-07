@@ -22,7 +22,7 @@ Capture:
 - Clipping/scroll hierarchy for inset main stages: outer shell boundary vs inner scroll container vs sticky topbar vs normal-flow content.
 - Local overflow ownership for bounded list containers such as sidebars, navigation lists, builder palettes, menus, inspector panels, and repeated grouped lists.
 - Important image-based visual elements, including whether they should be restored as layered coded background plus transparent subject asset plus separate overlays, or whether source crop/clean generation fallback is required.
-- Source visual bounding boxes for generated transparent subjects and edge behavior for horizontal scrollers inside padded mobile content.
+- Source visual bounding boxes for generated transparent subjects, exact original-source-pixel crop bounds for screenshot assets/references, and edge behavior for horizontal scrollers inside padded mobile content.
 - Hero/photo/map underlay relationships with floating bottom sheets, rounded cards, booking panels, player panels, or detail panels, including `overlap_px` and z-order when the panel covers part of the image.
 - Ignored mobile system chrome such as iOS home indicators and Android gesture/navigation bars when visible.
 - Viewport adaptation intent: the confirmed adaptation width is a fidelity calibration point, not a fixed output size; record fluid root behavior, fixed-vs-flex regions, breakpoint/wrapping intent, and scoped overflow needs.
@@ -131,6 +131,8 @@ When an important visual element is image-based, decide whether rendering should
 
 Before allowing final `source_crop`, run an asset contamination gate. This gate is mandatory for hero photos, venue/product photos, maps, artwork, screenshot previews, and other high-visual-weight raster regions. A crop is contaminated if it contains pixels from phone/device/browser/mock frames, OS status bars, iOS home indicators, Android gesture/navigation bars, notches/dynamic islands, clock/battery/wifi/signal indicators, app navigation/action buttons, carousel controls, chips, badges, text overlays, cards, bottom sheets, modals, popovers, or any other UI surface that should be reconstructed separately or ignored as presentation chrome. A contaminated crop is not a valid final asset; use it only as a generation reference.
 
+All source crop and crop-reference bounds are absolute source screenshot pixel coordinates. They are not CSS pixels, not relative to the adapted `1200px`/`402px` render width, and not inferred from the final display size. The adaptation scale is for layout measurement only. For bitmap assets such as avatars, thumbnails, photos, maps, and artwork, record the original crop size separately from the intended rendered CSS size when they differ.
+
 Use `asset_strategy: "generate_transparent_subject"` when:
 
 - The element is important to fidelity, such as a hero/product photo, screenshot preview, map tile, artwork, illustration, or raster-style visual composition.
@@ -158,7 +160,7 @@ Use `asset_strategy: "source_crop"` when:
 - The whole image element is visible enough to crop as one intact asset.
 - The element's background cannot be reliably recreated with code or should intentionally remain baked into the asset.
 
-For source crops, record source-image bounds for the entire visual element. The crop should be the whole image element, not a small texture patch. Set `source_crop.required = true`, `whole_element = true`, `include_occluders = false`, and record `source_crop.contamination_check` with `passed = true`, an empty contaminant list, and `decision = "clean_source_crop_allowed"`. When a user image generation skill is available and the subject is separable, do not choose `source_crop` just because cropping is easier; use `generate_transparent_subject` and record coded background layering instead. If the crop includes contaminants, set `passed = false`, list them, and reject final `source_crop`.
+For source crops, record source-image bounds for the entire visual element. The crop should be the whole image element, not a small texture patch. Set `source_crop.required = true`, `whole_element = true`, `include_occluders = false`, `coordinate_space = "absolute_source_image_pixels"`, `pixel_copy_required = true`, and record `source_crop.contamination_check` with `passed = true`, an empty contaminant list, and `decision = "clean_source_crop_allowed"`. When a user image generation skill is available and the subject is separable, do not choose `source_crop` just because cropping is easier; use `generate_transparent_subject` and record coded background layering instead. If the crop includes contaminants, set `passed = false`, list them, and reject final `source_crop`.
 
 Use `asset_strategy: "generate_clean_asset"` when:
 

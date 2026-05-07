@@ -20,6 +20,8 @@ css_value = observed_bitmap_value * scale
 
 Use normalized values for layout width, spacing, component dimensions, and responsive reconstruction. When a presentation wrapper is ignored, the render source is the inner real product UI bounds, not the full screenshot dimensions.
 
+This normalization is only for rendered CSS/layout measurements. Asset crop coordinates stay in the original screenshot's pixel coordinate space. Do not multiply crop `x`, `y`, `width`, or `height` by the normalized scale, and do not derive a crop rectangle from the final CSS display size.
+
 ## Responsive Output Contract
 
 The confirmed adaptation width is the scale calibration point for screenshot fidelity, not the output viewport size. At the confirmed width, the page should match the source proportions closely; at other viewport sizes, the page must remain usable and coherent.
@@ -76,6 +78,25 @@ If the DSL marks `requires_pointer_cursor = true`, `behavior.interactive = true`
 
 Use the DSL `asset` or `request.image_asset_strategy` fields to decide how important image-based visual elements are restored. Prefer layered restoration when image generation is available: coded background, transparent subject asset, then separate interactive overlays.
 
+### Exact Source Crop Pixel Gate
+
+When creating a screenshot crop for a final `source_crop` asset or as a generation reference, treat the recorded crop rectangle as absolute source screenshot pixels:
+
+- Use `asset.source_crop.bounds` or the matching `request.image_asset_strategy` crop bounds as `x`, `y`, `width`, and `height` in the original decoded screenshot. This remains true when an outer presentation wrapper is ignored; the crop rectangle still points into the original source file, not a scaled web page and not a CSS coordinate system.
+- Keep source crop dimensions and CSS display dimensions separate. A source avatar may be cropped as `69 x 69` source pixels and rendered at `36px x 36px`; that difference is intentional and must not change the crop rectangle.
+- Use a pixel-copy crop API, such as bitmap rectangle clone/crop or Pillow `Image.crop`, that copies the decoded source pixels without interpolation. Do not use drawing/resampling APIs such as `System.Drawing.Graphics.DrawImage`, canvas `drawImage`, browser screenshots, or CSS/object-fit output to create exact crop assets.
+- Save exact source crops as PNG unless the project has a stronger existing asset convention. Do not recompress through JPEG for UI/avatar/product crops.
+- After saving, reopen the crop and compare it to the original source rectangle. The crop passes only when the output dimensions equal the source rectangle and `pixel_mismatches = 0`.
+- If any pixel mismatch is found, discard the asset and recrop with a true pixel-copy method before rendering or recording success.
+
+Prefer the bundled helper when Pillow is available:
+
+```text
+python3 skills/image-to-webpage/scripts/crop-source-pixels.py --source <screenshot> --out <asset.png> --x <x> --y <y> --width <w> --height <h>
+```
+
+The helper prints a JSON verification record. Copy the crop rectangle, output size, coordinate space, method, and mismatch count into the render artifact for final `source_crop` assets.
+
 ## Hero Underlay And Floating Sheet Overlap
 
 When a mobile screen has a hero/photo/map area with a rounded bottom sheet, booking card, player panel, profile panel, or detail panel floating over it, render that as layered geometry rather than adjacent blocks.
@@ -112,6 +133,8 @@ For `asset_strategy = "source_crop"`:
 
 - Treat this as a fallback final asset when image generation is unavailable, explicitly declined by the user, or transparent subject separation is not suitable. Create or use a single crop covering the whole visual element from the source screenshot.
 - If image generation is available and not explicitly declined, do not render a separable important image as final `source_crop`. Correct the DSL/render artifact to `generate_transparent_subject` or document concrete evidence that separation is unsuitable.
+- Use the recorded original source screenshot pixel rectangle for the crop. Do not apply viewport adaptation scale, effective-source normalization scale, or CSS display size.
+- Crop with a pixel-copy method and require the exact pixel verification gate to pass with `pixel_mismatches = 0`.
 - Do not crop only an internal patch when the DSL says `whole_element = true`.
 - Do not include overlay controls in the crop. If an element is actually obstructed by interactive controls, correct the strategy to `generate_clean_asset` rather than saving an occluded crop as the final asset.
 - Do not include presentation or system chrome in the crop, including phone frames, browser/device mockups, OS status bars, iOS home indicators, Android gesture/navigation bars, notches/dynamic islands, clock/battery/wifi indicators, or outer screenshot chrome. If those pixels are present, the crop fails the asset contamination gate.
@@ -388,6 +411,7 @@ Always run the available build command. Then verify in a real browser when possi
 - Main-stage shell offsets are preserved when visible in the source, and those offsets do not create transparent sticky-topbar bleed because scrolling is owned by the inner pane.
 - Important image elements use layered restoration when image generation is available: coded background/gradient, transparent subject asset, and separate interactive overlays.
 - Whole-element source crops are used only as fallback final assets or when the DSL documents that the subject/background cannot be separated cleanly.
+- Final `source_crop` assets, including avatars and thumbnails, are cropped from original source screenshot pixels without adaptation scaling and pass exact pixel verification with output dimensions matching the crop rectangle and `pixel_mismatches = 0`.
 - Generated image assets omit overlay controls, prefer transparent backgrounds, and preserve the subject/material from the screenshot reference.
 - Generated transparent subjects must preserve the source subject's visual size. Render from the source subject bbox inside the gallery/hero, not from the generated PNG's natural or trimmed dimensions. Do not run `trim`, `-trim`, tight crop, or equivalent transparent-padding removal on a subject asset when the original transparent canvas represents the source crop coordinate system. If trimming is necessary for optimization, record the removed top/right/bottom/left transparent insets and compensate the CSS `left`/`top`/`width`/`height` so the visible subject keeps the same source bbox. If the generated asset has less transparent padding than the screenshot subject area, use the untrimmed alpha asset, reduce CSS display size, or regenerate with transparent padding so the visible product/hero subject does not become larger than the reference.
 - When image generation is available and not declined, separable product/hero subjects are not left as source crops with baked-in gradient/background pixels. The render artifact records the generated transparent asset and coded background strategy.
