@@ -25,6 +25,7 @@ Capture:
 - Source visual bounding boxes for generated transparent subjects and edge behavior for horizontal scrollers inside padded mobile content.
 - Hero/photo/map underlay relationships with floating bottom sheets, rounded cards, booking panels, player panels, or detail panels, including `overlap_px` and z-order when the panel covers part of the image.
 - Ignored mobile system chrome such as iOS home indicators and Android gesture/navigation bars when visible.
+- Viewport adaptation intent: the confirmed adaptation width is a fidelity calibration point, not a fixed output size; record fluid root behavior, fixed-vs-flex regions, breakpoint/wrapping intent, and scoped overflow needs.
 
 Use `null` for unknown, ambiguous, unreadable, or not visible values.
 
@@ -538,6 +539,15 @@ Legitimate elevation candidates:
 ## Scroll And Persistence
 
 Capture persistent viewport behavior as layout intent. Do not leave app-shell regions as ordinary content when the screenshot is a dashboard, SaaS app, admin panel, mail app, CRM, analytics UI, editor, or other workspace-style product.
+
+Also capture responsive viewport adaptation as layout intent:
+
+- Set `request.viewport_adaptation.calibration_width_is_fixed_output = false` unless the user explicitly requested a static artboard export.
+- Do not use source screenshot width/height, effective source bounds, or adaptation width as fixed final root dimensions.
+- Identify fixed regions only when they are real product-owned panels or chrome, such as desktop sidebars, navigation rails, fixed headers, bottom navs, or table minimum-width content inside a horizontal scroll owner.
+- Identify fluid regions that should expand or contract with the viewport, such as main stages, content panes, cards grids, hero sections, and page backgrounds.
+- Record breakpoint intent for rows, toolbars, grids, and forms: wrap, stack, collapse columns, or use scoped horizontal scroll for genuinely wide content.
+- If a screenshot appears to be a full-screen app, record a viewport-bounded shell with local scroll panes rather than a fixed screenshot-height document.
 
 Use the existing DSL fields first:
 

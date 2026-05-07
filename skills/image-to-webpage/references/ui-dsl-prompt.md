@@ -34,6 +34,8 @@ Requirements:
 - If a large centered rounded frame/artboard is visible and product-semantics evidence is weak or ambiguous, default to `request.ignored_outer_container = true` instead of silently preserving the frame.
 - When setting `request.ignored_outer_container = true`, also record `request.effective_source_bounds` for the real product UI bounds used for measurement. Include x, y, width, and height in source-image pixels. The effective bounds exclude presentation-only canvas, device/browser frames, decorative rounded frames, and outer drop shadows.
 - Base approximate layout measurements on the inner real UI content bounds when a presentation wrapper is ignored; do not use the full showcase image bounds as the page layout.
+- Treat source bounds and the confirmed adaptation width as measurement/calibration data only. Do not encode the root as a fixed output rectangle or fixed screenshot-height artboard unless the user explicitly requested a static artboard export.
+- Record viewport adaptation intent in `request.viewport_adaptation`: whether the root should fill the viewport, which regions are fixed panels versus fluid tracks, how grids/toolbars respond outside the calibration width, and where scoped horizontal scrolling is acceptable.
 - Preserve real in-product shell or pane edges even when they touch or sit near an ignored presentation wrapper. If the inner product UI has its own visible top/left/right/bottom border, clipped edge, raised pane, or directional shadow, model that boundary on the product node instead of discarding it with the showcase frame.
 - Distinguish presentation wrapper decoration from product chrome by checking whether the boundary aligns with internal UI regions, headers, sidebars, panes, tabs, or scroll containers. Product chrome belongs in the DSL; wrapper-only decoration does not.
 - Preserve real in-product shell offsets. If the main stage, raised pane, workspace surface, or app frame is visibly inset from the surrounding app canvas, record that offset on the product node even when an outer showcase wrapper is ignored.
@@ -132,6 +134,19 @@ Root output schema:
       "y": null,
       "width": null,
       "height": null
+    },
+    "viewport_adaptation": {
+      "calibration_width_is_fixed_output": false,
+      "root_sizing": "fill_viewport | fluid_document | fixed_artboard_requested | unknown | null",
+      "height_strategy": "min_viewport_height | viewport_bounded_shell | content_driven | fixed_artboard_requested | unknown | null",
+      "width_strategy": "fluid_width | content_max_width | viewport_bounded_shell | fixed_artboard_requested | unknown | null",
+      "fluid_regions": [],
+      "fixed_regions": [],
+      "content_max_width": null,
+      "breakpoint_intent": [],
+      "scoped_overflow_regions": [],
+      "forbidden_root_behavior": ["fixed_screenshot_width", "fixed_screenshot_height", "centered_static_artboard"],
+      "notes": null
     },
     "ignored_system_chrome": [
       {
@@ -802,6 +817,8 @@ Layout extraction rules:
 - Use direction = grid for card grids, image grids, dashboard metric grids, or repeated tile layouts.
 - Use gap and padding when visually inferable.
 - Use width/height only when useful for rendering fidelity.
+- Use root-level width/height as source measurement hints only, not as a fixed final page size. The root should normally be fluid/fill-viewport or content-driven according to product semantics; fixed artboard behavior is valid only when explicitly requested by the user.
+- Populate `request.viewport_adaptation` for every reconstruction. Set `calibration_width_is_fixed_output = false` by default. Identify fixed regions only for real product panels such as sidebars, rails, persistent nav bars, or table min-width content inside a scroll wrapper.
 - Preserve hierarchy over pixel-perfect positioning.
 - Prefer semantic grouping: header, sidebar, main, footer, toolbar, section, card.
 - Preserve visible offsets between real product surfaces. If a main stage, raised pane, workspace, or app frame starts below/away from the parent app canvas, record `margin_top`, side margins, or `offset_*` on that product node. Do not erase this offset as if it were an ignored presentation-wrapper gutter.

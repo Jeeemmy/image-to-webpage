@@ -28,6 +28,8 @@ Requirements:
 - Before extracting layout-sensitive tokens, identify outer wrapper candidates such as showcase canvases, centered artboards, decorative rounded frames, browser/device/mock frames, clipping frames, and drop-shadow wrappers. Record them in `raw_observations.image.wrapper_candidates` with approximate bounds, visual signals, decision, confidence, and evidence.
 - Do not decide a wrapper is product UI merely because it contains product controls or cards. Preserve wrapper tokens only when the wrapper boundary itself has product semantics such as app/window chrome, in-product shell layout ownership, scroll/clipping ownership, or alignment with internal product panes.
 - If a presentation wrapper is ignored, record the real product UI bounds in `raw_observations.image.effective_source_bounds` and base layout/token measurements on those bounds. Do not use the full screenshot width/height as the measurement denominator when the screenshot includes an ignored showcase canvas or device/browser frame.
+- Treat screenshot/image dimensions as source measurements only. Do not turn the raw screenshot width/height, effective source bounds, or default adaptation width into fixed output page dimensions. Record enough layout tokens to preserve fidelity at the confirmed adaptation width while allowing a viewport-adaptive implementation.
+- Extract responsive layout intent where visible or inferable: whether the root should fill the viewport, whether major shell regions are fixed-size or flexible, which content has max-width constraints, which grids/toolbars should wrap or collapse, and which wide regions need scoped horizontal scrolling. Store this in `layout.viewport_adaptation`.
 - If a real product main stage or raised pane is inset from the surrounding app canvas, record the observed shell offset in `raw_observations.measured_elements` and map repeated offset values into spacing tokens when appropriate. Do not treat this as presentation-wrapper padding when it belongs to the product UI.
 - For directional app-shell edge shadows, measure the visible shadow size conservatively. A tight 1-3px edge darkening with a short blur should map to `shadow.xs` or a very subtle `shadow.shell_edge`, not to generic card/popover shadows.
 - `shadow.shell_edge`, `directional_top`, `directional_left`, and `directional_top_left` should represent side-specific product edge treatments. Keep them low-alpha and short-radius unless the screenshot clearly shows a broad cast shadow.
@@ -333,6 +335,17 @@ Schema:
     "overlay": null
   },
   "layout": {
+    "viewport_adaptation": {
+      "calibration_width_is_fixed_output": false,
+      "root_sizing": "fill_viewport | fluid_document | fixed_artboard_requested | unknown | null",
+      "height_strategy": "min_viewport_height | viewport_bounded_shell | content_driven | fixed_artboard_requested | unknown | null",
+      "width_strategy": "fluid_width | content_max_width | viewport_bounded_shell | fixed_artboard_requested | unknown | null",
+      "fluid_regions": [],
+      "fixed_regions": [],
+      "content_max_width": null,
+      "grid_behavior": "wrap | collapse_columns | scoped_horizontal_scroll | fixed_tracks_inside_fluid_shell | unknown | null",
+      "notes": null
+    },
     "grid": {
       "columns": null,
       "gutter": null,

@@ -5,7 +5,7 @@
 Before implementation, confirm adaptation width with the user and verify that the First Response Confirmation Gate in `SKILL.md` has completed. The user's original screenshot reconstruction request does not count as confirmation. If the user has not explicitly confirmed after seeing the device classification, adaptation width, page target, and asset-generation decision, stop and ask for confirmation before implementing.
 
 - Landscape screenshot default: `1200px` PC layout width.
-- Portrait screenshot default: `414px` mobile layout width.
+- Portrait screenshot default: `402px` mobile layout width.
 - First tell the user whether the screenshot was recognized as PC/desktop or mobile.
 - Continue only after the user explicitly confirms the first reply or approves a corrected width/target.
 - If the user provides a width, use that width.
@@ -19,6 +19,21 @@ css_value = observed_bitmap_value * scale
 ```
 
 Use normalized values for layout width, spacing, component dimensions, and responsive reconstruction. When a presentation wrapper is ignored, the render source is the inner real product UI bounds, not the full screenshot dimensions.
+
+## Responsive Output Contract
+
+The confirmed adaptation width is the scale calibration point for screenshot fidelity, not the output viewport size. At the confirmed width, the page should match the source proportions closely; at other viewport sizes, the page must remain usable and coherent.
+
+Do not implement the root, body, page shell, or primary scroll container as a fixed screenshot/artboard rectangle, such as `width: 1200px; height: 854px`, `w-[1200px] h-[854px]`, `width: 402px`, `height: 896px`, or a centered fixed-size stage. Fixed dimensions are allowed only for measured component internals, real product-owned fixed-width panels, table minimum widths inside a horizontal scroll region, or max/min constraints inside a fluid shell.
+
+Prefer these implementation patterns:
+
+- Desktop app shells: `width: 100%` or `100vw`, `min-height: 100vh`/dynamic viewport units, grid or flex tracks such as fixed sidebar plus `minmax(0, 1fr)` content, and local scroll panes for viewport-bounded areas.
+- Desktop document/marketing pages: fluid sections with content-level `max-width`, responsive gutters via `clamp()`/breakpoints, and `min-height` only where the screenshot shows a first-viewport composition.
+- Mobile screens: a fluid screen width, `min-height: 100dvh` or equivalent, persistent chrome outside the scroll pane when appropriate, safe-area compensation, and content scrolling instead of a fixed phone-height wrapper.
+- Repeated grids/toolbars/form rows: preserve the confirmed-width layout at the calibration width, then wrap, stack, collapse columns, or use scoped horizontal scroll for genuinely wide content on smaller viewports.
+
+Record the chosen strategy in the render artifact, including the calibration width, whether the root is fluid, the primary viewport units used, min/max constraints, breakpoint behavior, and any intentional fixed panels or scoped horizontal overflow.
 
 ## Page Integration And Artifact Ownership
 
@@ -43,6 +58,7 @@ Prefer existing project conventions. In React + Tailwind projects:
 - Keep repeated components data-driven.
 - Use high-quality icons for common UI glyphs. Prefer an existing project icon package first. If none exists and dependencies may be added, prefer a tree-shakeable ESM package such as `lucide-react`, `@heroicons/react`, or `@tabler/icons-react`, importing only the named icons used by the page. If dependencies cannot be added, use consistent inline SVGs from an open-source icon set. Avoid crude CSS, emoji, text-character, or hand-drawn approximations for settings, menu, search, nav, status, and action icons.
 - Render standalone actionable icons as real buttons or links with accessible labels, not inert spans. Repeated card settings/menu icons should be present on every card where the screenshot shows them.
+- Use the confirmed adaptation width as the point where measured pixel values are most faithful, then place those values inside a fluid shell. Do not combine high-fidelity arbitrary values into a fixed-size screenshot replica at the root.
 - Preserve responsive behavior explicitly: grids collapse, toolbars wrap, inputs keep usable widths.
 - Treat row layouts from DSL as source intent, not as a license for fixed one-line flex everywhere. Filter rows, toolbars, form rows, action groups, pagination controls, and mixed input/button rows must wrap or stack at narrow widths with usable control sizes.
 - Scope horizontal overflow to the content that actually needs it. Tables, code blocks, timelines, and wide data grids may scroll horizontally inside their own region, but pagination, filters, toolbar buttons, and surrounding page controls should remain outside that horizontal scroll container unless the screenshot clearly shows them scrolling together.
@@ -355,6 +371,8 @@ Always run the available build command. Then verify in a real browser when possi
 - Old unrelated page text is gone.
 - Console errors are absent.
 - Desktop and mobile layouts do not clip, overlap, or overflow incoherently.
+- The page root/app shell is viewport-adaptive, not a fixed screenshot-size artboard. Search the implemented files for hard-coded root patterns such as `w-[1200px]`, `h-[854px]`, `width: 1200px`, `height: 854px`, `width: 402px`, or fixed `body`/root dimensions. If such values exist, they must be justified as component internals or replaced with fluid shell sizing.
+- The render artifact includes a `viewport_adaptation` or equivalent section recording calibration width, fluid root behavior, dynamic viewport units, breakpoints/wrapping behavior, and any intentional fixed panels/min-width scroll regions.
 - Enabled interactive controls expose pointer affordance: buttons, nav items, tabs, icon buttons, card action menus, switches, row actions, and links use semantic controls and `cursor: pointer` on hover; disabled controls do not.
 - Sidebar/navigation rail and main canvas backgrounds match the source relationship. Distinct tints remain distinct; shared app-shell backgrounds are used only when the source reads as a continuous surface.
 - KPI/stat/summary cards preserve internal spacing: title/action row, inner tinted value band/metric well, band padding, and band bottom/right/left inset match the source instead of collapsing to the card edge.
@@ -374,6 +392,7 @@ Always run the available build command. Then verify in a real browser when possi
 - Generated transparent subjects must preserve the source subject's visual size. Render from the source subject bbox inside the gallery/hero, not from the generated PNG's natural or trimmed dimensions. Do not run `trim`, `-trim`, tight crop, or equivalent transparent-padding removal on a subject asset when the original transparent canvas represents the source crop coordinate system. If trimming is necessary for optimization, record the removed top/right/bottom/left transparent insets and compensate the CSS `left`/`top`/`width`/`height` so the visible subject keeps the same source bbox. If the generated asset has less transparent padding than the screenshot subject area, use the untrimmed alpha asset, reduce CSS display size, or regenerate with transparent padding so the visible product/hero subject does not become larger than the reference.
 - When image generation is available and not declined, separable product/hero subjects are not left as source crops with baked-in gradient/background pixels. The render artifact records the generated transparent asset and coded background strategy.
 - The built CSS contains the page's fidelity-critical visual rules. For Tailwind, inspect the actual emitted CSS file after build for key root/card/gallery/control/CTA/high-weight text utilities, especially arbitrary color, dimension, positioning, radius, shadow, cursor, and background-gradient classes. Build success is not enough when missing CSS would leave only default text/flow visible.
+- The built CSS/JS does not make the reconstruction root a fixed screenshot-size page. When browser checks are prohibited, use text/build-output inspection to confirm responsive root rules such as `width:100%`, `100vw`, `min-height:100vh`/`100dvh`, flex/grid `minmax(0,1fr)`, `clamp()`, or breakpoint rules are present where relevant, and that fixed screenshot dimensions are absent from root-level selectors.
 - Important imported image assets are present in the built output and referenced by the built JS/CSS bundle. Product/hero/gallery assets must not disappear because of a bad import path, missing file, stale dev server, or unreferenced generated asset.
 - When available, run the bundled helper for non-browser integrity checks, for example:
   `node skills/image-to-webpage/scripts/check-build-integrity.mjs --dist dist --class "h-[333px]" --class "bg-[#17140e]" --asset-name-contains "diamond-ring" --js-contains "Diamond ring"`.

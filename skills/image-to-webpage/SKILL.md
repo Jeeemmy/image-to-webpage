@@ -26,8 +26,8 @@ Before the first reply, inspect the project structure and dependencies only enou
 The first reply must include only these confirmation items:
 
 - The recognized target device type: PC/desktop or mobile.
-- Default adaptation width: `1200px` for PC/landscape screenshots unless the user specified another width.
-- Default adaptation width: `414px` for mobile/portrait screenshots unless the user specified another width.
+- Default adaptation width: `1200px` for PC/landscape screenshots unless the user specified another width. State that this width is the fidelity calibration point, not a fixed page/root width; the rendered page must still adapt to the user's viewport.
+- Default adaptation width: `402px` for mobile/portrait screenshots unless the user specified another width. State that this width is the fidelity calibration point, not a fixed phone/page/root width; the rendered page must still adapt to the user's viewport.
 - Planned page target and page name. Before replying, inspect the user's project structure and dependencies to determine whether it has a routing/page framework or page registry. If routing exists, state the exact route to add, for example `路由/文件：检测到项目已有路由，放到 /pages/<name> 对应页面。` If no routing framework exists, state the exact static HTML target, for example `路由/文件：未检测到路由框架，使用 <name>.html。` Do not give a conditional fallback such as "优先做成 /xxx；如果没有路由框架，则使用 xxx.html", and do not ask the user to judge whether routing exists.
 - Whether image generation is available for this session when important image-based visuals are likely present. If available, explicitly say image generation will be used to restore separable image subjects with transparent backgrounds and coded backgrounds/overlays. If the user explicitly declines image generation, use the no-AI asset fallback path and record that choice.
 - A font availability notice only when high-visual-weight text appears to use a font that is not installed and no project/local/system font with a close visual style is available. Do not warn for low-visual-weight text or when a close style fallback is available. Use this form: "识别到截图中 <part> 部分文字推测是 <font> 字体。当前系统没有安装，也没有检测到近似风格字体，建议安装 <font>。如果没有，将使用 <fallback> 字体替代。"
@@ -66,6 +66,8 @@ Record the wrapper candidates and final decision in the DSL request metadata. If
 
 When a presentation wrapper is ignored, record the effective source bounds of the real product UI and use those bounds as the render source. The ignored wrapper must not reappear later as body/page padding, a centered artboard, a rounded outer frame, a device/browser shell, or a background band around the rendered page.
 
+Record viewport adaptation intent in the DSL request metadata. The adaptation width is only the measurement baseline for scale and fidelity at the confirmed width; it must not become a fixed root/artboard width, fixed screenshot-height page, or non-responsive viewport lock.
+
 For important visual elements that are rendered as images, record a layered asset strategy in the DSL. When the user has an image generation skill available and the user has not explicitly declined it, use the screenshot crop as a reference to generate a transparent subject cutout: preserve the main subject/material, erase the visual background, and erase interactive overlays. Recreate simple or gradient backgrounds with code/design tokens, then layer the transparent subject asset and any floating interactive controls above it. Use a whole-element source crop as the final asset only when image generation is unavailable, the user explicitly declined image generation, or the element cannot be separated cleanly.
 
 Before accepting any screenshot crop as a final image asset, run an asset contamination gate. A crop is contaminated if it contains presentation/device chrome or interactive UI that should be rendered separately, including phone frames, browser/device mockups, OS status bars, iOS home indicators, Android gesture/navigation bars, notches/dynamic islands, battery/wifi indicators, app back/favorite/share buttons, carousel controls, badges, text labels, cards, bottom sheets, modals, or floating action surfaces. For primary hero photos, venue/product photos, map tiles, artwork, and other high-visual-weight raster regions, a contaminated crop is not a valid final `source_crop`. If the underlying image cannot be cleanly cropped without those elements, set the strategy to `generate_clean_asset` or `generate_transparent_subject` and include explicit generation negative prompt features for every contaminant. Render the removed UI chrome and controls as normal DOM/components above the clean asset when they belong to the product UI; ignore presentation-only chrome.
@@ -77,11 +79,14 @@ Use the generated Design Tokens, generated UI DSL, `references/rendering.md`, an
 Before rendering, verify that the First Response Confirmation Gate has completed and the user has explicitly confirmed the adaptation width after seeing the first reply:
 
 - Landscape screenshots default to `1200px` PC layout width.
-- Portrait screenshots default to `414px` mobile layout width.
+- Portrait screenshots default to `402px` mobile layout width.
 - Tell the user whether the screenshot was recognized as PC/desktop or mobile.
 - Tell the user which width will be used in the first reply.
 - Continue only if the user confirms after the first reply.
 - If the user gives a specific width, use the user's width instead.
+- Treat the confirmed width as a calibration point only. The final page root, app shell, and scroll owners must be viewport-adaptive with fluid width/height behavior, while preserving the screenshot proportions at the confirmed width.
+- Do not hard-code a root/page/artboard to the screenshot dimensions, for example `width: 1200px; height: 854px`, `w-[1200px] h-[854px]`, or a centered fixed-size screenshot stage, unless the user explicitly requested a static artboard export. Use fixed pixel values only for measured component details, true product-owned fixed panels, or max/min constraints that sit inside a responsive shell.
+- For desktop, prefer `width: 100%`/`100vw`, `min-height: 100vh` or dynamic viewport units, flex/grid tracks, `minmax()`, `min()`, `max()`, `clamp()`, and content-level `max-width` constraints as needed. For mobile, prefer dynamic viewport sizing, safe-area-aware persistent chrome, and scrollable content panes instead of fixed phone-height pages.
 
 Record the render result locally, for example:
 
@@ -89,7 +94,7 @@ Record the render result locally, for example:
 <page-or-workflow-artifacts>/<name>-render-step3.json
 ```
 
-Include source artifacts, adaptation width, scale, files changed, scroll architecture, verification commands, style/asset integrity checks, and browser checks.
+Include source artifacts, adaptation width, scale, files changed, viewport adaptation strategy, scroll architecture, verification commands, style/asset integrity checks, and browser checks.
 
 For DSL image nodes with `asset_strategy = "generate_transparent_subject"`, use the user's available image generation skill with the screenshot crop/reference to preserve the subject while removing background and interactive elements, then render any background gradients in code and overlay controls separately. If image generation is available and not explicitly declined, do not downgrade a separable important image to `source_crop`; correct the DSL/render plan instead. For `asset_strategy = "source_crop"`, create/use the recorded whole-element crop only as a fallback final asset when image generation is unavailable, the user declined image generation, or the DSL documents why transparent separation is unsuitable. Before saving a `source_crop`, inspect the crop bounds against the screenshot and artifact: if the crop includes device/browser chrome, status bars, iOS/Android system navigation indicators, notches, navigation buttons, bottom sheets, text/cards, badges, or any other overlay that should not be part of the underlying image, reject that source crop and switch to `generate_clean_asset` or a clean crop that excludes contaminants. For `asset_strategy = "generate_clean_asset"`, use the DSL prompt features or reference crop to generate a clean non-layered asset only when transparent subject extraction is not supported or not appropriate; prompts must explicitly ask to remove all detected contaminating UI and presentation chrome.
 
@@ -117,6 +122,8 @@ If browser/page opening is unavailable or prohibited by project instructions, bu
 - Do not infer a page from text alone when the user asked for image restoration; require the screenshot.
 - Do not use raw bitmap pixels as CSS pixels unless the user explicitly says the image is 1:1 CSS pixels.
 - Compute normalized scale as `adaptation_width / effective_source_width`. `effective_source_width` is the inner real UI width when a presentation wrapper is ignored, otherwise it is `screenshot_pixel_width`.
+- The confirmed adaptation width is a fidelity calibration baseline, not a fixed output resolution. Do not make the page root, app shell, body, or primary scroll container a fixed `1200px`, `402px`, or screenshot-height artboard unless the user explicitly asked for a static artboard export.
+- Preserve high-fidelity proportions at the confirmed width through normalized measurements, but implement the final page with responsive viewport behavior: fluid root dimensions, content-level min/max constraints, adaptive grids/flex, usable wrapping/stacking, and local scroll owners where content exceeds the viewport.
 - Preserve visible text exactly when readable.
 - Use `null` for unknown or ambiguous values in JSON artifacts.
 - Do not silently fall back to mock data, fake success, or broad defensive degradation.
