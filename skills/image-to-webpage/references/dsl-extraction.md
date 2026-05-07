@@ -419,6 +419,53 @@ For KPI/stat/summary cards with an inner tinted value band, metric well, or bott
 
 Preserve the title/action row above the metric band separately from the value/trend/status row inside the band. Small title-row icons and action/menu icons remain icon or icon_button nodes, not decorative omissions.
 
+For repeated cards or list items with a visually separated bottom action strip, model the footer as its own child region instead of flattening the item to one generic `card`. Common examples include integration/app cards, file cards, product cards, row cards, and message cards where the bottom strip contains a settings/action icon, "Details"/open button, switch/toggle, status button, menu, or other controls.
+
+Record the repeated card with at least these structural regions when visible:
+
+- `card_body`: main logo/media/title/description area. Record whether it flexes or fills remaining height.
+- `card_action_footer`: bottom strip. Record height or min-height, top divider/border, background, padding, vertical alignment, left action group, right action group, and distribution such as `justify: "space-between"`.
+- Footer controls: every icon button, text button, switch/toggle, menu trigger, status badge, and their state. Do not leave these as inferred generic controls outside the card.
+
+Example:
+
+```json
+{
+  "type": "card",
+  "role": "integration_card",
+  "layout": { "direction": "column", "height": 182 },
+  "children": [
+    {
+      "type": "container",
+      "role": "card_body",
+      "layout": { "flex": 1, "padding": 16 }
+    },
+    {
+      "type": "footer",
+      "role": "card_action_footer",
+      "layout": {
+        "height": 52,
+        "padding_x": 14,
+        "padding_y": 10,
+        "align": "center",
+        "justify": "space-between",
+        "shrink": 0
+      },
+      "appearance": {
+        "border": { "visible": true, "sides": ["top"], "role": "divider" }
+      },
+      "children": [
+        { "type": "icon_button", "role": "settings", "icon": "settings" },
+        { "type": "button", "role": "open_details", "content": "Details" },
+        { "type": "switch", "role": "enabled_toggle", "state": { "checked": true } }
+      ]
+    }
+  ]
+}
+```
+
+If the screenshot cuts off lower repeated items but the same card template is visible above, propagate the visible footer structure to repeated sibling cards of the same type. If only a sliver of the footer is visible, still record it as a footer with unknown exact height rather than omitting it or allowing renderer heuristics to invent a too-small strip.
+
 For ordinary cards with media/illustration regions and bottom text, record whether the media fills remaining space or the text is bottom-anchored. The renderer needs to know which internal region flexes and which region stays pinned.
 
 ## Shell Offset And Clipping

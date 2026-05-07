@@ -24,6 +24,7 @@ Requirements:
 - When uncertain between very close pale neutrals for the same app shell, prefer one averaged/representative token and document the uncertainty in `meta.assumptions` instead of encoding a visible color mismatch into semantic aliases.
 - When uncertain whether close pale neutrals are one surface or separate intentional regions, compare the full region behavior: vertical boundary, active nav item contrast, topbar continuation, shadows/borders, and whether the region fills a persistent navigation column. If evidence supports distinct regions, record distinct tokens with confidence instead of forcing a shared app-shell token.
 - For KPI, stat, metric, and summary cards, record both the outer card surface and any inner tinted value band/metric well as separate component tokens. Include outer padding, inner band padding, inner band height, corner radius, background color, and bottom/right inset when visible. Do not collapse the inner value band into the card background or leave its spacing implicit.
+- For repeated cards/list items with separated bottom action strips, record footer-specific component tokens instead of relying only on generic card/button/switch tokens. Capture card body height or flex behavior, footer height/min-height, top divider color/width, footer padding, action-group gap, control vertical alignment, icon-button size, text-button size, switch size, and whether the footer must be non-shrinking.
 - For corner radius, do not treat the physical screenshot edge, viewport crop, or an off-screen continuation as evidence that a component corner is square. If a regular card, panel, container, modal, or section is clipped by the screenshot edge and only some corners are visible, mark the missing corners as cropped/unknown and prefer the same uniform radius as the visible corners unless there is positive in-product evidence of asymmetric geometry. Positive evidence means the actual component boundary is visible and intentionally square, joined to another surface, or shaped like a bottom sheet/drawer/tabbar/split shell. A crop line at the image edge is not positive evidence. Record this assumption in `meta.assumptions`.
 - Before extracting layout-sensitive tokens, identify outer wrapper candidates such as showcase canvases, centered artboards, decorative rounded frames, browser/device/mock frames, clipping frames, and drop-shadow wrappers. Record them in `raw_observations.image.wrapper_candidates` with approximate bounds, visual signals, decision, confidence, and evidence.
 - Do not decide a wrapper is product UI merely because it contains product controls or cards. Preserve wrapper tokens only when the wrapper boundary itself has product semantics such as app/window chrome, in-product shell layout ownership, scroll/clipping ownership, or alignment with internal product panes.
@@ -468,6 +469,23 @@ Schema:
       "radius": null,
       "border_color": null,
       "shadow": null
+    },
+    "card_action_footer": {
+      "height": null,
+      "min_height": null,
+      "padding_x": null,
+      "padding_y": null,
+      "background": null,
+      "border_top_color": null,
+      "border_top_width": null,
+      "action_gap": null,
+      "justify": "space-between | start | end | center | null",
+      "align": "center | start | end | null",
+      "non_shrinking": null,
+      "icon_button_size": null,
+      "text_button_height": null,
+      "switch_width": null,
+      "switch_height": null
     },
     "modal": {
       "background": null,

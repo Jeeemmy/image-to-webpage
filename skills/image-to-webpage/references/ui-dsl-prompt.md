@@ -52,6 +52,7 @@ Requirements:
 - Preserve interactive affordances: enabled controls should carry `behavior.interactive`, pointer cursor intent, and action role when visible semantics imply click/toggle/navigation.
 - Preserve distinct app-shell region surfaces, especially sidebar/navigation rail versus main canvas/main stage backgrounds when their tints differ.
 - Preserve KPI/stat/summary card internals, including inner tinted metric bands/wells and their inset from the outer card edge.
+- Preserve repeated card/list-item action footers as structure. If a card has a visually separated bottom strip with settings/action icons, a "Details" or row-action button, a switch/toggle, status controls, or a bottom divider, model that strip as a child `footer` or `container` with role `card_action_footer`; do not flatten the entire item to a single `card` with only text content.
 - Preserve visible borders, dividers, outlines, separators, and panel boundaries using semantic border fields.
 - Use the most specific component type available.
 - Do not represent checkbox, radio, switch, tab, nav item, badge, table, avatar, menu item, or icon-only action as a generic container/button/input.
@@ -90,6 +91,7 @@ Component recognition rules:
 - Use avatar for user/profile images or initials inside a circular or rounded identity element.
 - Use divider for thin visible separator lines.
 - Use card for a grouped content panel with its own surface, boundary, padding, or elevation.
+- For a repeated product/list card with a bottom action strip, use a `card` with child regions such as `card_body` and `card_action_footer`. The footer should contain its own `icon_button`, text `button`, `switch`, menu/action nodes, visible top divider/border, approximate height/min-height, padding, and left/right distribution. Record the switch state per item when visible.
 - Use container with appearance.border when the element is primarily layout but has a visible outline.
 - Use table for repeated rows and columns with aligned cells.
 - Use list/list_item for repeated vertical content without strict columns.
