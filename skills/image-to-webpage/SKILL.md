@@ -50,7 +50,7 @@ Prefer page-local artifact storage when the target project has route/page module
 
 ### Step 2: Generate UI DSL
 
-Use the preset prompt in `references/ui-dsl-prompt.md` with the same screenshot. Output only valid JSON and save the result locally, for example:
+Use the preset prompt in `references/ui-dsl-prompt.md` and the hard extraction rules in `references/dsl-extraction.md` with the same screenshot. Output only valid JSON and save the result locally, for example:
 
 ```text
 <page-or-workflow-artifacts>/<name>-ui-dsl.json
@@ -108,6 +108,7 @@ If browser/page opening is unavailable or prohibited by project instructions, bu
 
 - `references/design-token-prompt.md`: canonical Step 1 prompt template. Load it before generating Design Tokens.
 - `references/ui-dsl-prompt.md`: canonical Step 2 prompt template. Load it before generating UI DSL.
+- `references/dsl-extraction.md`: hard Step 2 extraction rules. Load it before generating UI DSL.
 - `references/rendering.md`: Step 3 rendering, normalization, shadow, scroll, and verification rules. Load it before editing code.
 - `references/frontend-design.md`: hard Step 3 design-quality reference. Load it before editing code and apply it during reconstruction, while preserving screenshot fidelity as the higher-priority contract.
 
@@ -145,7 +146,7 @@ If browser/page opening is unavailable or prohibited by project instructions, bu
 - Treat wrapper preservation as a required render contract too. If `ignored_outer_container = false` while wrapper candidates exist, audit that every preserved outer shell has documented product-semantics evidence and is not merely a decorative centered artboard.
 - When ignoring a presentation wrapper, still preserve real in-product shell boundaries such as top/left-only borders, raised panes, and directional edge shadows.
 - Assign shared visual boundaries to the node that owns them. Do not duplicate one separator on both adjacent panes, and do not assign a main-stage left edge to a neighboring sidebar just because the line sits on the boundary between them.
-- Capture corner radius per corner when the screenshot is asymmetric. Do not collapse a top-left-only or one-side-only rounded shell into a uniform rounded shape.
+- Capture corner radius per corner when the actual product boundary is visibly asymmetric. Do not collapse a top-left-only or one-side-only rounded shell into a uniform rounded shape when positive in-product evidence supports the asymmetry. However, do not treat the physical screenshot edge, viewport crop, scroll cutoff, or off-screen continuation as evidence that a cropped corner is square. For ordinary cards, panels, containers, sections, and modals whose visible same-surface corners are rounded but other corners are cut off by the screenshot edge, prefer symmetric radius inference and record the cropped corners as unknown/cropped rather than square.
 - Preserve real in-product shell offsets from the surrounding app canvas. Do not remove a main-stage top/side margin just because sticky topbar rules prohibit transparent padding inside the scroll container.
 - When an inset main stage contains a persistent topbar, model/render it as an outer clipped shell with the offset/border/shadow, an inner scroll container, a sticky opaque topbar inside that scroll container, and content below the topbar in normal flow.
 - Bounded repeated-content containers such as sidebars, navigation lists, builder palettes, menus, and inspector panels must own local scrolling when content can exceed their visible height. Do not hide overflow on repeated list content without an inner scroll pane.

@@ -112,6 +112,18 @@ For mobile screenshots, explicitly distinguish OS/device chrome from product UI.
 - Preserve product-owned bottom navigation, tabbars, and sheet drag handles only when they attach to a product surface, have product semantics, or align with product controls. When ambiguous, prefer ignored system chrome for an isolated pill/bar flush with the screenshot's bottom edge.
 - If such system chrome appears inside an important image crop, list it in the image asset contamination check and negative prompt features.
 
+## Screenshot Edge Corner Gate
+
+Do not infer special asymmetric UI from the physical screenshot edge. When a component boundary continues beyond the screenshot, viewport, scroll cutoff, or crop:
+
+- Mark the affected corner visibility as `cropped_by_screenshot_edge`, `occluded`, or `unknown`.
+- Do not record the cropped corner as square, `0`, or `"none"` unless the actual in-product boundary is visible as square.
+- For ordinary cards, content panels, containers, modals, menus, and sections, if visible same-surface corners are rounded and the missing corners are cropped by the screenshot edge, infer a uniform radius from the visible corners.
+- Record the inference in `appearance.radius.inference` rather than claiming all corners were directly observed.
+- Use asymmetric radius only with positive product evidence, such as a bottom sheet attached to the viewport bottom, a drawer joined to an edge, a split shell merged into another pane, or a visibly square boundary inside the screenshot.
+
+Example: a desktop content panel titled "All Integrations" whose top corners are visible rounded but bottom corners continue off the screenshot should be modeled as a normal uniform-radius panel. The image bottom edge is not evidence that the panel's bottom corners are square.
+
 ## Image Asset Strategy
 
 When an important visual element is image-based, decide whether rendering should use a layered generated subject, a source crop, or a generated clean asset.

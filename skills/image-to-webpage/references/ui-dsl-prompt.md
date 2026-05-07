@@ -301,7 +301,18 @@ Common node schema:
       "top_right": null,
       "bottom_right": null,
       "bottom_left": null,
-      "role": "uniform | asymmetric | none | null"
+      "role": "uniform | asymmetric | none | inferred_uniform | null",
+      "corner_visibility": {
+        "top_left": "visible | cropped_by_screenshot_edge | occluded | unknown | null",
+        "top_right": "visible | cropped_by_screenshot_edge | occluded | unknown | null",
+        "bottom_right": "visible | cropped_by_screenshot_edge | occluded | unknown | null",
+        "bottom_left": "visible | cropped_by_screenshot_edge | occluded | unknown | null"
+      },
+      "inference": {
+        "strategy": "observed_uniform | inferred_uniform_from_visible_corners | observed_asymmetric | unknown | null",
+        "evidence": null,
+        "notes": null
+      }
     }
   },
   "state": {
@@ -714,6 +725,10 @@ Corner radius extraction rules:
 - If all four corners share one radius, set `radius.role = "uniform"` and repeat the same token/number on each corner.
 - If only one, two, or three corners are rounded, set `radius.role = "asymmetric"` and record each corner separately. Use `0`, `"none"`, or null for square/unknown corners instead of implying a uniform radius.
 - Do not copy radius from ignored showcase frames into product nodes. Preserve only radius attached to real product chrome, such as a main-stage top-left shell corner that clips the topbar/content.
+- A corner hidden by the physical screenshot edge, viewport crop, scroll cutoff, or off-screen continuation is not a visible square corner. Mark that corner as `cropped_by_screenshot_edge` or `unknown`; do not set it to `0`, `"none"`, or square solely because the screenshot ends there.
+- For regular product cards, panels, content containers, modals, and sections, if at least one same-surface corner is visibly rounded and the opposite-side corners are cropped by the screenshot edge, default to `radius.role = "inferred_uniform"` and repeat the visible radius on the cropped corners. Record `radius.inference.strategy = "inferred_uniform_from_visible_corners"` and note that the missing corners were cropped.
+- Use `radius.role = "asymmetric"` only when there is positive in-product evidence: the actual component boundary is visible as square, joined flush to another product surface, shaped as a bottom sheet/drawer/tabbar/split shell, or intentionally has different corner treatment. The physical image boundary or viewport edge is not positive evidence.
+- Example: if an "All Integrations" style content panel continues beyond the bottom of the screenshot and its top corners are visible rounded while bottom corners are cut off by the screenshot edge, model it as a regular uniform-radius panel, not as top-rounded/bottom-square special UI.
 
 Directional shadow extraction rules:
 - `appearance.elevation` remains a coarse fallback. When shadow direction or side matters, also add `appearance.shadow`.

@@ -164,9 +164,12 @@ Render each visible separator once. If the DSL assigns a main-stage/profile-pane
 
 Render per-corner radius when `appearance.radius` is present.
 
-- For uniform radii, use the repo's normal radius utility or token.
+- For uniform or `inferred_uniform` radii, use the repo's normal radius utility or token on all four corners.
 - For asymmetric radii, use corner-specific utilities such as `rounded-tl-*`, `rounded-tr-*`, `rounded-br-*`, `rounded-bl-*`, or a CSS `border-radius: top-left top-right bottom-right bottom-left` value.
 - Do not replace a top-left-only radius with `rounded-*` on all corners.
+- Do not convert corners marked `cropped_by_screenshot_edge`, `occluded`, or `unknown` into square corners. If a normal card, panel, section, container, menu, or modal has visible rounded corners on the same surface and the missing corners are cropped by the screenshot edge, render a uniform radius and record the inference in the render artifact.
+- Use asymmetric bottom-square/top-rounded rendering only when the DSL provides positive in-product evidence, such as a bottom sheet attached to a viewport edge, a drawer or split pane joined to another surface, or a visible square component boundary. A physical screenshot crop line is not enough evidence.
+- For panels that continue beyond the captured image, such as an "All Integrations" card grid container cut off at the screenshot bottom, prefer the regular symmetric panel radius from the visible top corners instead of treating the cropped bottom edge as square.
 - Put `overflow-hidden` or equivalent on the shell that owns the radius when its children/topbar/content should be clipped by that corner.
 
 ## Shell Offsets And Clipping
@@ -363,7 +366,7 @@ Always run the available build command. Then verify in a real browser when possi
 - Tabbars match the screenshot's distribution: no accidental `space-around` outer gutters when the source uses edge-spread/space-between alignment.
 - Non-symmetric shell borders and directional shadows are preserved on the correct sides, especially top/left-only or side-only app-stage edges.
 - Shared boundaries are rendered once and attached to the correct owner; borderless sidebars remain borderless when the visible line belongs to an adjacent pane.
-- Asymmetric corner radii are preserved per corner and are not normalized to a uniform rounded rectangle.
+- Asymmetric corner radii are preserved per corner only when supported by positive in-product evidence; screenshot-edge-cropped corners are not treated as square and ordinary panels default to symmetric radius inference.
 - Main-stage shell offsets are preserved when visible in the source, and those offsets do not create transparent sticky-topbar bleed because scrolling is owned by the inner pane.
 - Important image elements use layered restoration when image generation is available: coded background/gradient, transparent subject asset, and separate interactive overlays.
 - Whole-element source crops are used only as fallback final assets or when the DSL documents that the subject/background cannot be separated cleanly.
