@@ -34,7 +34,7 @@ If a screenshot includes phone frames, browser frames, presentation canvases, ou
 
 ## 快速开始 Getting Started
 
-当前工程不单只有 skill 内容，还包含了一个简单的演示框架和许多还原的实例。如果只是需要 skill，则直接查看核心技能部分。
+当前工程不单只有 skill 内容，还包含了一个简单的多页面生成演示框架和许多还原的实例。如果只是需要 skill，则直接查看核心技能部分。
 
 The current project scripts cover the development server, production build, and local preview. The full project includes many screenshot reconstruction examples; If you only need the skill, see Core Skill part.
 
@@ -48,12 +48,12 @@ During testing, this project was tested with codex and gpt-5.5/5.4/5.3 throughou
 
 ### 1. 安装技能 Install Skill
 
-使用以下命令，在任意 IDE 中安装 Image-to-webpage Skill。
+使用以下命令，在任意 IDE 中安装或更新 Image-to-webpage Skill。
 
-Use the following instruction to install the Image-to-webpage Skill in any IDE.
+Use the following instruction to install or upgrade the Image-to-webpage Skill in any IDE.
 
 ```markdown
-Install the skill from https://github.com/Jeeemmy/image-to-webpage/blob/main/skills/image-to-webpage/SKILL.md.
+Install or Upgrade the skill from https://github.com/Jeeemmy/image-to-webpage/blob/main/skills/image-to-webpage/SKILL.md.
 ```
 
 ### 2. 开始还原 start reconstruct
@@ -61,13 +61,21 @@ Install the skill from https://github.com/Jeeemmy/image-to-webpage/blob/main/ski
 直接发截图，并让 AI 开始还原
 
 ```markdown
-附件：截图
+<附件：截图>
 还原截图为页面
 ```
 
 Send the screenshot directly and ask the AI to start reconstructing it.
 
 ```markdown
-Attachment: screenshot
+<Attachment: screenshot>
 Recreate the screenshot as a page.
 ```
+
+## 展示模板 Showcase
+
+### Case 1：常规后台 Regular Dashboard
+
+| 原图 Original | GPT-5.5 | GPT-5.4 | GPT-5.3 | 
+|---|---|---|---|
+| ![原图](./docs/screenshots/case-01-original.png) | ![A 模型效果](./docs/screenshots/case-01-model-a.png) | ![B 模型效果](./docs/screenshots/case-01-model-b.png) |  |

@@ -47,6 +47,9 @@ Requirements:
 - Preserve all visible text exactly when readable.
 - If visible text is unreadable, keep the component and set content/text/value to null.
 - Preserve every visible icon.
+- Preserve interactive affordances: enabled controls should carry `behavior.interactive`, pointer cursor intent, and action role when visible semantics imply click/toggle/navigation.
+- Preserve distinct app-shell region surfaces, especially sidebar/navigation rail versus main canvas/main stage backgrounds when their tints differ.
+- Preserve KPI/stat/summary card internals, including inner tinted metric bands/wells and their inset from the outer card edge.
 - Preserve visible borders, dividers, outlines, separators, and panel boundaries using semantic border fields.
 - Use the most specific component type available.
 - Do not represent checkbox, radio, switch, tab, nav item, badge, table, avatar, menu item, or icon-only action as a generic container/button/input.
@@ -267,7 +270,10 @@ Common node schema:
     "overflow": "visible | hidden | auto | scroll | clip | null",
     "clip_content": null,
     "scroll_axis": "x | y | both | null",
-    "scroll_reason": "viewport_bounded | fixed_panel_height | repeated_list_overflow | canvas_overflow | table_overflow | null"
+    "scroll_reason": "viewport_bounded | fixed_panel_height | repeated_list_overflow | canvas_overflow | table_overflow | null",
+    "interactive": null,
+    "cursor": "pointer | default | text | grab | not-allowed | null",
+    "action": "navigate | open_menu | toggle | submit | filter | sort | search | open_details | request | dismiss | none | null"
   },
   "appearance": {
     "variant": "primary | secondary | ghost | outline | danger | success | warning | info | neutral | selected | active | null",
@@ -311,6 +317,7 @@ Common node schema:
   "icon": null,
   "leading_icon": null,
   "trailing_icon": null,
+  "requires_pointer_cursor": null,
   "asset": "image_asset_strategy_or_null",
   "items": null
 }
@@ -364,11 +371,22 @@ Common icon names:
 - external-link
 - bell
 - notification
+- grid
+- analytics
+- integration
+- automation
+- template
+- form
+- sparkle
+- refresh
+- rotate
 - cart
 - heart
 - star
 - eye
 - eye-off
+
+Use `more-vertical` for vertical kebab/action-menu icons and `settings` for cog/gear controls. Do not omit repeated card action icons just because they are small or decorative-looking; if a card has a visible menu/settings affordance, model it as an `icon_button` or icon node with `behavior.action = "open_menu"` and `requires_pointer_cursor = true`.
 
 Type-specific schema rules:
 - heading:
@@ -390,6 +408,12 @@ Type-specific schema rules:
     "content": "visible_button_text_or_null",
     "leading_icon": icon_or_null,
     "trailing_icon": icon_or_null,
+    "requires_pointer_cursor": true,
+    "behavior": {
+      "interactive": true,
+      "cursor": "pointer",
+      "action": "submit | navigate | request | open_details | dismiss | null"
+    },
     "appearance": {
       "variant": "primary | secondary | ghost | outline | danger | success | warning | info | neutral | null",
       "size": "xs | sm | md | lg | xl | null"
@@ -406,6 +430,12 @@ Type-specific schema rules:
     "type": "icon_button",
     "content": null,
     "icon": icon,
+    "requires_pointer_cursor": true,
+    "behavior": {
+      "interactive": true,
+      "cursor": "pointer",
+      "action": "open_menu | toggle | navigate | dismiss | null"
+    },
     "appearance": {
       "variant": "ghost | outline | primary | secondary | neutral | null",
       "size": "xs | sm | md | lg | xl | null",
@@ -461,6 +491,12 @@ Type-specific schema rules:
   {
     "type": "checkbox",
     "label": "visible_label_or_null",
+    "requires_pointer_cursor": true,
+    "behavior": {
+      "interactive": true,
+      "cursor": "pointer",
+      "action": "toggle"
+    },
     "state": {
       "checked": null,
       "disabled": null
@@ -489,6 +525,12 @@ Type-specific schema rules:
     "type": "tab",
     "content": "visible_tab_text_or_null",
     "icon": icon_or_null,
+    "requires_pointer_cursor": true,
+    "behavior": {
+      "interactive": true,
+      "cursor": "pointer",
+      "action": "filter | navigate | null"
+    },
     "state": {
       "active": null,
       "selected": null,
@@ -509,6 +551,12 @@ Type-specific schema rules:
     "content": "visible_item_text_or_null",
     "icon": icon_or_null,
     "trailing_icon": icon_or_null,
+    "requires_pointer_cursor": true,
+    "behavior": {
+      "interactive": true,
+      "cursor": "pointer",
+      "action": "navigate | open_menu | null"
+    },
     "state": {
       "active": null,
       "selected": null,
@@ -656,6 +704,7 @@ Border extraction rules:
 - For a boundary shared by two adjacent regions, assign the line to exactly one owner: the pane whose own outline, clipped shell, raised edge, or shadow continues along that side. Do not duplicate the same line on both neighbors.
 - Do not give a sidebar or navigation rail a border merely because it touches a bordered/inset main stage, profile pane, or raised workspace. If the visible line belongs to the adjacent pane's left edge, set the sidebar border to visible = false or null.
 - If separation is caused only by adjacent background/surface contrast, do not encode a border or divider.
+- Preserve intentionally distinct region fills. If a sidebar/navigation rail has a visibly different tint from the main canvas or main stage, keep those as separate region backgrounds/surfaces in the DSL instead of treating the whole app shell as one shared background. Share app-shell background only when adjacent regions visually read as one continuous surface.
 - If a border indicates active/selected/focused/error state, set border.role accordingly.
 - Do not encode border color, exact border width, or CSS border syntax. Those belong to Design Tokens.
 
@@ -690,9 +739,17 @@ Icon extraction rules:
   - or trailing_icon.
 - Do not omit decorative icons; mark decorative = true when they carry no semantic meaning.
 - Use decorative = false when the icon communicates action, state, navigation, identity, or input affordance.
+- Do not omit tiny repeated action icons on cards, table rows, list items, stat cards, or panels. Kebab menus, gear/settings icons, drag/menu dots, refresh/sync icons, notification bells, and small status/action glyphs are part of the component contract even when they are only 12-18px.
 - Use trailing_icon for dropdown chevrons, external-link icons, clear buttons, forward arrows, and disclosure indicators.
 - Use leading_icon for search, user, mail, lock, calendar, filter, add, and similar leading affordances.
+- Use an `icon_button` node when the icon is a standalone clickable control, such as a card settings menu, row action menu, notification bell, sidebar collapse button, favorite/share button, or toolbar action.
+- For standalone action icons, set `behavior.interactive = true`, `behavior.cursor = "pointer"`, the best available `behavior.action`, and `requires_pointer_cursor = true` unless the control is disabled.
 - If the exact icon is unclear, use the closest conservative semantic name and set aria_label to null.
+
+Interactivity extraction rules:
+- Mark controls as interactive when they visually behave like controls even if the screenshot cannot prove click behavior. Buttons, links, nav items, tabs, segmented control options, switches, checkboxes, radio buttons, icon buttons, dropdown/select triggers, search/input clear buttons, card action menus, sortable table headers, and row/card "Details" actions should set `behavior.interactive = true` and `requires_pointer_cursor = true` unless disabled.
+- Disabled controls may keep `behavior.interactive = false` or `cursor = "not-allowed"` depending on the visual state.
+- Do not rely on visible hover state to infer interactivity; most screenshots show default state only. Use component semantics and visible affordances.
 
 Targeted typography role rules:
 - Do not perform per-element font analysis in the DSL. Use global typography for low-visual-weight body copy, descriptions, labels, captions, metadata, secondary navigation labels, and ordinary form text.
@@ -744,6 +801,8 @@ Layout extraction rules:
 - Capture internal card distribution when visible. If a card has an illustration/media area that occupies the available remaining vertical space while text/metadata sits at the bottom, set a layout hint such as `content_distribution = "media_fills_remaining_space"` or `"text_anchored_bottom"` on the card and use a separate child stack/group for bottom text when useful.
 - For folder/product/file cards where the image is centered in the free space and labels are bottom-aligned, record `media_alignment = "center"` and `text_alignment = "start"` with bottom anchoring intent. Do not model this as a plain natural vertical stack.
 - If a card's content appears bottom anchored, prefer explicit layout intent over only listing children in visual order; the renderer needs to know which region flexes and which region stays pinned.
+- For KPI/stat/summary cards that contain an inner tinted value band, metric well, or bottom value strip, model the outer card and inner band as separate nodes. Record the card's outer padding, the band height, band padding, and the band's bottom/right/left inset from the card edge. Do not collapse the band into the card background or stretch it to the card edges when the screenshot shows a visible gutter.
+- If the stat card has a title row above the inner band and a value/trend/status inside the band, preserve that vertical structure instead of treating all content as a single evenly padded card stack.
 - For bounded containers with repeated content, such as sidebars, navigation rails, builder palettes, filter panels, menus, inspector panels, property panels, file lists, cards lists, and grouped list sections, record localized scroll behavior when content may exceed the visible height.
 - If the source shows a fixed-height panel and list content approaches or exceeds the bottom edge, set `behavior.scroll_container = "self"` or `"child"`, `overflow = "auto"`, `scroll_axis = "y"`, and `scroll_reason = "fixed_panel_height"` or `"repeated_list_overflow"`.
 - Do not use `overflow = "hidden"` on a list/palette/sidebar merely to preserve rounded corners. Put clipping on an outer shell if needed, and put the repeated content inside an inner scroll container.

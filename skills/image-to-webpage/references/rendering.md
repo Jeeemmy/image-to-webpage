@@ -19,6 +19,12 @@ css_value = observed_bitmap_value * scale
 
 Use normalized values for layout width, spacing, component dimensions, and responsive reconstruction. When a presentation wrapper is ignored, the render source is the inner real product UI bounds, not the full screenshot dimensions.
 
+## Page Integration And Artifact Ownership
+
+Integrate the generated page at the narrowest existing page boundary. If the project has file-based routing, route modules, a page registry, a pages directory, or static page files, create/register one page-local module or file for the reconstruction instead of folding the page implementation, data, icons, styles, and artifacts into the global app entry file.
+
+Keep generated page assets and workflow artifacts namespaced by page when the project supports it. Prefer a page-local `artifacts/` or equivalent folder beside the generated page over a shared flat artifact directory that can collide across multiple reconstructions. For standalone static output, keep the HTML, CSS, assets, and artifacts grouped by the generated page name.
+
 ## React + Tailwind Implementation
 
 Prefer existing project conventions. In React + Tailwind projects:
@@ -32,10 +38,21 @@ Prefer existing project conventions. In React + Tailwind projects:
 - Keep Tailwind class names statically discoverable by the project's content scanner. Do not build fidelity-critical classes through runtime string interpolation unless the exact complete class strings also appear statically, are safelisted, or are replaced by inline/page-scoped CSS.
 - If the page relies on many arbitrary Tailwind values, add a build-output style integrity check. Confirm the compiled CSS contains the critical utilities or equivalent CSS for the page root, persistent chrome, main card/gallery, important image positioning/sizing, controls, CTA, and high-visual-weight text. If any are missing, fix before reporting success.
 - Keep repeated components data-driven.
-- Use local SVG/CSS approximations for logos/icons when external assets are unavailable.
+- Use high-quality icons for common UI glyphs. Prefer an existing project icon package first. If none exists and dependencies may be added, prefer a tree-shakeable ESM package such as `lucide-react`, `@heroicons/react`, or `@tabler/icons-react`, importing only the named icons used by the page. If dependencies cannot be added, use consistent inline SVGs from an open-source icon set. Avoid crude CSS, emoji, text-character, or hand-drawn approximations for settings, menu, search, nav, status, and action icons.
+- Render standalone actionable icons as real buttons or links with accessible labels, not inert spans. Repeated card settings/menu icons should be present on every card where the screenshot shows them.
 - Preserve responsive behavior explicitly: grids collapse, toolbars wrap, inputs keep usable widths.
+- Treat row layouts from DSL as source intent, not as a license for fixed one-line flex everywhere. Filter rows, toolbars, form rows, action groups, pagination controls, and mixed input/button rows must wrap or stack at narrow widths with usable control sizes.
+- Scope horizontal overflow to the content that actually needs it. Tables, code blocks, timelines, and wide data grids may scroll horizontally inside their own region, but pagination, filters, toolbar buttons, and surrounding page controls should remain outside that horizontal scroll container unless the screenshot clearly shows them scrolling together.
 - Respect shared app-shell background tokens. If tokens or DSL indicate sidebar, topbar, and main stage share one app canvas color, apply the same background to all of those large regions and sticky header cover layers. Do not introduce a visible seam by choosing nearby but different neutral colors.
+- Do not over-apply shared app-shell background tokens. If tokens or DSL record distinct backgrounds for a sidebar/navigation rail and main canvas/main stage, preserve those separate fills even when they are close pale neutrals. A persistent nav column that has its own tint should not be recolored to match the main stage just for consistency.
 - Render card internal distribution from DSL hints. For media cards with `media_fills_remaining_space` or `text_anchored_bottom`, use a fixed/min height flex column, a `flex-1` media region with centered content, and a bottom text stack pinned with `mt-auto` or equivalent. Do not render those cards as a plain natural vertical stack that leaves accidental bottom whitespace.
+- Render KPI/stat/summary cards from their recorded internal structure. When a card has an inner tinted value band or metric well, keep the outer card padding, inner band height, band padding, and bottom/right/left inset from the source. Do not stretch the band until it nearly touches the card edge unless the screenshot does.
+
+## Interactivity And Cursor Affordance
+
+Clickable UI must feel clickable. Render enabled buttons, links, nav items, tabs, segmented options, switches, checkboxes, radio buttons, icon buttons, select/dropdown triggers, card action menus, sortable headers, and row/card details actions with the appropriate semantic element and `cursor: pointer` on hover. Disabled controls may use `cursor: not-allowed`; text inputs and search fields should use the text cursor in the editable area.
+
+If the DSL marks `requires_pointer_cursor = true`, `behavior.interactive = true`, or a known control type, apply pointer cursor even if the screenshot only shows the default state. Do not require a visible hover screenshot to add cursor affordance.
 
 ## Image Asset Rendering
 
@@ -251,6 +268,8 @@ For tables and dense data regions:
 - Table headers can be sticky only when the screenshot or product semantics clearly show a scrollable data region.
 - Scope horizontal overflow to the table/content region, not the whole app shell.
 - Keep pagination, filters, and non-table controls outside the table's horizontal overflow container unless the screenshot shows otherwise.
+- On narrow viewports, keep filter inputs, select controls, search fields, primary actions, and pagination controls readable and tappable. They may wrap, stack, or switch to full-width controls, but must not shrink into tiny unusable boxes merely because the source desktop row was horizontal.
+- If a table needs a minimum width, apply that minimum to the table itself or its immediate scroll wrapper, not to the entire card footer, filter bar, or pagination row.
 
 Verification checklist for scrolling:
 
@@ -330,6 +349,10 @@ Always run the available build command. Then verify in a real browser when possi
 - Old unrelated page text is gone.
 - Console errors are absent.
 - Desktop and mobile layouts do not clip, overlap, or overflow incoherently.
+- Enabled interactive controls expose pointer affordance: buttons, nav items, tabs, icon buttons, card action menus, switches, row actions, and links use semantic controls and `cursor: pointer` on hover; disabled controls do not.
+- Sidebar/navigation rail and main canvas backgrounds match the source relationship. Distinct tints remain distinct; shared app-shell backgrounds are used only when the source reads as a continuous surface.
+- KPI/stat/summary cards preserve internal spacing: title/action row, inner tinted value band/metric well, band padding, and band bottom/right/left inset match the source instead of collapsing to the card edge.
+- Visible action/status/navigation icons are present and consistent in quality. Repeated card settings/menu icons, search icons, notification icons, nav icons, and stat icons are not dropped; icon packages are imported per-icon or tree-shaken rather than wholesale.
 - Shadows match the screenshot: if the screenshot is mostly flat, remove shadows before adjusting colors.
 - Inner/inset control shadows match the screenshot: controls with inner-only bevels should not gain outside drop shadows.
 - Shadow strength records are honest: guessed/visually judged strength must include confidence/evidence/notes and must not be presented as measured.
@@ -344,7 +367,7 @@ Always run the available build command. Then verify in a real browser when possi
 - Generated image assets omit overlay controls, prefer transparent backgrounds, and preserve the subject/material from the screenshot reference.
 - Generated transparent subjects must preserve the source subject's visual size. Render from the source subject bbox inside the gallery/hero, not from the generated PNG's natural or trimmed dimensions. Do not run `trim`, `-trim`, tight crop, or equivalent transparent-padding removal on a subject asset when the original transparent canvas represents the source crop coordinate system. If trimming is necessary for optimization, record the removed top/right/bottom/left transparent insets and compensate the CSS `left`/`top`/`width`/`height` so the visible subject keeps the same source bbox. If the generated asset has less transparent padding than the screenshot subject area, use the untrimmed alpha asset, reduce CSS display size, or regenerate with transparent padding so the visible product/hero subject does not become larger than the reference.
 - When image generation is available and not declined, separable product/hero subjects are not left as source crops with baked-in gradient/background pixels. The render artifact records the generated transparent asset and coded background strategy.
-- The built CSS contains the page's fidelity-critical visual rules. For Tailwind, inspect the actual emitted CSS file after build for key root/card/gallery/control/CTA/high-weight text utilities, especially arbitrary color, dimension, positioning, radius, shadow, and background-gradient classes. Build success is not enough when missing CSS would leave only default text/flow visible.
+- The built CSS contains the page's fidelity-critical visual rules. For Tailwind, inspect the actual emitted CSS file after build for key root/card/gallery/control/CTA/high-weight text utilities, especially arbitrary color, dimension, positioning, radius, shadow, cursor, and background-gradient classes. Build success is not enough when missing CSS would leave only default text/flow visible.
 - Important imported image assets are present in the built output and referenced by the built JS/CSS bundle. Product/hero/gallery assets must not disappear because of a bad import path, missing file, stale dev server, or unreferenced generated asset.
 - When available, run the bundled helper for non-browser integrity checks, for example:
   `node skills/image-to-webpage/scripts/check-build-integrity.mjs --dist dist --class "h-[333px]" --class "bg-[#17140e]" --asset-name-contains "diamond-ring" --js-contains "Diamond ring"`.

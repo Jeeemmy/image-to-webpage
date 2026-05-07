@@ -24,7 +24,7 @@ When this skill triggers, keep the first user-facing reply limited to confirming
 - The recognized target device type: PC/desktop or mobile.
 - Default adaptation width: `1200px` for PC/landscape screenshots unless the user specified another width.
 - Default adaptation width: `414px` for mobile/portrait screenshots unless the user specified another width.
-- Planned page route and page name.
+- Planned page target and page name. Before replying, inspect the user's project structure and dependencies to determine whether it has a routing/page framework or page registry. If routing exists, state the exact route to add, for example `路由/文件：检测到项目已有路由，放到 /pages/<name> 对应页面。` If no routing framework exists, state the exact static HTML target, for example `路由/文件：未检测到路由框架，使用 <name>.html。` Do not give a conditional fallback such as "优先做成 /xxx；如果没有路由框架，则使用 xxx.html", and do not ask the user to judge whether routing exists.
 - Whether image generation is available for this session when important image-based visuals are likely present. If available, explicitly say image generation will be used to restore separable image subjects with transparent backgrounds and coded backgrounds/overlays. If the user explicitly declines image generation, use the no-AI asset fallback path and record that choice.
 - A font availability notice only when high-visual-weight text appears to use a font that is not installed and no project/local/system font with a close visual style is available. Do not warn for low-visual-weight text or when a close style fallback is available. Use this form: "识别到截图中 <part> 部分文字推测是 <font> 字体。当前系统没有安装，也没有检测到近似风格字体，建议安装 <font>。如果没有，将使用 <fallback> 字体替代。"
 
@@ -37,16 +37,20 @@ If the user has not provided a screenshot/snapshot/image, ask for one before con
 Use the preset prompt in `references/design-token-prompt.md` with the user's screenshot. Output only valid JSON and save the result locally, for example:
 
 ```text
-workflow-artifacts/<name>-design-tokens.json
+<page-or-workflow-artifacts>/<name>-design-tokens.json
 ```
+
+Prefer page-local artifact storage when the target project has route/page modules, for example `src/pages/<name>/artifacts/design-tokens.json` or the project's equivalent convention. Use a global `workflow-artifacts/` directory only when the project has no page-local convention or the output is a standalone static file.
 
 ### Step 2: Generate UI DSL
 
 Use the preset prompt in `references/ui-dsl-prompt.md` with the same screenshot. Output only valid JSON and save the result locally, for example:
 
 ```text
-workflow-artifacts/<name>-ui-dsl.json
+<page-or-workflow-artifacts>/<name>-ui-dsl.json
 ```
+
+Store the UI DSL beside the generated page artifacts when the project has page-local modules. Keep each generated page's tokens, DSL, render record, and source assets namespaced by page so adding another screenshot reconstruction does not overwrite or confuse prior outputs.
 
 Before extracting DSL, run a wrapper classification gate. Enumerate any outer canvas, centered artboard, browser/device/mock frame, decorative rounded frame, clipping frame, or drop-shadow wrapper as a candidate. This gate is mandatory even when the final decision is to preserve the candidate.
 
@@ -76,7 +80,7 @@ Before rendering, confirm adaptation width:
 Record the render result locally, for example:
 
 ```text
-workflow-artifacts/<name>-render-step3.json
+<page-or-workflow-artifacts>/<name>-render-step3.json
 ```
 
 Include source artifacts, adaptation width, scale, files changed, scroll architecture, verification commands, style/asset integrity checks, and browser checks.
@@ -109,6 +113,8 @@ If browser/page opening is unavailable or prohibited by project instructions, bu
 - Use `null` for unknown or ambiguous values in JSON artifacts.
 - Do not silently fall back to mock data, fake success, or broad defensive degradation.
 - Treat borders, surface contrast, elevation, scroll behavior, and overlay behavior as separate signals.
+- Treat interactivity as a render contract, not just visual shape. Clickable controls, buttons, icon buttons, links, nav items, tabs, segmented controls, checkboxes/radios, switches, menu triggers, card action menus, sortable headers, and any element with a visible action affordance must render with appropriate interactive semantics and `cursor: pointer` on hover unless disabled.
+- Preserve intentionally distinct app-shell region backgrounds. Do not merge sidebar, navigation rail, topbar, main canvas, and main stage backgrounds into one token merely because they are close pale neutrals; share a background token only when the regions visually read as one continuous surface.
 - Keep global typography extraction broad, but record targeted typography for high-visual-weight text. High-weight text includes prices, brand/logo text, hero headlines, large KPI/counter numbers, and visually dominant CTA labels. For these, record role, text sample, font-family candidates, digit style when relevant, confidence, evidence, and fallback/availability notes. Low-visual-weight body/supporting text may use the global typography fallback without per-element font analysis.
 - For high-visual-weight font availability, distinguish exact-font absence from style absence. If the exact inferred font is missing but a close project/local/system font exists in the same visual class, use that fallback silently and record it in the artifact. Tell the user only when no close visual fallback is available.
 - For mobile/system status bars, prefer an existing project-level default status bar component or standard status bar style when one exists. Do not hand-roll a per-page status bar unless no reusable default exists, the screenshot shows product-specific status bar customization, or the user explicitly asks for exact custom reconstruction. Record the status bar strategy and reason in the render artifact.
@@ -138,5 +144,7 @@ If browser/page opening is unavailable or prohibited by project instructions, bu
 - Bounded repeated-content containers such as sidebars, navigation lists, builder palettes, menus, and inspector panels must own local scrolling when content can exceed their visible height. Do not hide overflow on repeated list content without an inner scroll pane.
 - For directional shell-edge shadows, preserve strength separately. Default to `xs` for tight, barely visible top/left edge shadows unless the screenshot clearly shows a larger cast shadow.
 - For tabbars and horizontal navigation, capture and render edge distribution explicitly. Do not silently substitute equal grid tracks or `space-around` gutters for source layouts that use content-sized `space-between`/edge-spread alignment.
+- For KPI/stat/summary cards with an inner tinted value band or metric well, capture and render the outer card padding, inner band padding, and bottom/right inset separately. Do not stretch the inner band until it nearly touches the card edge unless the screenshot actually shows that tight spacing.
+- Prefer high-quality icon components over hand-drawn approximations for common UI icons. In JavaScript apps, use an existing project icon package when available; otherwise prefer a tree-shakeable icon package such as `lucide-react` or another ESM per-icon import library, importing only the icons used. If dependencies cannot be added, use inline SVGs copied from a consistent open-source icon set rather than crude CSS/ASCII approximations. Every visible settings, menu, search, action, status, and navigation icon should be represented.
 - When using Tailwind arbitrary values or generated utility CSS, treat compiled style availability as part of correctness. A page that relies on uncompiled classes can degrade into mostly default text while still passing build. Do not consider build-only verification complete unless critical visual utilities/assets are present in the built output or the same styles are applied by inline/page-scoped CSS.
 - Verify with a real build and browser checks when possible.

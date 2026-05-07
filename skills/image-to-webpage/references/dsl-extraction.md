@@ -9,6 +9,7 @@ Capture:
 - Page hierarchy and semantic roles.
 - Visible text exactly as shown.
 - Every visible icon as an icon node, `icon`, `leading_icon`, or `trailing_icon`.
+- Interactivity for every visible control: buttons, links, nav items, tabs, switches, checkboxes/radios, icon buttons, dropdown/select triggers, card action menus, row actions, and sortable/filter controls should carry interactive hints and pointer-cursor intent unless disabled.
 - Borders, dividers, outlines, selected states, and panel boundaries.
 - Component-specific types such as `nav_item`, `tabs`, `tab`, `switch`, `badge`, `avatar`, `icon_button`, `search_input`, `card`, and `section`.
 - Approximate layout measurements only where useful for rendering fidelity.
@@ -349,6 +350,18 @@ Use semantic appearance variants for surface changes:
 - `variant: "neutral"` for normal surfaces.
 - `tone: "brand"` for branded primary controls.
 
+When adjacent large regions have intentionally different fills, preserve that separation as surface/background tokens rather than borders or shadows. A sidebar/navigation rail, topbar, main canvas, and main stage may use close but distinct pale neutrals. Do not merge them into one shared surface unless they visually read as a continuous app canvas. If the sidebar tint clearly differs from the main canvas, record distinct region roles and backgrounds.
+
+## Icon And Interactivity Extraction
+
+Do not omit tiny repeated action icons on cards, panels, table rows, stat cards, nav items, or list items. Vertical kebab menus, cog/settings controls, refresh/sync indicators, notification bells, search icons, more menus, and status glyphs should be captured even when they are only 12-18px.
+
+Use `type = "icon_button"` for standalone clickable icons such as a card settings/menu trigger, notification bell, sidebar collapse control, share/favorite button, toolbar icon, or row action. If extension fields are allowed, set `behavior.interactive = true`, `behavior.cursor = "pointer"`, `requires_pointer_cursor = true`, and a semantic `behavior.action`.
+
+Mark controls as interactive from semantic affordance, not from visible hover state. Screenshots usually show default state, but buttons, links, nav items, tabs, segmented options, switches, checkboxes, radio buttons, icon buttons, dropdown/select triggers, search/input clear buttons, row/card Details actions, card action menus, and sortable table headers are still interactive.
+
+Use `cursor = "text"` for text inputs/search fields, and `cursor = "not-allowed"` only for disabled controls. Do not leave interactive SVG/icon wrappers as inert decorative spans when they represent actions; the renderer needs button/link semantics and pointer cursor behavior.
+
 ## Corner Radius
 
 Inspect corners independently. `appearance.shape` is only a coarse semantic label; it is not enough for asymmetric shells.
@@ -386,6 +399,14 @@ Estimate `edge_inset_start` and `edge_inset_end` if they are important for fidel
 For horizontal scrollers inside padded mobile content, record whether the scroll strip is clipped to the padded content column or visually bleeds to the screen edge. If the first chip/card/tab aligns with page padding but later content continues into the padding area, record an edge behavior hint such as `full_bleed_scroll_with_inner_padding` so rendering uses negative inline margins plus matching inner padding/scroll-padding.
 
 On mobile, do not model ordinary browser scrollbars as UI nodes. Scrollbar visibility is a render-layer decision: scrollbars are hidden by default unless the source screenshot shows a meaningful in-product scrollbar or scroll indicator.
+
+## Metric And Card Internal Layout
+
+For KPI/stat/summary cards with an inner tinted value band, metric well, or bottom value strip, model the outer card and inner band as separate nodes. Record the outer padding, inner band background, band height, band padding, and the band's bottom/right/left inset from the card edge. Do not collapse the band into the outer card background or stretch it until it nearly touches the edge unless the source actually shows that spacing.
+
+Preserve the title/action row above the metric band separately from the value/trend/status row inside the band. Small title-row icons and action/menu icons remain icon or icon_button nodes, not decorative omissions.
+
+For ordinary cards with media/illustration regions and bottom text, record whether the media fills remaining space or the text is bottom-anchored. The renderer needs to know which internal region flexes and which region stays pinned.
 
 ## Shell Offset And Clipping
 
