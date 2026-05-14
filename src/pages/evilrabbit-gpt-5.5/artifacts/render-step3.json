@@ -1,0 +1,137 @@
+{
+  "step": "render-step3",
+  "source_artifacts": [
+    "design-tokens.json",
+    "ui-dsl.json"
+  ],
+  "source_image": "comparison-image/pc-complex/evilrabbit.webp",
+  "confirmed_device_type": "PC/desktop",
+  "confirmed_adaptation_width": 1200,
+  "width_inference": {
+    "source": "inferred_from_screenshot",
+    "user_confirmed": true,
+    "candidate_width": 1200,
+    "confidence": 0.84,
+    "evidence": [
+      "Full screenshot is a 2400x1800 high-resolution presentation export.",
+      "The teal outside region is a showcase canvas; the real dashboard shell is roughly x=117, y=129, width=2165, height=1540 in source pixels.",
+      "Dashboard controls, sidebar density, and app-shell proportions match a desktop calibration near 1200px rather than the raw bitmap width.",
+      "A 1200px calibration gives scale 0.554, consistent with the visually observed two-times export and the measured inner shell width."
+    ],
+    "alternate_candidates": [
+      {
+        "width": 1080,
+        "reason": "Also plausible for a dense desktop dashboard, but it makes the side columns and center device stage tighter than the source composition.",
+        "confidence": 0.42
+      }
+    ],
+    "notes": "Width confirmed by user after first response gate."
+  },
+  "effective_source_bounds": {
+    "x": 117,
+    "y": 129,
+    "width": 2165,
+    "height": 1540
+  },
+  "normalized_scale": 0.5542725,
+  "files_changed": [
+    "src/pages/evilrabbit-gpt-5.5/EvilRabbitPage.jsx",
+    "src/pages/evilrabbit-gpt-5.5/evilrabbit.css",
+    "src/pages/evilrabbit-gpt-5.5/assets/device-reference-crop.png",
+    "src/pages/evilrabbit-gpt-5.5/assets/rabbit-r2-device.png",
+    "src/pages/evilrabbit-gpt-5.5/assets/rabbit-r2-device-clean.png",
+    "src/pages/evilrabbit-gpt-5.5/artifacts/design-tokens.json",
+    "src/pages/evilrabbit-gpt-5.5/artifacts/ui-dsl.json",
+    "src/pages/evilrabbit-gpt-5.5/artifacts/render-step3.json"
+  ],
+  "viewport_adaptation_strategy": {
+    "root_width": "100vw",
+    "root_height": "100dvh",
+    "root_overflow": "hidden",
+    "scroll_owner_selector": ".er-main-scroll",
+    "document_body_scroll_disabled_by_shell": true,
+    "min_height_zero_chain": [
+      ".er-shell",
+      ".er-main-scroll",
+      ".er-dashboard",
+      ".er-board"
+    ],
+    "persistent_chrome_selectors": [
+      ".er-sidebar"
+    ],
+    "dense_layout_behavior": "The dashboard uses a local min-width inside the main scroll owner rather than a fixed root artboard."
+  },
+  "asset_pipeline": {
+    "exact_reference_crop": {
+      "source": "comparison-image/pc-complex/evilrabbit.webp",
+      "out": "src/pages/evilrabbit-gpt-5.5/assets/device-reference-crop.png",
+      "x": 915,
+      "y": 330,
+      "width": 760,
+      "height": 900,
+      "coordinate_space": "absolute_source_image_pixels",
+      "method": "Pillow.Image.crop_pixel_copy",
+      "pixel_mismatches": 0
+    },
+    "generated_subject": {
+      "reference": "src/pages/evilrabbit-gpt-5.5/assets/device-reference-crop.png",
+      "raw_output": "src/pages/evilrabbit-gpt-5.5/assets/rabbit-r2-device.png",
+      "cleaned_output": "src/pages/evilrabbit-gpt-5.5/assets/rabbit-r2-device-clean.png",
+      "strategy": "generate_transparent_subject",
+      "notes": "Generated output included RGB checkerboard transparency preview; local alpha cleanup removed bright checkerboard pixels."
+    }
+  },
+  "verification": {
+    "commands": [
+      {
+        "command": "npm run build",
+        "result": "passed",
+        "notes": "Vite production build completed successfully."
+      },
+      {
+        "command": "node -e \"JSON.parse(...)\" for design-tokens/ui-dsl/render-step3",
+        "result": "passed",
+        "notes": "All page artifacts are valid JSON."
+      },
+      {
+        "command": "node skills/image-to-webpage/scripts/check-build-integrity.mjs --dist dist --css-contains evilrabbit-page --css-contains height:100dvh --css-contains overflow:hidden --css-contains er-main-scroll --css-contains overflow:auto --js-contains evilrabbit-gpt-5.5 --js-contains \"Rabbit R2 device\" --asset-name-contains rabbit-r2-device-clean",
+        "result": "passed",
+        "notes": "Critical CSS, JS route/page strings, and generated asset are present in build output."
+      },
+      {
+        "command": "rg fixed screenshot root dimensions in src/pages/evilrabbit-gpt-5.5",
+        "result": "passed",
+        "notes": "No fixed 1200/2165/2400 root implementation dimensions found; DSL forbidden behavior mentions are artifact metadata only."
+      }
+    ],
+    "browser_checks": [
+      {
+        "viewport": "1280x720 default in-app browser",
+        "result": "passed",
+        "notes": "Three-column layout renders without incoherent overlap; smaller viewport uses local main scrolling."
+      },
+      {
+        "viewport": "1200x854 confirmed calibration viewport",
+        "result": "passed",
+        "notes": "Dashboard shell, three columns, central generated Rabbit R2 asset, drag control, and bottom metrics are visible in the calibrated viewport."
+      },
+      {
+        "check": "local scroll owner",
+        "result": "passed",
+        "notes": "Scrolling over the dashboard moves the main content while persistent sidebar remains fixed."
+      }
+    ],
+    "style_asset_integrity": {
+      "root_is_fluid": true,
+      "root_rules": [
+        "width: 100vw",
+        "height: 100dvh",
+        "overflow: hidden"
+      ],
+      "scroll_owner_selector": ".er-main-scroll",
+      "generated_asset_referenced": true,
+      "exact_crop_pixel_mismatches": 0,
+      "notes": "Generated Rabbit R2 image required local alpha cleanup because API output used a visible checkerboard transparency preview."
+    }
+  }
+}

@@ -1,29 +1,11 @@
-import { flowmailPage } from "../pages/flowmail/page.config.js";
-import { flowmailAutomationPage } from "../pages/flowmail-automation/page.config.js";
-import { nuboPage } from "../pages/nubo/page.config.js";
-import { bizwiseProfilePage } from "../pages/bizwise-profile/page.config.js";
-import { raxonTradingPage } from "../pages/raxon-trading/page.config.js";
-import { dashboardPage } from "../pages/dashboard/page.config.js";
-import { vyraHealthPage } from "../pages/vyra-health/page.config.js";
-import { evilRabbitOverviewPage } from "../pages/evilrabbit-overview/page.config.js";
-import { homeserviceSinglePage } from "../pages/homeservice-single/page.config.js";
-import { luxurySinglePage } from "../pages/luxury-single/page.config.js";
-import { smartnoteSinglePage } from "../pages/smartnote-single/page.config.js";
-import { weddingSinglePage } from "../pages/wedding-single/page.config.js";
+import { flowmailGpt55Page } from "../pages/flowmail-gpt-5.5/index.js";
+import { appleStoreGpt55Page } from "../pages/applestore-gpt-5.5/index.js";
+import { evilRabbitGpt55Page } from "../pages/evilrabbit-gpt-5.5/index.js";
 
 export const pages = [
-  flowmailPage,
-  flowmailAutomationPage,
-  nuboPage,
-  bizwiseProfilePage,
-  raxonTradingPage,
-  dashboardPage,
-  vyraHealthPage,
-  evilRabbitOverviewPage,
-  homeserviceSinglePage,
-  luxurySinglePage,
-  weddingSinglePage,
-  smartnoteSinglePage,
+  flowmailGpt55Page,
+  appleStoreGpt55Page,
+  evilRabbitGpt55Page,
 ];
 
 export function findPageByRoute(pathname) {

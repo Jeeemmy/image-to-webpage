@@ -72,16 +72,12 @@ Send the screenshot directly and ask the AI to start reconstructing it.
 Recreate the screenshot as a page.
 ```
 
-## 展示模板 Showcase
+## 展示样例 Showcase
 
-### Case 1：常规后台 Regular Dashboard
+以下示例全部是首次生成的结果，没有做额外调整。
 
-最常规的后台，比较常规的设计，几乎不用图片素材作为内容填充。
+### Case 1：常规页面 Regular Dashboard
 
 | 原图 Original | GPT-5.5 |
 |---|---|
-| ![Original](comparison-image/regular/flowmail-email.png) | ![GPT-5.5](comparison-image/regular/flowmail-email-gpt-5.5.png) |
-
-| GPT-5.4 | GPT-5.3-codex | 
-|---|---|
-| ![GPT-5.4](comparison-image/regular/flowmail-email-gpt-5.4.png) | ![GPT-5.3-codex](comparison-image/regular/flowmail-email-gpt-5.3-codex.png) |
+| ![Original](comparison-image/pc-regular/flowmail.webp) | ![GPT-5.5](comparison-image/pc-regular/flowmail-gpt-5.5.webp) |

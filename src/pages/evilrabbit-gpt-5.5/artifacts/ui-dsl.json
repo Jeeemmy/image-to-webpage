@@ -1,0 +1,269 @@
+{
+  "version": "ui-dsl-v2",
+  "request": {
+    "source": "given_snapshot",
+    "source_file": "comparison-image/pc-complex/evilrabbit.webp",
+    "target_device": "pc_desktop",
+    "source_dimensions": {
+      "width": 2400,
+      "height": 1800
+    },
+    "adaptation_width": 1200,
+    "adaptation_width_inference": {
+      "source": "inferred_from_screenshot",
+      "user_confirmed": true,
+      "candidate_width": 1200,
+      "effective_source_width": 2165,
+      "normalized_scale": 0.5542725,
+      "confidence": 0.84,
+      "evidence": [
+        "2400x1800 high-resolution source",
+        "inner product shell width about 2165px",
+        "presentation wrapper ignored",
+        "desktop control density fits 1200px calibration"
+      ],
+      "alternate_candidates": [
+        {
+          "width": 1080,
+          "reason": "Plausible but tighter than the visible desktop dashboard density.",
+          "confidence": 0.42
+        }
+      ],
+      "notes": "User confirmed continuation after the confirmation gate."
+    },
+    "ignored_outer_container": true,
+    "wrapper_candidates": [
+      {
+        "id": "outer_teal_showcase_canvas",
+        "type": "outer_canvas",
+        "bounds": {
+          "x": 0,
+          "y": 0,
+          "width": 2400,
+          "height": 1800
+        },
+        "visual_signals": [
+          "teal presentation background",
+          "outer glow and margin"
+        ],
+        "contains_product_ui": true,
+        "boundary_has_product_semantics": false,
+        "decision": "ignore",
+        "confidence": 0.95,
+        "evidence": "Not product chrome."
+      },
+      {
+        "id": "inner_dark_dashboard_shell",
+        "type": "clipping_frame",
+        "bounds": {
+          "x": 117,
+          "y": 129,
+          "width": 2165,
+          "height": 1540
+        },
+        "visual_signals": [
+          "sidebar and panels align to shell",
+          "owns dashboard layout"
+        ],
+        "contains_product_ui": true,
+        "boundary_has_product_semantics": true,
+        "decision": "preserve",
+        "confidence": 0.92,
+        "evidence": "Real app shell."
+      }
+    ],
+    "wrapper_decision": {
+      "ignored": true,
+      "effective_source_bounds_reason": "Excluded teal presentation canvas.",
+      "preserved_candidates": [
+        "inner_dark_dashboard_shell"
+      ],
+      "ignored_candidates": [
+        "outer_teal_showcase_canvas"
+      ],
+      "confidence": 0.93,
+      "notes": "Do not render a centered teal artboard around the page."
+    },
+    "effective_source_bounds": {
+      "x": 117,
+      "y": 129,
+      "width": 2165,
+      "height": 1540
+    },
+    "viewport_adaptation": {
+      "calibration_width_is_fixed_output": false,
+      "root_sizing": "fill_viewport",
+      "height_strategy": "viewport_bounded_shell",
+      "width_strategy": "fluid_width",
+      "fluid_regions": [
+        "main_scroll",
+        "device_stage",
+        "metrics"
+      ],
+      "fixed_regions": [
+        "sidebar",
+        "left_column",
+        "right_column"
+      ],
+      "content_max_width": null,
+      "breakpoint_intent": [
+        "Use local horizontal overflow below dense desktop width."
+      ],
+      "scoped_overflow_regions": [
+        "er-main-scroll"
+      ],
+      "forbidden_root_behavior": [
+        "fixed_screenshot_width",
+        "fixed_screenshot_height",
+        "centered_static_artboard"
+      ],
+      "notes": "Dashboard shell should keep document scrollY at 0 while main pane scrolls."
+    },
+    "ignored_system_chrome": [],
+    "image_asset_strategy": {
+      "important_image_elements": [
+        {
+          "id": "rabbit_r2_device",
+          "node_id": "device_preview",
+          "importance": "primary",
+          "bounds": {
+            "x": 915,
+            "y": 330,
+            "width": 760,
+            "height": 900
+          },
+          "is_obstructed": true,
+          "occluding_element_ids": [
+            "drag_to_rotate_control"
+          ],
+          "asset_strategy": "generate_transparent_subject",
+          "layering": {
+            "background_strategy": "code",
+            "subject_strategy": "transparent_generated_asset",
+            "overlay_strategy": "separate_interactive_nodes",
+            "recommended_stack": [
+              "coded_background",
+              "transparent_subject",
+              "interactive_overlays"
+            ]
+          },
+          "source_crop": {
+            "required": true,
+            "whole_element": true,
+            "include_occluders": false,
+            "coordinate_space": "absolute_source_image_pixels",
+            "pixel_copy_required": true,
+            "display_size": {
+              "width": 421,
+              "height": 498
+            },
+            "contamination_check": {
+              "passed": false,
+              "contaminants": [
+                "dark dashboard background",
+                "drag control overlap near bottom right"
+              ],
+              "decision": "reject_source_crop_generate_transparent_subject"
+            },
+            "bounds": {
+              "x": 915,
+              "y": 330,
+              "width": 760,
+              "height": 900
+            }
+          },
+          "generation": {
+            "required": true,
+            "user_image_generation_skill_required": true,
+            "transparent_background_preferred": true,
+            "allow_non_transparent_fallback": true,
+            "reference_image": "source_crop",
+            "preserve_subject": true,
+            "remove_background": true,
+            "remove_interactive_elements": true,
+            "prompt_features": [
+              "matte black Rabbit R2 device",
+              "angled perspective",
+              "cyan pixel rabbit logo",
+              "front knobs and side green button"
+            ],
+            "negative_prompt_features": [
+              "no dashboard background",
+              "no drag pill",
+              "no button overlay",
+              "no halo",
+              "no matte fringe"
+            ]
+          },
+          "evidence": "Central product device is the dominant raster visual."
+        }
+      ]
+    }
+  },
+  "root": {
+    "type": "container",
+    "id": "root",
+    "role": "desktop_dashboard_shell",
+    "behavior": {
+      "scroll_container": "child",
+      "overflow": "hidden"
+    },
+    "layout": {
+      "direction": "row",
+      "width": null,
+      "height": null
+    },
+    "children": [
+      {
+        "type": "sidebar",
+        "id": "left_navigation",
+        "role": "persistent_primary_navigation",
+        "layout": {
+          "width": 169,
+          "direction": "column"
+        },
+        "behavior": {
+          "positioning": "sticky",
+          "sticky_edge": "left",
+          "internal_scroll_container": "child"
+        }
+      },
+      {
+        "type": "main",
+        "id": "main_dashboard_scroll",
+        "role": "viewport_bounded_dashboard_canvas",
+        "behavior": {
+          "scroll_container": "self",
+          "overflow": "auto",
+          "scroll_axis": "both",
+          "scroll_reason": "canvas_overflow"
+        },
+        "children": [
+          {
+            "type": "header",
+            "id": "dashboard_header",
+            "role": "overview_header"
+          },
+          {
+            "type": "grid",
+            "id": "dashboard_board",
+            "role": "three_column_device_dashboard",
+            "layout": {
+              "columns": 3,
+              "gap": 13
+            }
+          },
+          {
+            "type": "grid",
+            "id": "metric_cards",
+            "role": "bottom_metrics",
+            "layout": {
+              "columns": 4,
+              "gap": 13
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

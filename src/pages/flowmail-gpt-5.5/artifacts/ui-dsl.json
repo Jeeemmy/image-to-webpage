@@ -1,0 +1,485 @@
+{
+  "version": "ui-dsl-v2",
+  "request": {
+    "source": "given_snapshot",
+    "ignored_outer_container": false,
+    "wrapper_candidates": [
+      {
+        "id": "full_app_shell",
+        "type": "other",
+        "bounds": {
+          "x": 0,
+          "y": 0,
+          "width": 2157,
+          "height": 1535
+        },
+        "visual_signals": [
+          "product sidebar starts at source x=0",
+          "main content begins at a persistent vertical pane boundary",
+          "topbar belongs to the app layout and aligns with the main pane"
+        ],
+        "contains_product_ui": true,
+        "boundary_has_product_semantics": true,
+        "decision": "preserve",
+        "confidence": 0.92,
+        "evidence": "The boundary is the actual product viewport/app shell rather than an external design board."
+      }
+    ],
+    "wrapper_decision": {
+      "ignored": false,
+      "effective_source_bounds_reason": "The full image is the real desktop application shell.",
+      "preserved_candidates": [
+        "full_app_shell"
+      ],
+      "ignored_candidates": [],
+      "confidence": 0.92,
+      "notes": "No decorative browser frame, device frame, or centered showcase artboard is visible."
+    },
+    "effective_source_bounds": {
+      "x": 0,
+      "y": 0,
+      "width": 2157,
+      "height": 1535
+    },
+    "viewport_adaptation": {
+      "calibration_width_is_fixed_output": false,
+      "root_sizing": "fill_viewport",
+      "height_strategy": "viewport_bounded_shell",
+      "width_strategy": "fluid_width",
+      "fluid_regions": [
+        "main_content",
+        "cards_grid"
+      ],
+      "fixed_regions": [
+        "sidebar",
+        "topbar"
+      ],
+      "content_max_width": null,
+      "breakpoint_intent": [
+        "desktop four-stat row wraps when narrow",
+        "integration cards preserve three columns at calibration width and collapse below desktop widths"
+      ],
+      "scoped_overflow_regions": [
+        "main_scroll_pane"
+      ],
+      "forbidden_root_behavior": [
+        "fixed_screenshot_width",
+        "fixed_screenshot_height",
+        "centered_static_artboard"
+      ],
+      "notes": "Render as a dashboard shell bounded to the viewport with local main scrolling."
+    },
+    "ignored_system_chrome": [],
+    "image_asset_strategy": {
+      "important_image_elements": [
+        {
+          "id": "john_doe_avatar",
+          "node_id": "sidebar_profile_avatar",
+          "importance": "supporting",
+          "bounds": {
+            "x": 35,
+            "y": 1427,
+            "width": 68,
+            "height": 68
+          },
+          "is_obstructed": false,
+          "occluding_element_ids": [],
+          "asset_strategy": "source_crop",
+          "layering": {
+            "background_strategy": "none",
+            "subject_strategy": "source_crop",
+            "overlay_strategy": "none",
+            "recommended_stack": [
+              "source_crop"
+            ]
+          },
+          "source_crop": {
+            "required": true,
+            "whole_element": true,
+            "include_occluders": false,
+            "coordinate_space": "absolute_source_image_pixels",
+            "pixel_copy_required": true,
+            "display_size": {
+              "width": 36,
+              "height": 36
+            },
+            "contamination_check": {
+              "passed": true,
+              "contaminants": [],
+              "decision": "clean_source_crop_allowed"
+            },
+            "bounds": {
+              "x": 35,
+              "y": 1427,
+              "width": 68,
+              "height": 68
+            }
+          },
+          "generation": {
+            "required": false,
+            "user_image_generation_skill_required": false,
+            "transparent_background_preferred": false,
+            "allow_non_transparent_fallback": null,
+            "reference_image": "source_crop",
+            "preserve_subject": true,
+            "remove_background": false,
+            "remove_interactive_elements": false,
+            "prompt_features": [],
+            "negative_prompt_features": []
+          },
+          "evidence": "Small user profile photo with no overlay contamination."
+        }
+      ]
+    }
+  },
+  "root": {
+    "type": "container",
+    "id": "root",
+    "role": "desktop_dashboard_screen",
+    "layout": {
+      "direction": "row",
+      "width": null,
+      "height": null,
+      "gap": 0
+    },
+    "layering": {
+      "underlays": [],
+      "overlays": [],
+      "overlap_relationships": []
+    },
+    "children": [
+      {
+        "type": "sidebar",
+        "id": "sidebar",
+        "role": "primary_navigation",
+        "children": [
+          {
+            "type": "container",
+            "id": "brand",
+            "role": "brand",
+            "content": "FlowMail"
+          },
+          {
+            "type": "nav",
+            "id": "main_nav",
+            "children": [
+              {
+                "type": "nav_item",
+                "id": "nav_dashboard",
+                "content": "Dashboard",
+                "state": "inactive",
+                "behavior": {
+                  "interactive": true,
+                  "requires_pointer_cursor": true
+                }
+              },
+              {
+                "type": "nav_item",
+                "id": "nav_campaigns",
+                "content": "Campaigns",
+                "state": "inactive",
+                "behavior": {
+                  "interactive": true,
+                  "requires_pointer_cursor": true
+                }
+              },
+              {
+                "type": "nav_item",
+                "id": "nav_automations",
+                "content": "Automations",
+                "state": "inactive",
+                "behavior": {
+                  "interactive": true,
+                  "requires_pointer_cursor": true
+                }
+              },
+              {
+                "type": "nav_item",
+                "id": "nav_audience",
+                "content": "Audience",
+                "state": "inactive",
+                "behavior": {
+                  "interactive": true,
+                  "requires_pointer_cursor": true
+                }
+              },
+              {
+                "type": "nav_item",
+                "id": "nav_analytics",
+                "content": "Analytics",
+                "state": "inactive",
+                "behavior": {
+                  "interactive": true,
+                  "requires_pointer_cursor": true
+                }
+              },
+              {
+                "type": "nav_item",
+                "id": "nav_templates",
+                "content": "Templates",
+                "state": "inactive",
+                "behavior": {
+                  "interactive": true,
+                  "requires_pointer_cursor": true
+                }
+              },
+              {
+                "type": "nav_item",
+                "id": "nav_integrations",
+                "content": "Integrations",
+                "state": "active",
+                "behavior": {
+                  "interactive": true,
+                  "requires_pointer_cursor": true
+                }
+              },
+              {
+                "type": "nav_item",
+                "id": "nav_forms",
+                "content": "Forms",
+                "state": "inactive",
+                "behavior": {
+                  "interactive": true,
+                  "requires_pointer_cursor": true
+                }
+              },
+              {
+                "type": "nav_item",
+                "id": "nav_settings",
+                "content": "Settings",
+                "state": "inactive",
+                "behavior": {
+                  "interactive": true,
+                  "requires_pointer_cursor": true
+                }
+              }
+            ]
+          },
+          {
+            "type": "container",
+            "id": "profile",
+            "role": "account_menu",
+            "content": "John Doe Pro Plan",
+            "behavior": {
+              "interactive": true,
+              "requires_pointer_cursor": true
+            }
+          }
+        ]
+      },
+      {
+        "type": "main",
+        "id": "main_area",
+        "role": "integrations_workspace",
+        "children": [
+          {
+            "type": "header",
+            "id": "topbar",
+            "role": "persistent_topbar",
+            "children": [
+              {
+                "type": "text",
+                "id": "topbar_title",
+                "content": "Integrations"
+              },
+              {
+                "type": "search_input",
+                "id": "global_search",
+                "content": "Search here...",
+                "behavior": {
+                  "interactive": true
+                }
+              },
+              {
+                "type": "icon_button",
+                "id": "notifications",
+                "content": null,
+                "behavior": {
+                  "interactive": true,
+                  "requires_pointer_cursor": true
+                }
+              },
+              {
+                "type": "button",
+                "id": "ai_insight_button",
+                "content": "Get Ai Insight",
+                "behavior": {
+                  "interactive": true,
+                  "requires_pointer_cursor": true
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "hero_summary",
+            "children": [
+              {
+                "type": "heading",
+                "id": "page_title",
+                "content": "Integrations",
+                "typography_role": "hero_heading"
+              },
+              {
+                "type": "paragraph",
+                "id": "page_subtitle",
+                "content": "Connect FlowMail with your favorite tools"
+              },
+              {
+                "type": "button",
+                "id": "request_integration",
+                "content": "Request Integration",
+                "behavior": {
+                  "interactive": true,
+                  "requires_pointer_cursor": true
+                }
+              },
+              {
+                "type": "grid",
+                "id": "stat_cards",
+                "children": [
+                  {
+                    "type": "card",
+                    "id": "stat_total_available",
+                    "content": "Total Available 24 +6%"
+                  },
+                  {
+                    "type": "card",
+                    "id": "stat_connected",
+                    "content": "Connected 09 +2%"
+                  },
+                  {
+                    "type": "card",
+                    "id": "stat_categories",
+                    "content": "Categories 08 +5%"
+                  },
+                  {
+                    "type": "card",
+                    "id": "stat_last_synced",
+                    "content": "Last Synced 2m Live"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "all_integrations_panel",
+            "role": "integration_catalog",
+            "children": [
+              {
+                "type": "heading",
+                "id": "catalog_heading",
+                "content": "All Integrations"
+              },
+              {
+                "type": "search_input",
+                "id": "integration_search",
+                "content": "Search Integrations...",
+                "behavior": {
+                  "interactive": true
+                }
+              },
+              {
+                "type": "tabs",
+                "id": "integration_tabs",
+                "children": [
+                  {
+                    "type": "tab",
+                    "id": "tab_all",
+                    "content": "All",
+                    "state": "active",
+                    "behavior": {
+                      "interactive": true,
+                      "requires_pointer_cursor": true
+                    }
+                  },
+                  {
+                    "type": "tab",
+                    "id": "tab_available",
+                    "content": "Available",
+                    "state": "inactive",
+                    "behavior": {
+                      "interactive": true,
+                      "requires_pointer_cursor": true
+                    }
+                  },
+                  {
+                    "type": "tab",
+                    "id": "tab_connected",
+                    "content": "Connected",
+                    "state": "inactive",
+                    "behavior": {
+                      "interactive": true,
+                      "requires_pointer_cursor": true
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "grid",
+                "id": "integration_cards",
+                "children": [
+                  {
+                    "type": "card",
+                    "id": "slack_card",
+                    "role": "integration_card",
+                    "content": "Slack"
+                  },
+                  {
+                    "type": "card",
+                    "id": "trello_card",
+                    "role": "integration_card",
+                    "content": "Trello"
+                  },
+                  {
+                    "type": "card",
+                    "id": "monday_card",
+                    "role": "integration_card",
+                    "content": "Monday.com"
+                  },
+                  {
+                    "type": "card",
+                    "id": "notion_card",
+                    "role": "integration_card",
+                    "content": "Notion"
+                  },
+                  {
+                    "type": "card",
+                    "id": "jira_card",
+                    "role": "integration_card",
+                    "content": "Jira"
+                  },
+                  {
+                    "type": "card",
+                    "id": "asana_card",
+                    "role": "integration_card",
+                    "content": "Asana"
+                  },
+                  {
+                    "type": "card",
+                    "id": "clickup_card",
+                    "role": "integration_card",
+                    "content": "ClickUp"
+                  },
+                  {
+                    "type": "card",
+                    "id": "basecamp_card",
+                    "role": "integration_card",
+                    "content": "Basecamp"
+                  },
+                  {
+                    "type": "card",
+                    "id": "wrike_card",
+                    "role": "integration_card",
+                    "content": "Wrike"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

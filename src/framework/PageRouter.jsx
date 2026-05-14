@@ -28,9 +28,24 @@ function NotFound({ pathname }) {
   );
 }
 
+function BackToPageIndexButton() {
+  return (
+    <a
+      aria-label="返回列表"
+      className="fixed left-4 top-4 z-[9999] flex h-11 min-w-28 items-center justify-center rounded-md border border-[#171713]/20 bg-white/95 px-4 text-sm font-semibold text-[#171713] opacity-0 shadow-[0_8px_24px_rgba(16,16,20,0.10)] outline-none backdrop-blur transition duration-150 hover:opacity-100 focus-visible:opacity-100"
+      href="/"
+      title="返回列表"
+    >
+      返回列表
+    </a>
+  );
+}
+
 export default function PageRouter() {
   const pathname = normalizePathname(window.location.pathname);
   const page = pathname === "/" ? null : findPageByRoute(pathname);
+  const isEmbeddedPreview = window.self !== window.top;
+  const shouldShowBackButton = !isEmbeddedPreview;
   const title =
     pathname === "/" ? "UIWorkflow Lab" : page?.title ?? "页面未注册";
 
@@ -51,8 +66,18 @@ export default function PageRouter() {
     page.preview?.device === "mobile" &&
     !isPhoneContentPreview(window.location.search)
   ) {
-    return <PhonePreviewFrame page={page} />;
+    return (
+      <>
+        {shouldShowBackButton ? <BackToPageIndexButton /> : null}
+        <PhonePreviewFrame page={page} />
+      </>
+    );
   }
 
-  return <PageComponent artifacts={page.artifacts} />;
+  return (
+    <>
+      {shouldShowBackButton ? <BackToPageIndexButton /> : null}
+      <PageComponent artifacts={page.artifacts} />
+    </>
+  );
 }

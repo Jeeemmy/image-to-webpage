@@ -1,0 +1,371 @@
+{
+  "meta": {
+    "source_type": "ui_snapshot",
+    "source_image": "comparison-image/pc-regular/flowmail.webp",
+    "source_dimensions": {
+      "width": 2157,
+      "height": 1535
+    },
+    "adaptation_width": 1200,
+    "normalized_scale": 0.556328,
+    "extraction_confidence": 0.86,
+    "notes": [
+      "The visible UI is a desktop app shell. The screenshot has no external presentation artboard; the application chrome itself occupies the full source bounds.",
+      "Most iconography is vector-like product UI and should be reconstructed with DOM/SVG rather than image assets.",
+      "The only final source crop is the bottom-left user avatar, which is a raster identity image."
+    ],
+    "assumptions": [
+      "Global typography is approximated with the project Manrope stack, visually close to the rounded sans UI text in the screenshot.",
+      "The source is slightly blurred/compressed, so pale neutral colors and shadow strengths are conservative approximations.",
+      "The card grid continues below the captured viewport; bottom card corners at the screenshot edge are treated as cropped rather than square."
+    ],
+    "unknowns": []
+  },
+  "raw_observations": {
+    "image": {
+      "wrapper_candidates": [
+        {
+          "id": "full_source_bounds",
+          "type": "app_shell_boundary",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 2157,
+            "height": 1535
+          },
+          "visual_signals": [
+            "persistent left navigation starts at physical left edge",
+            "topbar and main content align to sidebar boundary",
+            "main content scroll continues beyond bottom crop"
+          ],
+          "decision": "preserve",
+          "confidence": 0.92,
+          "evidence": "The boundary is the actual product app shell and owns the sidebar/main layout."
+        }
+      ],
+      "effective_source_bounds": {
+        "x": 0,
+        "y": 0,
+        "width": 2157,
+        "height": 1535
+      }
+    }
+  },
+  "colors": {
+    "brand": {
+      "primary": "#5F3DF3",
+      "primary_hover": "#5436DA",
+      "primary_active": "#4A2FC4",
+      "primary_subtle": "#EEEAFE",
+      "secondary": "#40BEE2",
+      "accent": "#BFA7FF"
+    },
+    "background": {
+      "page": "#F7F7FB",
+      "canvas": "#F5F4FA",
+      "sidebar": "#FCFCFD",
+      "topbar": "#F7F7FB",
+      "surface": "#FFFFFF",
+      "surface_raised": "#FFFFFF",
+      "metric_well": "#F5F5FA",
+      "surface_overlay": "#FFFFFF",
+      "inverse": "#101014"
+    },
+    "text": {
+      "primary": "#090A0D",
+      "secondary": "#56575F",
+      "tertiary": "#73747B",
+      "muted": "#8E8F96",
+      "disabled": "#C8CAD1",
+      "inverse": "#FFFFFF",
+      "link": "#5F3DF3",
+      "link_hover": "#5436DA"
+    },
+    "border": {
+      "default": "#E6E6EC",
+      "subtle": "#EFEFF3",
+      "strong": "#DADAE2",
+      "focus": "#5F3DF3",
+      "divider": "#ECECF1"
+    },
+    "state": {
+      "success": "#16A066",
+      "success_bg": "#E5F6ED",
+      "warning": "#D99B11",
+      "warning_bg": "#FFF5D9",
+      "error": "#D94E4E",
+      "error_bg": "#FFE8E8",
+      "info": "#247DCC",
+      "info_bg": "#E7F1FC",
+      "disabled_bg": "#F0F1F4",
+      "disabled_text": "#C9CBD2"
+    },
+    "neutral_scale": {
+      "0": "#FFFFFF",
+      "50": "#FAFAFC",
+      "100": "#F5F5FA",
+      "200": "#ECECF1",
+      "300": "#DEDFE7",
+      "400": "#B8BAC4",
+      "500": "#8E8F96",
+      "600": "#64656C",
+      "700": "#3D3E45",
+      "800": "#202126",
+      "900": "#0B0C10",
+      "1000": "#000000"
+    },
+    "semantic_aliases": [
+      {
+        "alias": "app_shell.sidebar_background",
+        "value": "#FCFCFD"
+      },
+      {
+        "alias": "app_shell.main_background",
+        "value": "#F5F4FA"
+      },
+      {
+        "alias": "component.card_background",
+        "value": "#FFFFFF"
+      }
+    ]
+  },
+  "typography": {
+    "font_family": {
+      "primary": "Manrope, Inter, ui-sans-serif, system-ui, sans-serif",
+      "secondary": "Inter, ui-sans-serif, system-ui, sans-serif",
+      "mono": null
+    },
+    "font_size": {
+      "display": null,
+      "h1": 27,
+      "h2": 20,
+      "h3": 17,
+      "h4": 15,
+      "title": 16,
+      "subtitle": 14,
+      "body": 14,
+      "body_sm": 12,
+      "caption": 11,
+      "label": 13,
+      "button": 13
+    },
+    "line_height": {
+      "h1": 1.16,
+      "h2": 1.25,
+      "h3": 1.35,
+      "body": 1.45,
+      "caption": 1.2,
+      "button": 1.15
+    },
+    "font_weight": {
+      "regular": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700
+    },
+    "letter_spacing": {
+      "display": 0,
+      "heading": 0,
+      "body": 0,
+      "caption": 0,
+      "button": 0
+    },
+    "high_visual_weight_text": [
+      {
+        "role": "brand",
+        "sample": "FlowMail",
+        "font_family_candidates": [
+          "Manrope",
+          "Inter"
+        ],
+        "generic_class": "sans",
+        "digit_style": {
+          "numeric_forms": null,
+          "spacing": null,
+          "contrast": null
+        },
+        "font_size": 16,
+        "font_weight": 600,
+        "letter_spacing": 0,
+        "confidence": 0.78,
+        "evidence": "Rounded modern UI sans, medium-heavy brand label beside icon.",
+        "availability": {
+          "exact_font": "available",
+          "exact_installed": null,
+          "project_font": "Manrope",
+          "local_asset": null,
+          "close_style_available": true,
+          "close_style_candidates": [
+            "Manrope",
+            "Inter",
+            "system-ui"
+          ],
+          "checked_sources": [
+            "project_css"
+          ]
+        },
+        "fallback": {
+          "strategy": "project_font",
+          "selected": "Manrope",
+          "family_stack": [
+            "Manrope",
+            "Inter",
+            "ui-sans-serif",
+            "system-ui",
+            "sans-serif"
+          ],
+          "notes": "Use the project-imported Manrope family."
+        },
+        "user_notice_required": false
+      },
+      {
+        "role": "kpi",
+        "sample": "24, 09, 08, 2m",
+        "font_family_candidates": [
+          "Manrope",
+          "Inter"
+        ],
+        "generic_class": "sans",
+        "digit_style": {
+          "numeric_forms": "lining",
+          "spacing": "proportional",
+          "contrast": "low"
+        },
+        "font_size": 24,
+        "font_weight": 500,
+        "letter_spacing": 0,
+        "confidence": 0.8,
+        "evidence": "Large KPI numerals in stat cards.",
+        "availability": {
+          "exact_font": "available",
+          "exact_installed": null,
+          "project_font": "Manrope",
+          "local_asset": null,
+          "close_style_available": true,
+          "close_style_candidates": [
+            "Manrope",
+            "Inter",
+            "system-ui"
+          ],
+          "checked_sources": [
+            "project_css"
+          ]
+        },
+        "fallback": {
+          "strategy": "project_font",
+          "selected": "Manrope",
+          "family_stack": [
+            "Manrope",
+            "Inter",
+            "ui-sans-serif",
+            "system-ui",
+            "sans-serif"
+          ],
+          "notes": "Use project font."
+        },
+        "user_notice_required": false
+      }
+    ]
+  },
+  "spacing": {
+    "base": 4,
+    "scale": {
+      "0": 0,
+      "2xs": 4,
+      "xs": 7,
+      "sm": 10,
+      "md": 13,
+      "lg": 18,
+      "xl": 24,
+      "2xl": 32,
+      "3xl": 42
+    },
+    "layout": {
+      "sidebar_width": 208,
+      "topbar_height": 75,
+      "main_gutter_x": 20,
+      "main_gutter_y": 24,
+      "card_gap": 15
+    }
+  },
+  "radius": {
+    "sm": 6,
+    "md": 8,
+    "lg": 13,
+    "xl": 18,
+    "pill": 999
+  },
+  "shadow": {
+    "card": "0 8px 24px rgba(28, 30, 42, 0.06)",
+    "control": "0 4px 14px rgba(24, 25, 35, 0.08)",
+    "shell_edge": "8px 0 24px rgba(35, 36, 46, 0.04)",
+    "inner_control": "inset 0 1px 0 rgba(255,255,255,0.75)"
+  },
+  "components": {
+    "stat_card": {
+      "width": 228,
+      "height": 100,
+      "radius": 18,
+      "padding": 18,
+      "metric_well_height": 52,
+      "metric_well_inset": 12
+    },
+    "integration_card": {
+      "height": 186,
+      "radius": 13,
+      "body_padding": 24,
+      "footer_height": 50,
+      "footer_padding_x": 13,
+      "footer_divider": true
+    },
+    "switch": {
+      "width": 30,
+      "height": 18,
+      "thumb": 14
+    }
+  },
+  "layout": {
+    "viewport_adaptation": {
+      "calibration_width_is_fixed_output": false,
+      "root_sizing": "fill_viewport",
+      "height_strategy": "viewport_bounded_shell",
+      "width_strategy": "fluid_width",
+      "fluid_regions": [
+        "main_stage",
+        "integration_grid"
+      ],
+      "fixed_regions": [
+        "sidebar",
+        "topbar"
+      ],
+      "content_max_width": null,
+      "breakpoint_intent": [
+        "Stat cards and integration cards wrap/collapse when viewport cannot fit the 4/3 column desktop layout.",
+        "Sidebar becomes narrower on small desktop/tablet widths."
+      ],
+      "scoped_overflow_regions": [
+        "main_scroll"
+      ]
+    }
+  },
+  "assets": {
+    "john_doe_avatar": {
+      "strategy": "source_crop",
+      "source_crop": {
+        "x": 35,
+        "y": 1427,
+        "width": 68,
+        "height": 68
+      },
+      "display_size": {
+        "width": 36,
+        "height": 36
+      },
+      "contamination_check": {
+        "passed": true,
+        "contaminants": [],
+        "decision": "clean_source_crop_allowed"
+      }
+    }
+  }
+}

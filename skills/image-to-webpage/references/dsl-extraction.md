@@ -25,7 +25,7 @@ Capture:
 - Source visual bounding boxes for generated transparent subjects, exact original-source-pixel crop bounds for screenshot assets/references, and edge behavior for horizontal scrollers inside padded mobile content.
 - Hero/photo/map underlay relationships with floating bottom sheets, rounded cards, booking panels, player panels, or detail panels, including `overlap_px` and z-order when the panel covers part of the image.
 - Ignored mobile system chrome such as iOS home indicators and Android gesture/navigation bars when visible.
-- Viewport adaptation intent: the confirmed adaptation width is a fidelity calibration point, not a fixed output size; record fluid root behavior, fixed-vs-flex regions, breakpoint/wrapping intent, and scoped overflow needs.
+- Viewport adaptation intent: the confirmed adaptation width is a screenshot-inferred or user-provided fidelity calibration point, not a fixed output size; record the width inference evidence, fluid root behavior, fixed-vs-flex regions, breakpoint/wrapping intent, and scoped overflow needs.
 
 Use `null` for unknown, ambiguous, unreadable, or not visible values.
 
@@ -131,7 +131,7 @@ When an important visual element is image-based, decide whether rendering should
 
 Before allowing final `source_crop`, run an asset contamination gate. This gate is mandatory for hero photos, venue/product photos, maps, artwork, screenshot previews, and other high-visual-weight raster regions. A crop is contaminated if it contains pixels from phone/device/browser/mock frames, OS status bars, iOS home indicators, Android gesture/navigation bars, notches/dynamic islands, clock/battery/wifi/signal indicators, app navigation/action buttons, carousel controls, chips, badges, text overlays, cards, bottom sheets, modals, popovers, or any other UI surface that should be reconstructed separately or ignored as presentation chrome. A contaminated crop is not a valid final asset; use it only as a generation reference.
 
-All source crop and crop-reference bounds are absolute source screenshot pixel coordinates. They are not CSS pixels, not relative to the adapted `1200px`/`402px` render width, and not inferred from the final display size. The adaptation scale is for layout measurement only. For bitmap assets such as avatars, thumbnails, photos, maps, and artwork, record the original crop size separately from the intended rendered CSS size when they differ.
+All source crop and crop-reference bounds are absolute source screenshot pixel coordinates. They are not CSS pixels, not relative to the confirmed adaptation width, and not inferred from the final display size. The adaptation scale is for layout measurement only. For bitmap assets such as avatars, thumbnails, photos, maps, and artwork, record the original crop size separately from the intended rendered CSS size when they differ.
 
 Use `asset_strategy: "generate_transparent_subject"` when:
 
@@ -139,6 +139,7 @@ Use `asset_strategy: "generate_transparent_subject"` when:
 - The screenshot provides a usable reference crop for the subject.
 - The subject can be separated from its background, even if the image element is not obstructed.
 - The user has or may have an image generation skill that can preserve the subject while removing background and overlays, unless the user explicitly declined image generation.
+- The item is a repeated carousel/list template whose screenshot-edge-clipped instance is missing part of the subject and sibling items can provide style/composition priors; in this case, infer/reconstruct a complete subject instead of preserving clipped damage.
 
 For transparent subject generation, record:
 
@@ -151,6 +152,7 @@ For transparent subject generation, record:
 - `layering.subject_strategy = "transparent_generated_asset"`.
 - `layering.overlay_strategy = "separate_interactive_nodes"` when any buttons, chips, badges, carousel controls, play/save/share controls, or hover actions sit above the image.
 - `generation.reference_image = "source_crop"` or `"screenshot_region"` and concise `prompt_features` describing the subject, material, lighting, perspective, crop, and style.
+- When the reference is screenshot-edge-clipped, include completion intent in `generation.prompt_features` (for example: "reconstruct full uncut subject, keep sibling-template style/perspective"), and include edge-clean requirements in `generation.negative_prompt_features` (for example: "no white matte, no halo, no clipped edge, no residual text/UI fragments").
 
 Use `asset_strategy: "source_crop"` when:
 
@@ -414,6 +416,75 @@ Estimate `edge_inset_start` and `edge_inset_end` if they are important for fidel
 For horizontal scrollers inside padded mobile content, record whether the scroll strip is clipped to the padded content column or visually bleeds to the screen edge. If the first chip/card/tab aligns with page padding but later content continues into the padding area, record an edge behavior hint such as `full_bleed_scroll_with_inner_padding` so rendering uses negative inline margins plus matching inner padding/scroll-padding.
 
 On mobile, do not model ordinary browser scrollbars as UI nodes. Scrollbar visibility is a render-layer decision: scrollbars are hidden by default unless the source screenshot shows a meaningful in-product scrollbar or scroll indicator.
+
+## Edge-Anchored Text Stack Alignment
+
+For hero helper copy, support/contact links, account prompts, right-side summary text, left/right rail copy, and similar text/link stacks, record both the stack's edge anchor and the line alignment.
+
+Use these fields when available:
+
+- `layout.edge_anchor`: `right_safe_area`, `left_safe_area`, `center`, or the closest semantic edge.
+- `layout.offset_right` / `layout.offset_left`: measured edge inset when useful.
+- `layout.align`: stack child alignment, such as `end` for a right-aligned column.
+- `layout.text_alignment`: text line alignment, such as `end` for right-aligned text.
+
+A text group can be placed near the right side but still be left-aligned, or it can be anchored to the right edge and right-aligned. These are different visual signals. Do not default side-positioned vertical stacks to `align: "start"`; decide from the ragged edge of the visible text and links.
+
+Example:
+
+```json
+{
+  "type": "stack",
+  "id": "hero_support_links",
+  "role": "support_links",
+  "layout": {
+    "direction": "column",
+    "edge_anchor": "right_safe_area",
+    "offset_right": 122,
+    "align": "end",
+    "text_alignment": "end"
+  }
+}
+```
+
+## Carousel Card Item Proportions
+
+For horizontal product-card, offer-card, article-card, gallery-card, and app-store style carousels, measure the outer repeated item boundary before measuring media.
+
+Record the carousel item template with at least:
+
+- outer `layout.width`, `layout.height`, and `layout.aspect_ratio` for each repeated card/item or the carousel template;
+- row `gap`;
+- scoped horizontal overflow behavior when the row extends past the viewport;
+- media/image bounds separately from the outer card bounds;
+- whether sibling items share a single repeated template.
+
+Do not calculate card height from a product image crop, from visible media content, or from the viewport slice. A card may contain a small or partially visible image while the outer rounded tile remains much taller. If one card is partially clipped by the screenshot edge but neighboring cards show the same template, propagate the measured item dimensions to the clipped sibling.
+
+If a repeated carousel/list item's media subject is partially clipped by the screenshot edge, separate layout from asset completion:
+
+- Preserve the clipped appearance in layout by keeping normal carousel overflow behavior and template dimensions.
+- When image generation is available and not declined, do not keep the clipped media fragment as the final reusable asset; generate/reconstruct a complete subject asset using the clipped instance plus sibling items of the same template as references.
+- When image generation is unavailable or declined, allow a clipped fallback asset but record the limitation so the asset can be regenerated later.
+
+Example:
+
+```json
+{
+  "type": "grid",
+  "id": "featured_product_carousel",
+  "role": "horizontal_product_carousel",
+  "layout": {
+    "direction": "row",
+    "gap": 25,
+    "item_sizing": "fixed",
+    "item_width": 252,
+    "item_height": 313,
+    "item_aspect_ratio": 0.805,
+    "scoped_overflow": "horizontal"
+  }
+}
+```
 
 ## Metric And Card Internal Layout
 

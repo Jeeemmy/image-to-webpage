@@ -1,5 +1,16 @@
 import { pages } from "./pageRegistry.js";
 
+const pageNameCollator = new Intl.Collator(["zh-Hans", "en"], {
+  numeric: true,
+  sensitivity: "base",
+});
+
+const sortedPages = [...pages].sort(
+  (a, b) =>
+    pageNameCollator.compare(a.title, b.title) ||
+    pageNameCollator.compare(a.id, b.id),
+);
+
 function getDeviceLabel(page) {
   return page.preview?.device === "mobile" ? "Mob" : "PC";
 }
@@ -14,36 +25,42 @@ export default function PageIndex() {
           </h1>
         </header>
 
-        <section className="grid gap-4 md:grid-cols-2">
-          {pages.map((page) => (
-            <a
-              key={page.id}
-              href={page.route}
-              className="group rounded-lg border border-[#d9d7cf] bg-white p-5 transition hover:border-[#171713]"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex min-w-0 items-start gap-3">
-                  <span
-                    className={`mt-1 inline-flex h-6 shrink-0 items-center rounded border px-2 text-[11px] font-bold leading-none ${
-                      page.preview?.device === "mobile"
-                        ? "border-[#2f6f52] bg-[#e7f3ec] text-[#21513b]"
-                        : "border-[#4b5563] bg-[#f3f4f6] text-[#262b32]"
-                    }`}
-                  >
-                    {getDeviceLabel(page)}
+        {sortedPages.length === 0 ? (
+          <section className="rounded-lg border border-dashed border-[#c8c5bb] bg-white/70 p-8 text-sm leading-6 text-[#555145]">
+            当前没有已注册页面。
+          </section>
+        ) : (
+          <section className="grid gap-4 md:grid-cols-2">
+            {sortedPages.map((page) => (
+              <a
+                key={page.id}
+                href={page.route}
+                className="group rounded-lg border border-[#d9d7cf] bg-white p-5 transition hover:border-[#171713]"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex min-w-0 items-start gap-3">
+                    <span
+                      className={`mt-1 inline-flex h-6 shrink-0 items-center rounded border px-2 text-[11px] font-bold leading-none ${
+                        page.preview?.device === "mobile"
+                          ? "border-[#2f6f52] bg-[#e7f3ec] text-[#21513b]"
+                          : "border-[#4b5563] bg-[#f3f4f6] text-[#262b32]"
+                      }`}
+                    >
+                      {getDeviceLabel(page)}
+                    </span>
+                    <h2 className="text-xl font-semibold">{page.title}</h2>
+                  </div>
+                  <span className="shrink-0 whitespace-nowrap text-sm font-semibold text-[#171713] group-hover:underline">
+                    打开
                   </span>
-                  <h2 className="text-xl font-semibold">{page.title}</h2>
                 </div>
-                <span className="shrink-0 whitespace-nowrap text-sm font-semibold text-[#171713] group-hover:underline">
-                  打开
-                </span>
-              </div>
-              <p className="mt-5 rounded-md bg-[#f1f0eb] px-3 py-2 font-mono text-xs text-[#555145]">
-                {page.route}
-              </p>
-            </a>
-          ))}
-        </section>
+                <p className="mt-5 rounded-md bg-[#f1f0eb] px-3 py-2 font-mono text-xs text-[#555145]">
+                  {page.route}
+                </p>
+              </a>
+            ))}
+          </section>
+        )}
       </div>
     </main>
   );

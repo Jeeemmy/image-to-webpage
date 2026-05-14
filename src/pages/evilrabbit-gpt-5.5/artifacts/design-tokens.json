@@ -1,0 +1,347 @@
+{
+  "meta": {
+    "source_type": "ui_snapshot",
+    "source_file": "comparison-image/pc-complex/evilrabbit.webp",
+    "target_device": "pc_desktop",
+    "source_dimensions": {
+      "width": 2400,
+      "height": 1800
+    },
+    "effective_source_width": 2165,
+    "adaptation_width": 1200,
+    "adaptation_width_inference": {
+      "source": "inferred_from_screenshot",
+      "user_confirmed": true,
+      "candidate_width": 1200,
+      "confidence": 0.84,
+      "evidence": [
+        "Full screenshot is a 2400x1800 high-resolution presentation export.",
+        "The teal outside region is a showcase canvas; the real dashboard shell is roughly x=117, y=129, width=2165, height=1540 in source pixels.",
+        "Dashboard controls, sidebar density, and app-shell proportions match a desktop calibration near 1200px rather than the raw bitmap width.",
+        "A 1200px calibration gives scale 0.554, consistent with the visually observed two-times export and the measured inner shell width."
+      ],
+      "alternate_candidates": [
+        {
+          "width": 1080,
+          "reason": "Also plausible for a dense desktop dashboard, but it makes the side columns and center device stage tighter than the source composition.",
+          "confidence": 0.42
+        }
+      ],
+      "notes": "Width confirmed by user after first response gate."
+    },
+    "normalized_scale": 0.5542725,
+    "extraction_confidence": 0.83,
+    "notes": [
+      "Outer teal canvas, glow, and shadow are presentation-only and excluded from the product UI render.",
+      "The real UI is a dark desktop dashboard with persistent left navigation and local main scrolling.",
+      "The Rabbit R2 device is restored as a generated image asset layered above coded dashboard backgrounds and below the DOM drag control."
+    ],
+    "assumptions": [
+      "Manrope is used as a close rounded sans fallback for the screenshot typography.",
+      "Panel borders and shadows are subtle approximations because source compression blends dark glass surfaces.",
+      "The bottom metric cards continue within the same viewport-bounded shell and should not turn the browser document into the main scroll owner."
+    ],
+    "unknowns": [
+      "Exact brand font and exact underlying dashboard data are unknown."
+    ]
+  },
+  "raw_observations": {
+    "image": {
+      "width": 2400,
+      "height": 1800,
+      "wrapper_candidates": [
+        {
+          "id": "outer_teal_showcase_canvas",
+          "type": "outer_canvas",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 2400,
+            "height": 1800
+          },
+          "visual_signals": [
+            "large teal gradient around the product",
+            "dashboard centered with large margin",
+            "soft presentation glow and outer shadow"
+          ],
+          "decision": "ignore",
+          "confidence": 0.95,
+          "evidence": "The teal area has no app controls, no scroll ownership, and does not align with internal dashboard panes."
+        },
+        {
+          "id": "inner_dark_dashboard_shell",
+          "type": "app_shell",
+          "bounds": {
+            "x": 117,
+            "y": 129,
+            "width": 2165,
+            "height": 1540
+          },
+          "visual_signals": [
+            "left sidebar boundary aligns with product navigation",
+            "all panels and controls are inside this shell",
+            "shell owns dashboard clipping and layout"
+          ],
+          "decision": "preserve",
+          "confidence": 0.92,
+          "evidence": "This is the real product app shell."
+        }
+      ],
+      "wrapper_decision": {
+        "ignored_outer_container": true,
+        "preserved_candidates": [
+          "inner_dark_dashboard_shell"
+        ],
+        "ignored_candidates": [
+          "outer_teal_showcase_canvas"
+        ],
+        "effective_source_bounds_reason": "Use the dark dashboard shell as the measurement source; ignore the teal showcase canvas."
+      },
+      "effective_source_bounds": {
+        "x": 117,
+        "y": 129,
+        "width": 2165,
+        "height": 1540
+      },
+      "ignored_system_chrome": []
+    },
+    "measured_elements": [
+      {
+        "id": "sidebar",
+        "bounds": {
+          "x": 117,
+          "y": 129,
+          "width": 305,
+          "height": 1540
+        },
+        "css_width_approx": 169
+      },
+      {
+        "id": "left_settings_column",
+        "bounds": {
+          "x": 484,
+          "y": 335,
+          "width": 424,
+          "height": 1290
+        },
+        "css_width_approx": 235
+      },
+      {
+        "id": "right_settings_column",
+        "bounds": {
+          "x": 1795,
+          "y": 335,
+          "width": 425,
+          "height": 1050
+        },
+        "css_width_approx": 235
+      },
+      {
+        "id": "device_reference_crop",
+        "bounds": {
+          "x": 915,
+          "y": 330,
+          "width": 760,
+          "height": 900
+        },
+        "css_width_approx": 421
+      }
+    ]
+  },
+  "colors": {
+    "brand": {
+      "primary": "#38e1d0",
+      "accent": "#f1cf49",
+      "secondary": "#65f2e5"
+    },
+    "background": {
+      "page": "#070a12",
+      "canvas": "#080b13",
+      "sidebar": "#09101a",
+      "panel": "#161b26",
+      "panel_glass": "rgba(22,27,38,0.90)"
+    },
+    "text": {
+      "primary": "#f6fffd",
+      "secondary": "rgba(246,255,253,0.62)",
+      "muted": "rgba(246,255,253,0.42)"
+    },
+    "border": {
+      "subtle": "rgba(127,238,231,0.19)",
+      "sidebar": "rgba(152,245,235,0.12)"
+    },
+    "state": {
+      "success": "#61e86c",
+      "active": "#38e1d0"
+    }
+  },
+  "typography": {
+    "font_family": {
+      "primary": "Manrope, Inter, ui-sans-serif, system-ui, sans-serif"
+    },
+    "font_size": {
+      "h1": 31,
+      "h2": 28,
+      "h3": 18,
+      "body": 15,
+      "body_sm": 13,
+      "caption": 11
+    },
+    "font_weight": {
+      "regular": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700
+    },
+    "high_visual_weight_text": [
+      {
+        "role": "brand",
+        "sample": "Evil Rabbit",
+        "generic_class": "sans",
+        "font_size": 14,
+        "font_weight": 600,
+        "confidence": 0.72,
+        "availability": {
+          "exact_font": "unknown",
+          "exact_installed": null,
+          "close_style_available": true,
+          "close_style_candidates": [
+            "Manrope"
+          ],
+          "checked_sources": [
+            "project_css"
+          ]
+        },
+        "fallback": {
+          "strategy": "project_font",
+          "selected": "Manrope"
+        },
+        "user_notice_required": false
+      },
+      {
+        "role": "hero_heading",
+        "sample": "RABBIT R2",
+        "generic_class": "sans",
+        "font_size": 28,
+        "font_weight": 400,
+        "letter_spacing": 22,
+        "confidence": 0.78,
+        "availability": {
+          "exact_font": "unknown",
+          "exact_installed": null,
+          "close_style_available": true,
+          "close_style_candidates": [
+            "Manrope"
+          ],
+          "checked_sources": [
+            "project_css"
+          ]
+        },
+        "fallback": {
+          "strategy": "project_font",
+          "selected": "Manrope"
+        },
+        "user_notice_required": false
+      }
+    ]
+  },
+  "spacing": {
+    "scale": {
+      "xs": 8,
+      "sm": 12,
+      "md": 18,
+      "lg": 28,
+      "xl": 39
+    },
+    "component_gap": {
+      "inline": 13,
+      "stack": 10,
+      "card_padding": 18
+    }
+  },
+  "sizing": {
+    "container": {
+      "sidebar_width": 169,
+      "side_column_width": 235,
+      "device_visual_width": 421
+    },
+    "icon": {
+      "md": 24
+    },
+    "control_height": {
+      "md": 52
+    }
+  },
+  "radius": {
+    "component": {
+      "card": 13,
+      "button": 999,
+      "input": 7
+    },
+    "shell": {
+      "top_left": 0,
+      "top_right": 0,
+      "bottom_right": 0,
+      "bottom_left": 0
+    }
+  },
+  "shadow": {
+    "shell_edge": "subtle directional dark edge",
+    "card": "0 18px 36px rgba(0,0,0,0.18)",
+    "inner_control": "inset 0 1px 0 rgba(255,255,255,0.08)"
+  },
+  "gradient": {
+    "teal_panel_glow": "radial teal glow on dark glass panels",
+    "gold_control_glow": "subtle gold glow under sliders and metric charts"
+  },
+  "layout": {
+    "viewport_adaptation": {
+      "calibration_width_is_fixed_output": false,
+      "root_sizing": "fill_viewport",
+      "height_strategy": "viewport_bounded_shell",
+      "width_strategy": "fluid_width",
+      "fluid_regions": [
+        "main_scroll",
+        "device_stage",
+        "metric_cards"
+      ],
+      "fixed_regions": [
+        "sidebar",
+        "left_settings_column",
+        "right_settings_column"
+      ],
+      "grid_behavior": "fixed_tracks_inside_fluid_shell",
+      "scoped_overflow_regions": [
+        "er-main-scroll"
+      ],
+      "notes": "The page root fills the viewport; the dense dashboard has a local min-width and scrolls inside the main pane at narrow widths."
+    }
+  },
+  "imagery": {
+    "layering": {
+      "background_rendering": "code",
+      "transparent_subject_preferred": true,
+      "overlay_controls_separate": true
+    },
+    "important_assets": [
+      {
+        "id": "rabbit_r2_device",
+        "source_reference_crop": {
+          "x": 915,
+          "y": 330,
+          "width": 760,
+          "height": 900,
+          "coordinate_space": "absolute_source_image_pixels",
+          "pixel_mismatches": 0
+        },
+        "generated_asset": "src/pages/evilrabbit-gpt-5.5/assets/rabbit-r2-device-clean.png",
+        "asset_strategy": "generate_transparent_subject",
+        "contamination_removed": [
+          "dashboard background",
+          "drag-to-rotate pill"
+        ],
+        "note": "API returned RGB checkerboard, then local alpha cleanup converted the bright checkerboard background to transparency."
+      }
+    ]
+  }
+}

@@ -35,8 +35,9 @@ Requirements:
 - When setting `request.ignored_outer_container = true`, also record `request.effective_source_bounds` for the real product UI bounds used for measurement. Include x, y, width, and height in source-image pixels. The effective bounds exclude presentation-only canvas, device/browser frames, decorative rounded frames, and outer drop shadows.
 - Base approximate layout measurements on the inner real UI content bounds when a presentation wrapper is ignored; do not use the full showcase image bounds as the page layout.
 - Treat source bounds and the confirmed adaptation width as measurement/calibration data only. Do not encode the root as a fixed output rectangle or fixed screenshot-height artboard unless the user explicitly requested a static artboard export.
-- For viewport-bounded app shells and dashboards, do not set `root.layout.width` or `root.layout.height` to the calibration width, source screenshot width, source screenshot height, or viewport crop height. Keep root width/height `null` unless the user explicitly requested a static artboard export. Put observed source size and calibration data only in `request.effective_source_bounds` and `request.viewport_adaptation`.
+- For viewport-bounded app shells and dashboards, do not set `root.layout.width` or `root.layout.height` to the calibration width, source screenshot width, source screenshot height, or viewport crop height. Keep root width/height `null` unless the user explicitly requested a static artboard export. Put observed source size and calibration data only in `request.effective_source_bounds`, `request.adaptation_width_inference`, and `request.viewport_adaptation`.
 - Record viewport adaptation intent in `request.viewport_adaptation`: whether the root should fill the viewport, which regions are fixed panels versus fluid tracks, how grids/toolbars respond outside the calibration width, and where scoped horizontal scrolling is acceptable.
+- Record the confirmed adaptation width and inference evidence in `request.adaptation_width_inference`. This width must come from a user-provided value or screenshot-based inference confirmed by the user, not from fixed PC/mobile defaults. Include target device classification, source image dimensions, effective product UI bounds when known, candidate width, confidence, evidence, and alternate plausible widths when uncertainty remains.
 - Preserve real in-product shell or pane edges even when they touch or sit near an ignored presentation wrapper. If the inner product UI has its own visible top/left/right/bottom border, clipped edge, raised pane, or directional shadow, model that boundary on the product node instead of discarding it with the showcase frame.
 - Distinguish presentation wrapper decoration from product chrome by checking whether the boundary aligns with internal UI regions, headers, sidebars, panes, tabs, or scroll containers. Product chrome belongs in the DSL; wrapper-only decoration does not.
 - Preserve real in-product shell offsets. If the main stage, raised pane, workspace surface, or app frame is visibly inset from the surrounding app canvas, record that offset on the product node even when an outer showcase wrapper is ignored.
@@ -52,7 +53,9 @@ Requirements:
 - If visible text is unreadable, keep the component and set content/text/value to null.
 - Preserve every visible icon.
 - Preserve interactive affordances: enabled controls should carry `behavior.interactive`, pointer cursor intent, and action role when visible semantics imply click/toggle/navigation.
+- Preserve edge-anchored text/link stack alignment. For hero helper copy, support/contact links, account prompts, and right/left rail text blocks, record the container edge anchor and the internal alignment in the stack node. If a text stack is anchored to the right safe-area edge and the lines are right-aligned, set fields such as `layout.align = "end"`, `layout.text_alignment = "end"`, and an edge hint such as `layout.edge_anchor = "right_safe_area"` or `layout.offset_right`. Do not model it as a right-positioned but left-aligned column unless the source text is visibly left-aligned.
 - Preserve distinct app-shell region surfaces, especially sidebar/navigation rail versus main canvas/main stage backgrounds when their tints differ.
+- Preserve repeated carousel/card item proportions. For horizontal product cards, gallery cards, offer cards, and other carousel items, record the outer card `layout.width`, `layout.height`, and `layout.aspect_ratio` on the repeated card or carousel item template, plus row gap and scoped overflow behavior. Keep image/media crop bounds separate from the outer card bounds. Do not infer item height from the image crop or from generic card defaults; if one carousel item is partially clipped by the screenshot but sibling cards expose the template, propagate the shared item dimensions.
 - Preserve KPI/stat/summary card internals, including inner tinted metric bands/wells and their inset from the outer card edge.
 - Preserve repeated card/list-item action footers as structure. If a card has a visually separated bottom strip with settings/action icons, a "Details" or row-action button, a switch/toggle, status controls, or a bottom divider, model that strip as a child `footer` or `container` with role `card_action_footer`; do not flatten the entire item to a single `card` with only text content.
 - Preserve visible borders, dividers, outlines, separators, and panel boundaries using semantic border fields.
@@ -106,6 +109,29 @@ Root output schema:
   "version": "ui-dsl-v2",
   "request": {
     "source": "given_snapshot",
+    "target_device": "pc_desktop | mobile | unknown | null",
+    "source_dimensions": {
+      "width": null,
+      "height": null
+    },
+    "adaptation_width": null,
+    "adaptation_width_inference": {
+      "source": "user_provided | inferred_from_screenshot | unknown | null",
+      "user_confirmed": null,
+      "candidate_width": null,
+      "effective_source_width": null,
+      "normalized_scale": null,
+      "confidence": null,
+      "evidence": [],
+      "alternate_candidates": [
+        {
+          "width": null,
+          "reason": null,
+          "confidence": null
+        }
+      ],
+      "notes": null
+    },
     "ignored_outer_container": true,
     "wrapper_candidates": [
       {
@@ -274,6 +300,7 @@ Common node schema:
     "padding_y": null,
     "edge_inset_start": null,
     "edge_inset_end": null,
+    "edge_anchor": "left_safe_area | right_safe_area | top_safe_area | bottom_safe_area | center | none | null",
     "align": "start | center | end | stretch | space-between | null",
     "justify": "start | center | end | space-between | space-around | null",
     "content_distribution": "natural | media_fills_remaining_space | text_anchored_bottom | null",
@@ -284,7 +311,8 @@ Common node schema:
     "columns": null,
     "rows": null,
     "width": null,
-    "height": null
+    "height": null,
+    "aspect_ratio": null
   },
   "behavior": {
     "positioning": "static | sticky | fixed | absolute | null",
@@ -830,11 +858,13 @@ Image asset extraction rules:
 - For each important image node, also record a source-crop contamination check before allowing final `source_crop`. Contaminants include device/browser/mock frames, phone hardware, OS status bars, iOS home indicators, Android gesture/navigation bars, notches/dynamic islands, clock/battery/wifi/signal indicators, page navigation/action buttons, carousel controls, chips, badges, text overlays, cards, bottom sheets, modals, popovers, and other UI surfaces that cover or surround the underlying image. A contaminated crop is not valid as the final hero/photo/map/art asset.
 - For generated transparent subjects, record the source subject's visual bounding box separately from the containing image/card bounds when visible or inferable. Include enough information for rendering to preserve the subject's relative size and position after generation/cropping, because generated PNG natural dimensions and transparent padding may differ from the screenshot. If the transparent canvas represents the source crop coordinate system, record that trimming transparent padding is prohibited unless trim offsets are also recorded for placement compensation.
 - When a user image generation skill is available or likely available and the user has not explicitly declined it, prefer `asset.asset_strategy = "generate_transparent_subject"` for important image nodes that have a separable subject. Use the screenshot crop as the reference, set `generation.preserve_subject = true`, `remove_background = true`, `remove_interactive_elements = true`, and `transparent_background_preferred = true`.
+- For repeated carousel/list items whose image subject is partially clipped by the screenshot edge, do not keep the clipped piece as the final reusable media when image generation is available. Set a generated strategy (`generate_transparent_subject` or `generate_clean_asset`), use the clipped region plus sibling items of the same template as references, and describe in `generation.prompt_features` that the subject must be reconstructed as a complete uncut silhouette matching sibling perspective/style.
 - Record `asset.layering` so renderers know which parts are code and which parts are image assets. Use `background_strategy = "code"` for gradients, solid fills, glows, and simple geometric backdrops that can be recreated with CSS/Tailwind/canvas. Use `subject_strategy = "transparent_generated_asset"` for the extracted subject. Use `overlay_strategy = "separate_interactive_nodes"` for buttons, chips, badges, carousel controls, and hover/action overlays.
 - If no interactive occluder overlaps the important image but the subject can be separated from a gradient or stylized background, still prefer `generate_transparent_subject` over a final whole-element screenshot crop when image generation is available.
 - If image generation is unavailable or explicitly declined by the user, set `asset.asset_strategy = "source_crop"`, `asset.source_crop.required = true`, `whole_element = true`, `include_occluders = false`, `coordinate_space = "absolute_source_image_pixels"`, and `pixel_copy_required = true` only for unobstructed, contamination-free elements. The crop bounds should cover the whole visual element, not just a central patch.
 - If an interactive occluder, system chrome, presentation chrome, or product overlay overlaps the important image and transparent subject extraction is unavailable or inappropriate, set `asset.asset_strategy = "generate_clean_asset"`, `asset.generation.required = true`, and list `asset.occluding_element_ids` plus `asset.source_crop.contamination_check.contaminants`. Preserve product-owned occluding controls as separate DSL nodes so rendering can place them back above the clean generated asset.
 - Fill `asset.generation.prompt_features` with concise visual descriptors needed to preserve/regenerate the subject, such as subject, composition, perspective, colors, material, crop, lighting, style, and visible relationship to the coded background. Also set `asset.generation.reference_image` to `"source_crop"` or `"screenshot_region"` when a crop can serve as a reference. Fill `asset.generation.negative_prompt_features` with every contaminant to remove, such as phone frame, status bar, iOS home indicator, Android navigation bar, gesture pill, dynamic island, battery/wifi icons, back/favorite/share buttons, bottom sheet, text overlay, cards, badges, and modal surfaces.
+- For transparent subject generation prompts, explicitly include edge-clean constraints in prompt or negative features: no matte, no halo, no fringe, no white/black border residue, no clipped/cutoff edges, and no residual text/UI fragments.
 - Set `asset.generation.user_image_generation_skill_required = true` for generated subject/clean asset strategies. Set `allow_non_transparent_fallback = true` only because some user-provided image generation skills may not support transparency.
 - Do not include overlay buttons, badges, text labels, or controls inside a transparent subject or clean generated asset. Those remain independent UI nodes layered above the image.
 - Do not include phone frames, browser/device mockups, OS status bars, iOS home indicators, Android gesture/navigation bars, dynamic islands/notches, clock/battery/wifi indicators, bottom sheets, cards, text overlays, or page action buttons inside a final source crop, transparent subject, or clean generated asset unless the user explicitly asked to reproduce those pixels as part of the image itself.

@@ -2,11 +2,11 @@
 
 ## Viewport Normalization
 
-Before implementation, confirm adaptation width with the user and verify that the First Response Confirmation Gate in `SKILL.md` has completed. The user's original screenshot reconstruction request does not count as confirmation. If the user has not explicitly confirmed after seeing the device classification, adaptation width, page target, and asset-generation decision, stop and ask for confirmation before implementing.
+Before implementation, confirm adaptation width with the user and verify that the First Response Confirmation Gate in `SKILL.md` has completed. The user's original screenshot reconstruction request does not count as confirmation. If the user has not explicitly confirmed or corrected the inferred width after seeing the device classification, adaptation width inference, page target, and asset-generation decision, stop and ask for confirmation before implementing.
 
-- Landscape screenshot default: `1200px` PC layout width.
-- Portrait screenshot default: `402px` mobile layout width.
 - First tell the user whether the screenshot was recognized as PC/desktop or mobile.
+- Infer the adaptation width from screenshot evidence for both PC/desktop and mobile sources. Do not use fixed PC/mobile defaults.
+- Tell the user the inferred adaptation width, the main evidence for it, and any plausible alternate width when uncertain.
 - Continue only after the user explicitly confirms the first reply or approves a corrected width/target.
 - If the user provides a width, use that width.
 
@@ -14,7 +14,7 @@ Keep raw image dimensions in artifacts, but normalize implementation measurement
 
 ```text
 effective_source_width = ignored_outer_container ? real_product_ui_bounds.width : screenshot_pixel_width
-scale = adaptation_width / effective_source_width
+scale = confirmed_adaptation_width / effective_source_width
 css_value = observed_bitmap_value * scale
 ```
 
@@ -26,7 +26,7 @@ This normalization is only for rendered CSS/layout measurements. Asset crop coor
 
 The confirmed adaptation width is the scale calibration point for screenshot fidelity, not the output viewport size. At the confirmed width, the page should match the source proportions closely; at other viewport sizes, the page must remain usable and coherent.
 
-Do not implement the root, body, page shell, or primary scroll container as a fixed screenshot/artboard rectangle, such as `width: 1200px; height: 854px`, `w-[1200px] h-[854px]`, `width: 402px`, `height: 896px`, or a centered fixed-size stage. Fixed dimensions are allowed only for measured component internals, real product-owned fixed-width panels, table minimum widths inside a horizontal scroll region, or max/min constraints inside a fluid shell.
+Do not implement the root, body, page shell, or primary scroll container as a fixed screenshot/artboard rectangle, such as `width: <confirmed_width>px`, a matching fixed screenshot height, or a centered fixed-size stage. Fixed dimensions are allowed only for measured component internals, real product-owned fixed-width panels, table minimum widths inside a horizontal scroll region, or max/min constraints inside a fluid shell.
 
 Prefer these implementation patterns:
 
@@ -65,6 +65,8 @@ Prefer existing project conventions. In React + Tailwind projects:
 - Respect shared app-shell background tokens. If tokens or DSL indicate sidebar, topbar, and main stage share one app canvas color, apply the same background to all of those large regions and sticky header cover layers. Do not introduce a visible seam by choosing nearby but different neutral colors.
 - Do not over-apply shared app-shell background tokens. If tokens or DSL record distinct backgrounds for a sidebar/navigation rail and main canvas/main stage, preserve those separate fills even when they are close pale neutrals. A persistent nav column that has its own tint should not be recolored to match the main stage just for consistency.
 - Render card internal distribution from DSL hints. For media cards with `media_fills_remaining_space` or `text_anchored_bottom`, use a fixed/min height flex column, a `flex-1` media region with centered content, and a bottom text stack pinned with `mt-auto` or equivalent. Do not render those cards as a plain natural vertical stack that leaves accidental bottom whitespace.
+- Render edge-anchored text/link stacks from DSL alignment hints. If a stack has `layout.edge_anchor = "right_safe_area"` or right-side offset plus `layout.align = "end"` / `layout.text_alignment = "end"`, anchor the container to the right safe-area edge and set both child alignment and text alignment to the end/right side. Do not let the CSS default for vertical flex stacks (`align-items: stretch` or `flex-start`) override the extracted alignment.
+- Render horizontal carousel items from the outer item dimensions recorded in DSL/tokens. Use the repeated card's `layout.width`, `layout.height`, `item_width`, `item_height`, or component token dimensions for the card frame, and position media inside that frame separately. Do not derive card height from image natural dimensions, cropped media bounds, or generic card defaults. If the row uses scoped horizontal overflow, keep the fixed card dimensions inside the scroller rather than shrinking card height to fit the viewport.
 - Render KPI/stat/summary cards from their recorded internal structure. When a card has an inner tinted value band or metric well, keep the outer card padding, inner band height, band padding, and bottom/right/left inset from the source. Do not stretch the band until it nearly touches the card edge unless the screenshot does.
 - Render repeated card/list-item action footers from their recorded structure. Use a flex column card, make the body the flexible region, and make the footer `shrink-0` with its measured `height` or at least `min-height`. The footer must own its top divider, padding, background, and `justify-between`/left-right action distribution. Ensure `footer min-height >= tallest footer control + padding-top + padding-bottom`; do not let a fixed card height, `overflow-hidden`, or border-box mistake crop settings icons, "Details" buttons, switches, or row actions. If the card needs rounded clipping, put controls inside the clipped footer region rather than absolutely positioning them through the card edge.
 
@@ -125,6 +127,8 @@ For `asset_strategy = "generate_transparent_subject"`:
 
 - Use the screenshot crop/reference with the user's image generation skill to preserve the main subject/material while removing the visual background and interactive elements.
 - Ask for transparent background output. The generation instruction should explicitly say to keep the subject, erase/remove the background, and erase/remove buttons, badges, chips, text overlays, carousel controls, and other interactive UI elements.
+- If the reference item is screenshot-edge-clipped in a repeated carousel/list template, ask generation to reconstruct a complete uncut subject using sibling items as style/perspective priors. Do not freeze clipped damage into the reusable asset.
+- Add edge-clean constraints to the prompt/negative features: no matte, no halo, no white/black fringe, no clipped edge, and no residual text/UI fragments.
 - Recreate simple backgrounds with code instead of screenshots: CSS/Tailwind gradients, solid fills, glows, noise-free shapes, blurred blobs that are actually in the product, and geometric backdrops should live in DOM/CSS/canvas layers.
 - Render the final composition as layers, typically: coded background/gradient, transparent generated subject image, then floating buttons/chips/badges/controls as separate DOM nodes.
 - Record the generated transparent asset path, reference crop, coded background strategy, overlay node ids, and any fallback in the render artifact.
@@ -152,6 +156,8 @@ For `asset_strategy = "generate_clean_asset"`:
 - Record the generated asset path, whether transparency was supported, reference used, and any fallback in the render artifact.
 
 If generation is required but no user image generation skill is available, do not silently invent a low-fidelity placeholder. Use the best available source crop as a temporary reference/fallback asset if needed, record the limitation in the render artifact, and keep backgrounds and occluding controls separate where possible so the asset can be regenerated cleanly later.
+
+For repeated carousel/list items, keep layout clipping and asset completeness as separate concerns. A right-edge-truncated card in the screenshot should still use the full item template size. If generation is available, use a complete generated subject and let carousel overflow produce the visible truncation. If generation is unavailable, clipped fallback assets are acceptable only when explicitly recorded as temporary.
 
 ## Presentation Wrapper Removal And Preservation Audit
 
@@ -398,7 +404,7 @@ Always run the available build command. Then verify in a real browser when possi
 - Old unrelated page text is gone.
 - Console errors are absent.
 - Desktop and mobile layouts do not clip, overlap, or overflow incoherently.
-- The page root/app shell is viewport-adaptive, not a fixed screenshot-size artboard. Search the implemented files for hard-coded root patterns such as `w-[1200px]`, `h-[854px]`, `width: 1200px`, `height: 854px`, `width: 402px`, or fixed `body`/root dimensions. If such values exist, they must be justified as component internals or replaced with fluid shell sizing.
+- The page root/app shell is viewport-adaptive, not a fixed screenshot-size artboard. Search the implemented files for hard-coded root patterns such as fixed confirmed-width classes, fixed screenshot-height classes, `width: <confirmed_width>px`, screenshot-derived root heights, or fixed `body`/root dimensions. If such values exist, they must be justified as component internals or replaced with fluid shell sizing.
 - The render artifact includes a `viewport_adaptation` or equivalent section recording calibration width, fluid root behavior, dynamic viewport units, breakpoints/wrapping behavior, and any intentional fixed panels/min-width scroll regions.
 - For dashboard/app-shell pages, run a browser scroll-owner check when browser verification is allowed: record initial `window.scrollY`, sidebar/topbar bounding boxes, scroll the declared content pane, then assert `window.scrollY` is still `0`, the pane's `scrollTop` increased, and persistent chrome bounding boxes did not move.
 - If browser verification is prohibited, run a non-browser scroll-invariant gate on source and built CSS. The gate must confirm shell viewport height uses `height`/`h-screen`/`h-dvh` rather than only `min-height`, shell overflow is hidden, the main scroll pane has `overflow-y: auto` or equivalent, all flex/grid ancestors in the scroll chain have `min-height: 0`, and persistent sidebar/topbar selectors include sticky/fixed positioning with opaque backgrounds. Record each boolean in the render artifact and fix any false result before reporting success.
@@ -412,6 +418,8 @@ Always run the available build command. Then verify in a real browser when possi
 - Shadow strength records are honest: guessed/visually judged strength must include confidence/evidence/notes and must not be presented as measured.
 - Directional shell-edge shadows match the source size. Tight top/left app-stage shadows should remain `xs`/small, not become broad ambient elevation.
 - Tabbars match the screenshot's distribution: no accidental `space-around` outer gutters when the source uses edge-spread/space-between alignment.
+- Edge-anchored text/link stacks match the screenshot: right-anchored groups are right-aligned internally when the source shows right-aligned text, and left-anchored groups are not accidentally centered or end-aligned.
+- Horizontal carousel item proportions match the screenshot: repeated card width/height/aspect ratio comes from the outer card boundary, not the image crop or generic card defaults; sibling carousel cards share the measured template unless the source shows intentional variants.
 - Non-symmetric shell borders and directional shadows are preserved on the correct sides, especially top/left-only or side-only app-stage edges.
 - Shared boundaries are rendered once and attached to the correct owner; borderless sidebars remain borderless when the visible line belongs to an adjacent pane.
 - Asymmetric corner radii are preserved per corner only when supported by positive in-product evidence; screenshot-edge-cropped corners are not treated as square and ordinary panels default to symmetric radius inference.

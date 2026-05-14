@@ -23,13 +23,17 @@ Requirements:
 - Conversely, if the sidebar/navigation rail has a visibly different tint from the main canvas or main stage, create separate region tokens such as `sidebar.background`, `nav_rail.background`, `main_canvas.background`, and `main_stage.background` even when the colors are close pale neutrals. Do not average distinct product regions into one shared alias.
 - When uncertain between very close pale neutrals for the same app shell, prefer one averaged/representative token and document the uncertainty in `meta.assumptions` instead of encoding a visible color mismatch into semantic aliases.
 - When uncertain whether close pale neutrals are one surface or separate intentional regions, compare the full region behavior: vertical boundary, active nav item contrast, topbar continuation, shadows/borders, and whether the region fills a persistent navigation column. If evidence supports distinct regions, record distinct tokens with confidence instead of forcing a shared app-shell token.
+- For side-anchored text/link stacks such as hero helper copy, support links, account prompts, and contact panels, record alignment as a layout-sensitive token or measured element when visible. Capture the edge anchor (`left_safe_area`, `right_safe_area`, `center`, or similar), internal alignment (`start`, `center`, `end`), text alignment (`left`, `center`, `right`), and approximate edge inset. Do not treat a right-anchored text stack as left-aligned merely because it is positioned on the right side.
+- For horizontal product/card carousels, record outer repeated-card dimensions separately from media/image dimensions. Include card width, height, aspect ratio, gap, padding, media region bounds, and whether sibling items share one template. Do not derive the card height from a product image crop, visible media content, or the current viewport slice; the outer rounded card boundary is the source of item proportions.
 - For KPI, stat, metric, and summary cards, record both the outer card surface and any inner tinted value band/metric well as separate component tokens. Include outer padding, inner band padding, inner band height, corner radius, background color, and bottom/right inset when visible. Do not collapse the inner value band into the card background or leave its spacing implicit.
 - For repeated cards/list items with separated bottom action strips, record footer-specific component tokens instead of relying only on generic card/button/switch tokens. Capture card body height or flex behavior, footer height/min-height, top divider color/width, footer padding, action-group gap, control vertical alignment, icon-button size, text-button size, switch size, and whether the footer must be non-shrinking.
 - For corner radius, do not treat the physical screenshot edge, viewport crop, or an off-screen continuation as evidence that a component corner is square. If a regular card, panel, container, modal, or section is clipped by the screenshot edge and only some corners are visible, mark the missing corners as cropped/unknown and prefer the same uniform radius as the visible corners unless there is positive in-product evidence of asymmetric geometry. Positive evidence means the actual component boundary is visible and intentionally square, joined to another surface, or shaped like a bottom sheet/drawer/tabbar/split shell. A crop line at the image edge is not positive evidence. Record this assumption in `meta.assumptions`.
 - Before extracting layout-sensitive tokens, identify outer wrapper candidates such as showcase canvases, centered artboards, decorative rounded frames, browser/device/mock frames, clipping frames, and drop-shadow wrappers. Record them in `raw_observations.image.wrapper_candidates` with approximate bounds, visual signals, decision, confidence, and evidence.
 - Do not decide a wrapper is product UI merely because it contains product controls or cards. Preserve wrapper tokens only when the wrapper boundary itself has product semantics such as app/window chrome, in-product shell layout ownership, scroll/clipping ownership, or alignment with internal product panes.
 - If a presentation wrapper is ignored, record the real product UI bounds in `raw_observations.image.effective_source_bounds` and base layout/token measurements on those bounds. Do not use the full screenshot width/height as the measurement denominator when the screenshot includes an ignored showcase canvas or device/browser frame.
-- Treat screenshot/image dimensions as source measurements only. Do not turn the raw screenshot width/height, effective source bounds, or default adaptation width into fixed output page dimensions. Record enough layout tokens to preserve fidelity at the confirmed adaptation width while allowing a viewport-adaptive implementation.
+- Treat screenshot/image dimensions as source measurements only. Do not turn the raw screenshot width/height, effective source bounds, or confirmed adaptation width into fixed output page dimensions. Record enough layout tokens to preserve fidelity at the confirmed adaptation width while allowing a viewport-adaptive implementation.
+- Record the confirmed adaptation width and how it was selected. The width must come from the user's explicit width or from screenshot-based inference confirmed by the user, not from a fixed PC/mobile default. Include target device classification, source image dimensions, effective product UI bounds when a wrapper is ignored, the inferred candidate width, confidence, evidence, and alternate plausible widths when uncertain.
+- Infer adaptation width for both PC/desktop and mobile screenshots. Use visible source evidence such as effective UI width, screenshot aspect ratio, browser/device chrome, mobile status/navigation bars, common viewport families, and export scaling. Do not assume all landscape screenshots use one desktop width or all portrait screenshots use one mobile width.
 - Extract responsive layout intent where visible or inferable: whether the root should fill the viewport, whether major shell regions are fixed-size or flexible, which content has max-width constraints, which grids/toolbars should wrap or collapse, and which wide regions need scoped horizontal scrolling. Store this in `layout.viewport_adaptation`.
 - If a real product main stage or raised pane is inset from the surrounding app canvas, record the observed shell offset in `raw_observations.measured_elements` and map repeated offset values into spacing tokens when appropriate. Do not treat this as presentation-wrapper padding when it belongs to the product UI.
 - For directional app-shell edge shadows, measure the visible shadow size conservatively. A tight 1-3px edge darkening with a short blur should map to `shadow.xs` or a very subtle `shadow.shell_edge`, not to generic card/popover shadows.
@@ -53,6 +57,29 @@ Schema:
 {
   "meta": {
     "source_type": "ui_snapshot",
+    "target_device": "pc_desktop | mobile | unknown | null",
+    "source_dimensions": {
+      "width": null,
+      "height": null
+    },
+    "effective_source_width": null,
+    "adaptation_width": null,
+    "adaptation_width_inference": {
+      "source": "user_provided | inferred_from_screenshot | unknown | null",
+      "user_confirmed": null,
+      "candidate_width": null,
+      "confidence": null,
+      "evidence": [],
+      "alternate_candidates": [
+        {
+          "width": null,
+          "reason": null,
+          "confidence": null
+        }
+      ],
+      "notes": null
+    },
+    "normalized_scale": null,
     "extraction_confidence": null,
     "notes": [],
     "assumptions": [],

@@ -1,0 +1,118 @@
+{
+  "page": {
+    "name": "flowmail-gpt-5.5",
+    "route": "/pages/flowmail-gpt-5.5",
+    "recognized_device": "PC/desktop",
+    "adaptation_width": 1200,
+    "adaptation_width_confirmed_by_user": true,
+    "effective_source_bounds": {
+      "x": 0,
+      "y": 0,
+      "width": 2157,
+      "height": 1535
+    },
+    "normalized_scale": 0.556328
+  },
+  "source_artifacts": {
+    "design_tokens": "src/pages/flowmail-gpt-5.5/artifacts/design-tokens.json",
+    "ui_dsl": "src/pages/flowmail-gpt-5.5/artifacts/ui-dsl.json",
+    "source_image": "comparison-image/pc-regular/flowmail.webp"
+  },
+  "files_changed": [
+    "src/pages/flowmail-gpt-5.5/FlowmailPage.jsx",
+    "src/pages/flowmail-gpt-5.5/flowmail.css",
+    "src/pages/flowmail-gpt-5.5/index.js",
+    "src/pages/flowmail-gpt-5.5/assets/john-doe-avatar.png",
+    "src/pages/flowmail-gpt-5.5/artifacts/design-tokens.json",
+    "src/pages/flowmail-gpt-5.5/artifacts/ui-dsl.json",
+    "src/pages/flowmail-gpt-5.5/artifacts/render-step3.json",
+    "src/framework/pageRegistry.js"
+  ],
+  "viewport_adaptation_strategy": {
+    "root_is_fixed_artboard": false,
+    "root_rule": ".fm-shell { width: 100%; height: 100dvh; overflow: hidden; }",
+    "layout": "viewport-bounded desktop dashboard shell with fixed sidebar and fluid main content",
+    "responsive_behavior": [
+      "Four stat cards wrap to two columns below 1100px.",
+      "Integration catalog preserves three columns at desktop calibration and collapses to two/one columns at narrower widths.",
+      "Sidebar compacts to an icon rail below 760px."
+    ],
+    "forbidden_behaviors_avoided": [
+      "no fixed 1200px root",
+      "no fixed screenshot-height root",
+      "no centered showcase artboard"
+    ]
+  },
+  "scroll_architecture": {
+    "primary_scroll_owner_selector": ".fm-main-scroll",
+    "document_body_scrolling_disabled_for_shell": true,
+    "root_viewport_height_rule": "height: 100dvh",
+    "root_overflow_rule": "overflow: hidden",
+    "min_height_zero_chain": [
+      ".fm-shell",
+      ".fm-main",
+      ".fm-main-scroll"
+    ],
+    "persistent_chrome_selectors": [
+      ".fm-sidebar",
+      ".fm-topbar"
+    ],
+    "chrome_backgrounds_are_opaque": true,
+    "browser_scroll_test": "opened target route in local browser at http://127.0.0.1:41751/pages/flowmail-gpt-5.5; non-browser scroll invariant gate also passed",
+    "non_browser_css_scroll_invariant_gate": "passed: .fm-shell uses height:100dvh and overflow:hidden; .fm-main/.fm-main-scroll use min-height:0; .fm-main-scroll owns overflow-y:auto."
+  },
+  "asset_integrity": {
+    "john_doe_avatar": {
+      "strategy": "source_crop",
+      "path": "src/pages/flowmail-gpt-5.5/assets/john-doe-avatar.png",
+      "crop": {
+        "x": 35,
+        "y": 1427,
+        "width": 68,
+        "height": 68
+      },
+      "display_size": {
+        "width": 36,
+        "height": 36
+      },
+      "coordinate_space": "absolute_source_image_pixels",
+      "method": "Pillow.Image.crop_pixel_copy",
+      "pixel_mismatches": 0,
+      "contamination_check": {
+        "passed": true,
+        "contaminants": [],
+        "decision": "clean_source_crop_allowed"
+      }
+    }
+  },
+  "verification_commands": [
+    {
+      "command": "npm run build",
+      "result": "passed"
+    },
+    {
+      "command": "node skills/image-to-webpage/scripts/check-build-integrity.mjs --dist dist --class fm-shell --class fm-sidebar --class fm-main-scroll --class fm-integration-card --class fm-switch --asset-name-contains john-doe-avatar --js-contains flowmail-gpt-5.5",
+      "result": "passed"
+    },
+    {
+      "command": "rg \"fm-shell|fm-main-scroll|height:100dvh|overflow:hidden|john-doe-avatar|flowmail-gpt-5\\\\.5\" dist src/pages/flowmail-gpt-5.5 src/framework/pageRegistry.js",
+      "result": "passed"
+    }
+  ],
+  "style_integrity_checks": {
+    "critical_selectors_present_in_built_css": [
+      ".fm-shell",
+      ".fm-sidebar",
+      ".fm-main-scroll",
+      ".fm-integration-card",
+      ".fm-switch"
+    ],
+    "critical_asset_present_in_build": "dist/assets/john-doe-avatar-*.png",
+    "critical_route_string_present_in_built_js": "/pages/flowmail-gpt-5.5"
+  },
+  "notes": [
+    "No generated transparent subject assets were required because the screenshot is primarily vector UI. The user avatar is the only clean final crop.",
+    "Card logos are reconstructed with CSS shapes/SVG-like DOM rather than copied bitmap logos.",
+    "The page is registered through the existing page registry."
+  ]
+}

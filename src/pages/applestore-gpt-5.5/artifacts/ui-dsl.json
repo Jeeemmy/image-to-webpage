@@ -1,0 +1,100 @@
+{
+  "page": "applestore-gpt-5.5",
+  "source": "comparison-image/pc-real/applestore.webp",
+  "viewport": {
+    "sourcePixels": [3840, 3728],
+    "targetDevice": "desktop",
+    "adaptationWidth": 1920,
+    "normalizedScale": 0.5,
+    "normalizedCanvas": [1920, 1864],
+    "responsive": true
+  },
+  "wrapperClassification": {
+    "candidates": [
+      {
+        "name": "full_page_viewport",
+        "sourceBounds": [0, 0, 3840, 3728],
+        "normalizedBounds": [0, 0, 1920, 1864],
+        "decision": "preserve_as_real_page_viewport",
+        "reason": "截图是完整 Apple Store 网页视口，没有额外展示边框、设备壳、浏览器壳或居中画板。"
+      }
+    ]
+  },
+  "layoutTree": [
+    {
+      "type": "stickyNav",
+      "selector": ".as-nav",
+      "normalizedBounds": [0, 0, 1920, 22],
+      "children": ["Apple logo", "global nav links", "search button", "bag button"]
+    },
+    {
+      "type": "hero",
+      "selector": ".as-hero",
+      "normalizedBounds": [0, 22, 1920, 608],
+      "children": ["confetti field", "gradient store title", "right aligned support links", "category strip"]
+    },
+    {
+      "type": "carouselSection",
+      "selector": ".as-new-products",
+      "heading": "上新了，快来认识一下这些新朋友。",
+      "cardTemplate": {
+        "normalizedSize": [400, 500],
+        "radius": 11,
+        "gap": 13
+      }
+    },
+    {
+      "type": "carouselSection",
+      "selector": ".as-gift-products",
+      "heading": "母亲节精选好礼。款款爱意满满。",
+      "cardTemplate": {
+        "normalizedSize": [400, 500],
+        "radius": 11,
+        "gap": 13
+      }
+    },
+    {
+      "type": "fixedChatAvatar",
+      "selector": ".as-chat",
+      "normalizedSize": [32, 32],
+      "position": {
+        "right": 15.5,
+        "bottom": 11
+      }
+    }
+  ],
+  "assetStrategy": {
+    "mode": "source_crops_from_current_screenshot",
+    "cropCoordinateSpace": "absolute source screenshot pixels",
+    "renderCoordinateSpace": "1920px normalized CSS coordinates",
+    "rationale": "产品图是高权重真实商品媒体，继续使用本次截图的页面专属裁片；DOM/CSS 重建导航、文案、卡片、彩纸和控制按钮。",
+    "assets": [
+      { "name": "cat-mac.webp", "sourceBounds": [275, 720, 565, 940], "normalizedBounds": [137.5, 360, 282.5, 470] },
+      { "name": "cat-iphone.webp", "sourceBounds": [620, 720, 780, 940], "normalizedBounds": [310, 360, 390, 470] },
+      { "name": "cat-ipad.webp", "sourceBounds": [900, 720, 1090, 940], "normalizedBounds": [450, 360, 545, 470] },
+      { "name": "cat-watch.webp", "sourceBounds": [1172, 730, 1408, 940], "normalizedBounds": [586, 365, 704, 470] },
+      { "name": "cat-vision.webp", "sourceBounds": [1442, 740, 1688, 940], "normalizedBounds": [721, 370, 844, 470] },
+      { "name": "cat-airpods.webp", "sourceBounds": [1728, 745, 1978, 940], "normalizedBounds": [864, 372.5, 989, 470] },
+      { "name": "cat-airtag.webp", "sourceBounds": [2050, 742, 2220, 940], "normalizedBounds": [1025, 371, 1110, 470] },
+      { "name": "cat-homepod.webp", "sourceBounds": [2330, 735, 2568, 940], "normalizedBounds": [1165, 367.5, 1284, 470] },
+      { "name": "cat-accessories.webp", "sourceBounds": [2638, 720, 2820, 940], "normalizedBounds": [1319, 360, 1410, 470] },
+      { "name": "card-iphone-pro.webp", "sourceBounds": [278, 1642, 1074, 2300], "normalizedBounds": [139, 821, 537, 1150] },
+      { "name": "card-macbook.webp", "sourceBounds": [1160, 1618, 1830, 2300], "normalizedBounds": [580, 809, 915, 1150] },
+      { "name": "card-watch-band.webp", "sourceBounds": [1945, 1660, 2740, 2300], "normalizedBounds": [972.5, 830, 1370, 1150] },
+      { "name": "card-iphone-17e.webp", "sourceBounds": [2880, 1650, 3575, 2300], "normalizedBounds": [1440, 825, 1787.5, 1150] },
+      { "name": "card-airpods-pro.webp", "sourceBounds": [3605, 1670, 3840, 2300], "normalizedBounds": [1802.5, 835, 1920, 1150] },
+      { "name": "gift-bundle.webp", "sourceBounds": [278, 2810, 1074, 3662], "normalizedBounds": [139, 1405, 537, 1831] },
+      { "name": "magsafe-case.webp", "sourceBounds": [1110, 2575, 1906, 3210], "normalizedBounds": [555, 1287.5, 953, 1605] },
+      { "name": "lanyard.webp", "sourceBounds": [1942, 2575, 2740, 3210], "normalizedBounds": [971, 1287.5, 1370, 1605] },
+      { "name": "ipad-cover.webp", "sourceBounds": [2778, 2575, 3575, 3210], "normalizedBounds": [1389, 1287.5, 1787.5, 1605] },
+      { "name": "app-phone.webp", "sourceBounds": [3090, 3015, 3820, 3660], "normalizedBounds": [1545, 1507.5, 1910, 1830] },
+      { "name": "avatar.webp", "sourceBounds": [3663, 3610, 3756, 3704], "normalizedBounds": [1831.5, 1805, 1878, 1852] }
+    ]
+  },
+  "scrollArchitecture": {
+    "primaryScrollOwner": "document",
+    "documentScrolling": true,
+    "horizontalCarousels": [".as-new-carousel", ".as-gift-carousel"],
+    "hiddenScrollbars": true
+  }
+}

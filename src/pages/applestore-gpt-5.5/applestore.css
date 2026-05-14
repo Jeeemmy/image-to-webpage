@@ -1,0 +1,639 @@
+.as-page {
+  --as-bg: #f5f5f7;
+  --as-text: #1d1d1f;
+  --as-muted: #6e6e73;
+  --as-link: #0066cc;
+  --as-orange: #f56300;
+  --as-red: #f34045;
+  --as-scale: calc(100vw / 1920px);
+  min-height: calc(1864px * var(--as-scale));
+  overflow-x: hidden;
+  background: var(--as-bg);
+  color: var(--as-text);
+  font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+  letter-spacing: 0;
+}
+
+.as-page * {
+  box-sizing: border-box;
+}
+
+.as-stage {
+  position: relative;
+  width: 1920px;
+  min-height: 1864px;
+  transform: scale(var(--as-scale));
+  transform-origin: top left;
+}
+
+.as-icon {
+  display: block;
+  width: 1em;
+  height: 1em;
+}
+
+.as-nav {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  height: 22px;
+  width: 1920px;
+  background: rgba(250, 250, 252, 0.88);
+  color: rgba(0, 0, 0, 0.82);
+  backdrop-filter: saturate(180%) blur(18px);
+}
+
+.as-nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 945px;
+  height: 22px;
+  margin: 0 auto;
+  gap: 22px;
+}
+
+.as-nav a,
+.as-icon-button {
+  color: inherit;
+  text-decoration: none;
+}
+
+.as-nav a:not(.as-nav-logo) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 25px;
+  height: 22px;
+  padding: 0 2px;
+  font-size: 7.5px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.as-nav-logo {
+  display: grid;
+  width: 21px;
+  height: 22px;
+  place-items: center;
+  color: #2b2b2d;
+}
+
+.as-apple-logo {
+  width: 10.5px;
+  height: 12.5px;
+}
+
+.as-icon-button {
+  display: grid;
+  width: 21px;
+  height: 22px;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: #252527;
+}
+
+.as-icon-button .as-icon {
+  width: 11px;
+  height: 11px;
+}
+
+.as-hero {
+  position: relative;
+  z-index: 1;
+  min-height: 608px;
+  padding-top: 1px;
+}
+
+.as-hero-copy {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 250px);
+  align-items: start;
+  width: 1640px;
+  margin: 0 auto;
+  padding-top: 185px;
+}
+
+.as-hero h1 {
+  margin: 0;
+  background: linear-gradient(90deg, #e85600 2%, #fa3d3f 85%);
+  background-clip: text;
+  color: transparent;
+  font-size: 61px;
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: 0;
+}
+
+.as-help {
+  justify-self: end;
+  padding-top: 2px;
+  text-align: right;
+}
+
+.as-help h2 {
+  margin: 0 0 13px;
+  color: #1d1d1f;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.as-help a {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+  margin-top: 6px;
+  color: var(--as-link);
+  font-size: 8.5px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.as-link-icon {
+  width: 6px;
+  height: 6px;
+}
+
+.as-category-wrap {
+  position: relative;
+  z-index: 2;
+  width: 1540px;
+  margin: 102.5px auto 0;
+}
+
+.as-category-strip {
+  display: grid;
+  grid-template-columns: repeat(9, minmax(92px, 1fr));
+  align-items: end;
+  gap: 32px;
+}
+
+.as-category {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  color: #1d1d1f;
+  text-align: center;
+  text-decoration: none;
+}
+
+.as-category-image {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  height: 75px;
+}
+
+.as-category img {
+  display: block;
+  max-width: 100%;
+  max-height: 75px;
+  object-fit: contain;
+}
+
+.as-category-phone img,
+.as-category-accessories img {
+  max-height: 81px;
+}
+
+.as-category-vision img,
+.as-category-homepod img,
+.as-category-airpods img {
+  max-height: 69px;
+}
+
+.as-category-airtag img {
+  max-height: 66px;
+}
+
+.as-category span:last-child {
+  margin-top: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.as-category span.is-active {
+  text-decoration: underline;
+  text-underline-offset: 2.5px;
+  text-decoration-thickness: 1px;
+}
+
+.as-section {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.as-new-products {
+  margin-top: 48px;
+}
+
+.as-section-heading {
+  width: 1640px;
+  margin: 0 auto 22px;
+  color: #6e6e73;
+  font-size: 21.5px;
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: 0;
+}
+
+.as-section-heading span {
+  color: var(--as-orange);
+}
+
+.as-carousel {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 400px;
+  gap: 13px;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding-inline: 139px;
+  scroll-padding-inline: 139px;
+  scrollbar-width: none;
+}
+
+.as-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.as-product-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 11px;
+  background: #fff;
+  box-shadow: 0 1.5px 6px rgba(0, 0, 0, 0.06);
+}
+
+.as-new-card {
+  height: 500px;
+}
+
+.as-product-copy {
+  position: relative;
+  z-index: 2;
+  padding: 26px 26px 0;
+}
+
+.as-eyebrow {
+  margin: 0 0 9px;
+  color: #b64400;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.as-new-card h3,
+.as-gift-card h3 {
+  margin: 0;
+  color: #1d1d1f;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.as-new-card h3 {
+  font-size: 28px;
+  line-height: 1.18;
+}
+
+.as-new-card h3 span,
+.as-gift-card h3 span {
+  display: block;
+}
+
+.as-subtitle {
+  margin: 10px 0 0;
+  color: #1d1d1f;
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.as-price {
+  margin: 6px 0 0;
+  color: #1d1d1f;
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.as-new-card .as-product-media {
+  position: absolute;
+  z-index: 1;
+  display: block;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+.as-new-card.is-dark {
+  background: #000;
+  color: #fff;
+}
+
+.as-new-card.is-dark h3,
+.as-new-card.is-dark .as-subtitle,
+.as-new-card.is-dark .as-price {
+  color: #fff;
+}
+
+.as-new-card.is-dark .as-product-copy {
+  padding-top: 60px;
+}
+
+.as-card-iphone-pro .as-product-media {
+  width: 398px;
+  left: 0;
+  bottom: 0;
+}
+
+.as-card-macbook .as-product-media {
+  width: 335px;
+  left: 28px;
+  bottom: 1px;
+}
+
+.as-card-watch-band .as-product-media {
+  width: 397.5px;
+  left: 7.5px;
+  bottom: 1px;
+}
+
+.as-card-iphone-17e .as-product-media {
+  width: 347.5px;
+  left: 62px;
+  bottom: 1px;
+}
+
+.as-card-airpods-pro .as-product-media {
+  width: 117.5px;
+  left: 11.5px;
+  bottom: 1px;
+}
+
+.as-card-airpods-pro h3 {
+  max-width: 260px;
+}
+
+.as-carousel-arrow,
+.as-card-arrow {
+  position: sticky;
+  right: 16px;
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  align-self: center;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(210, 210, 215, 0.72);
+  color: #6a6a6d;
+}
+
+.as-carousel-arrow {
+  margin-left: -52px;
+}
+
+.as-chevron {
+  width: 10px;
+  height: 17px;
+}
+
+.as-gift-products {
+  margin-top: 75px;
+  padding-bottom: 50px;
+}
+
+.as-gift-carousel {
+  grid-auto-columns: 400px;
+  gap: 13px;
+  overflow-y: visible;
+}
+
+.as-gift-card {
+  height: 500px;
+}
+
+.as-gift-feature img {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 82%;
+  object-fit: cover;
+  object-position: bottom center;
+}
+
+.as-gift-copy {
+  position: relative;
+  z-index: 2;
+  padding: 22.5px 26px 0;
+}
+
+.as-small-label {
+  margin: 0 0 9px;
+  color: #2f2f31;
+  font-size: 8px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.as-gift-card h3 {
+  font-size: 21px;
+  line-height: 1.28;
+}
+
+.as-gift-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 292.5px;
+  margin-top: 15px;
+}
+
+.as-gift-media img {
+  display: block;
+  width: 100%;
+  max-width: 310px;
+  max-height: 280px;
+  object-fit: contain;
+}
+
+.as-card-lanyard .as-gift-media img {
+  max-width: 230px;
+  max-height: 280px;
+}
+
+.as-card-ipad-cover .as-gift-media img {
+  max-width: 270px;
+}
+
+.as-swatches {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7.5px;
+  min-height: 12px;
+  margin-top: 6px;
+}
+
+.as-swatches span {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 999px;
+}
+
+.as-swatches span.is-striped {
+  border-color: rgba(0, 0, 0, 0.04);
+}
+
+.as-swatches small {
+  color: #56565a;
+  font-size: 7.5px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.as-gift-bottom {
+  padding: 22px 26px 0;
+}
+
+.as-gift-bottom .as-eyebrow {
+  margin-bottom: 7px;
+}
+
+.as-gift-bottom .as-price {
+  margin-top: 23px;
+  font-size: 11px;
+}
+
+.as-app-card {
+  padding: 22.5px 26px 0;
+}
+
+.as-app-copy {
+  position: relative;
+  z-index: 2;
+}
+
+.as-app-copy p {
+  margin: 0 0 9px;
+  color: #57575b;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.as-app-copy h3 {
+  font-size: 17px;
+  line-height: 1.22;
+}
+
+.as-app-copy span {
+  display: block;
+  margin-top: 9px;
+  color: #2e2e31;
+  font-size: 8px;
+  font-weight: 500;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.as-app-card img {
+  position: absolute;
+  left: 25px;
+  bottom: -12px;
+  width: 365px;
+  max-width: none;
+}
+
+.as-app-card .as-card-arrow {
+  position: absolute;
+  right: 17px;
+  bottom: 175px;
+}
+
+.as-confetti-field {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.as-confetti {
+  position: absolute;
+  display: block;
+  width: 29px;
+  height: 29px;
+  overflow: visible;
+  transform-origin: center;
+}
+
+.as-confetti-dot {
+  width: 13px;
+  height: 13px;
+  filter: drop-shadow(0 1px 2px rgba(245, 86, 44, 0.24));
+}
+
+.as-confetti-squiggle {
+  width: 24px;
+  height: 30px;
+}
+
+.as-confetti-loop,
+.as-confetti-crown,
+.as-confetti-wave,
+.as-confetti-curve {
+  width: 30px;
+  height: 30px;
+}
+
+.as-confetti-top {
+  height: 140px;
+  top: 35px;
+  bottom: auto;
+}
+
+.as-confetti-bottom {
+  top: -29px;
+  height: 380px;
+}
+
+.as-chat {
+  position: fixed;
+  right: 15.5px;
+  bottom: 11px;
+  z-index: 40;
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  overflow: hidden;
+  border: 0;
+  border-radius: 50%;
+  background: #84c8f7;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.14);
+}
+
+.as-chat img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

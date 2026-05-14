@@ -1,0 +1,48 @@
+{
+  "page": "applestore-gpt-5.5",
+  "status": "completed",
+  "sourceArtifacts": [
+    "src/pages/applestore-gpt-5.5/artifacts/design-tokens.json",
+    "src/pages/applestore-gpt-5.5/artifacts/ui-dsl.json"
+  ],
+  "adaptationWidth": 1920,
+  "normalization": {
+    "sourcePixels": [3840, 3728],
+    "scale": 0.5,
+    "renderBaseline": [1920, 1864]
+  },
+  "viewportAdaptationStrategy": "The implementation uses a 1920px normalized page stage and scales that stage fluidly with viewport width. At a 1920px browser width the CSS coordinates are 1:1 with the regenerated 1920 artifact baseline.",
+  "primaryScrollOwner": "document",
+  "documentScrolling": true,
+  "horizontalScrollOwners": [
+    ".as-new-carousel",
+    ".as-gift-carousel"
+  ],
+  "filesChanged": [
+    "src/pages/applestore-gpt-5.5/AppleStorePage.jsx",
+    "src/pages/applestore-gpt-5.5/applestore.css",
+    "src/pages/applestore-gpt-5.5/index.js",
+    "src/pages/applestore-gpt-5.5/artifacts/design-tokens.json",
+    "src/pages/applestore-gpt-5.5/artifacts/ui-dsl.json",
+    "src/pages/applestore-gpt-5.5/artifacts/render-step3.json",
+    "src/framework/pageRegistry.js"
+  ],
+  "assetIntegrity": {
+    "strategy": "source crop assets from provided screenshot, rendered in 1920 normalized CSS coordinates",
+    "pixelCopy": "Pillow Image.crop source rectangles",
+    "assetNamespace": "src/pages/applestore-gpt-5.5/assets"
+  },
+  "verification": {
+    "commands": [
+      "npm run build",
+      "Google Chrome headless --window-size=1920,1864 --screenshot=src/pages/applestore-gpt-5.5/artifacts/browser-1920.png http://127.0.0.1:41755/pages/applestore-gpt-5.5"
+    ],
+    "browserChecks": [
+      {
+        "viewport": "1920x1864",
+        "screenshot": "src/pages/applestore-gpt-5.5/artifacts/browser-1920.png",
+        "result": "Full page rendered from regenerated 1920 artifact baseline."
+      }
+    ]
+  }
+}
